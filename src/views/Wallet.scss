@@ -1,0 +1,325 @@
+.wallet-container {
+    width: 100vw;
+    height: 100%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    .wallet-info {
+        width: 60vw;
+
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+
+        font-weight: 500;
+        padding: 2em;
+
+        .wallet-copy-help {
+            font-size: 1em;
+            color: palevioletred;
+            align-self: flex-end;
+        }
+
+        .wallet-info-account {
+            border-top: 7px solid lightpink;
+
+            width: 100%;
+            height: 100%;
+            padding: 1em;
+            margin: 0;
+
+            &:hover {      
+                color: white;        
+                h2 {
+                    background-size: 100% 100%;
+                }
+
+                p {
+                    background-size: 100% 100%;
+                }
+            }
+
+            h2, p{
+                flex: 1;
+                text-decoration: none;
+                background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                background-size: 0 100%;
+                background-repeat: no-repeat;
+                transition: background .5s;
+    
+                background-position: 0;
+            }
+
+            h2 {
+                font-size: 1.5em;
+                letter-spacing: 3px;
+                line-height: 1.5;
+                text-decoration: underline;
+            }
+
+            p {
+                font-size: 1.3em;
+                letter-spacing: 2px;
+
+                line-height: 1.2;
+            }
+        }
+        
+        .wallet-info-detail {
+            width: 100%;
+            padding: 1em;
+            margin: 0;
+            border-bottom: 7px solid lightpink;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            .wallet-amount {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+
+                &:hover {              
+                    h2 {
+                        color: white;
+                        background-size: 100% 100%;
+                    }
+    
+                    div {
+                        border-top: 3px solid lightblue;
+                        border-bottom: 3px solid lightblue;
+                    }
+                }
+    
+                div {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: row;
+                    text-align: left;
+
+                    border-top: 3px solid lightgrey;
+                    border-bottom: 3px solid lightgrey;
+                    
+                    &:hover {
+                        p {
+                            color: white;
+                            background-size: 100% 100%;
+                        }
+                    }
+                }
+
+                h2, div p{
+                    flex: 1;
+                    text-decoration: none;
+                    background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                    background-size: 0 100%;
+                    background-repeat: no-repeat;
+                    transition: background .5s;
+        
+                    background-position: 0;
+                }
+    
+                h2 {
+                    font-size: 1.5em;
+                    letter-spacing: 3px;
+                    line-height: 1.5;
+                    text-decoration: underline;
+                }
+    
+                div p {
+                    font-size: 1.3em;
+                    font-weight: 500;
+                    letter-spacing: 2px;
+    
+                    line-height: 1.2;
+                }
+            }
+
+            .wallet-more {
+                width: 100%;
+                font-size: 1.5em;
+                font-weight: 800;
+                letter-spacing: 15px;
+                padding: 0;
+                margin: 0;
+
+                section {
+                    color: darkblue;
+                    width: 100%;
+
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    text-align: center;
+                    justify-content: center;
+                    
+                    text-decoration: none;
+                    background-image: linear-gradient(to right,  lightpink, lightpink 100%);
+                    background-size: 0 50%;
+                    background-repeat: no-repeat;
+                    transition: background .5s;
+                    background-position: 0;
+                    line-height: 1.5;
+
+                    &:hover {
+                        color: white;
+                        background-size: 100% 50%;
+                    }
+
+                    &:active {
+                        color: red;
+                        background-size: 100% 50%;
+                    }
+
+                    .more-up {
+                        display: none;
+                    }
+    
+                    .more-down {
+                        display: inherit;
+                    }
+                }
+            }
+
+            .wallet-more-detail {
+                display: none;
+                width: 100%;
+                padding: 0;
+                margin: 0; 
+                
+                div {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: left;
+                    padding: 0;
+                    margin: 0; 
+
+                    .wallet-priv-key,
+                    .wallet-res-key {
+                        width: 100%;
+                        margin: 0;
+
+                        h2 {
+                            font-size: 1.5em;
+                            letter-spacing: 3px;
+                            line-height: 1.5;
+                            text-decoration: underline;
+                        }
+
+                        div  {
+                            font-size: 1.3em;
+                            letter-spacing: 3px;
+
+                            &:active {
+                                color: cornflowerblue;
+                            }
+                        }
+
+                        span {
+                            width: 100%;
+                            margin: 0.5em 0 0 0;
+                            text-align: center;
+                            font-size: 1.3em;
+                            letter-spacing: 15px;
+                            font-weight: 800;
+                            color: red;
+
+                            background-image: linear-gradient(to right,  lightpink, lightpink 100%);
+                            background-size: 0 100%;
+                            background-repeat: no-repeat;
+                            transition: background .5s;
+                            background-position: 0;
+                            line-height: 1.5;
+
+                            &:hover {
+                                background-size: 100% 100%;
+                                color: white;
+                            }
+                        }
+
+                        h2, div {
+                            background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                            background-size: 0 100%;
+                            background-repeat: no-repeat;
+                            transition: background .5s;
+                            background-position: 0;
+                        }
+
+                        &:hover {
+                            color: white;
+                            
+                            h2 {
+                                background-size: 100% 100%;
+                            }
+
+                            div {
+                                color: white;
+                                background-size: 100% 100%;
+                            }
+                        }
+                    }
+
+                    .wallet-pub-key {
+                        width: 100%;
+
+                        h2, div p {
+                            background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                            background-size: 0 100%;
+                            background-repeat: no-repeat;
+                            transition: background .5s;
+                            background-position: 0;
+                            letter-spacing: 3px;
+                        }
+
+                        h2 {
+                            font-size: 1.5em;
+                            line-height: 1.5;
+                            text-decoration: underline;
+                        }
+
+                        div {
+                            border-top: 3px solid lightgrey;
+                            border-bottom: 3px solid lightgrey;
+
+                            font-size: 1.3em;
+
+                            p {
+                                line-height: 1.2;    
+                            }
+
+                            &:hover {
+                                p {
+                                    background-size: 100% 100%;
+                                    color: white;
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            h2 {
+                                color: white;
+                                background-size: 100% 100%;
+                            }
+
+                            div {
+                                border-top: 3px solid lightblue;
+                                border-bottom: 3px solid lightblue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

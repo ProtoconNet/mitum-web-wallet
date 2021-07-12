@@ -1,0 +1,184 @@
+.ca-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 3em;
+
+    h1 {
+        font-size: 3em;
+        font-weight: 800;
+        margin: 1em;
+    }
+
+    .ca-balance-wrap {
+        width: 60%;
+        margin: 1em;
+        padding: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+
+        border-top: 7px solid lightgray;
+        border-bottom: 7px solid lightgray;
+
+        ul {
+            width: 100%;
+            list-style-type: none;
+            font-size: 1em;
+            margin: 1em 0 1em 0;
+            padding: 0;
+            
+            li {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                text-decoration: none;
+                background-image: linear-gradient(to right,  lightgray, lightgray 100%);
+                background-size: 0 100%;
+                background-repeat: no-repeat;
+                transition: background .5s;
+                line-height: 0.7;
+                background-position: 0;
+                color: gray;
+
+
+                padding: 0.2em 0 0.2em 0 ;
+                font-weight: 500;
+                text-align: start;
+
+                .currency {
+                    width: 60%;
+                    font-size: 1.2em;
+                }
+
+                .amount {
+                    width: 40%;
+                    font-size: 1.2em;
+                }
+
+                &:hover {
+                    background-size: 100% 100%;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .ca-input-wrap {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        
+        margin: 1em;
+        padding: 1em;
+
+        .ca-keys {
+            margin: 1em 2em 1em 2em;
+            padding: 1em;
+
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+
+            h2 {
+                font-size: 2em;
+                text-decoration: underline;
+            }
+
+            ul {
+                width: 100%;
+                list-style-type: none;
+                padding: 1em 0 1em 0;
+                font-size: 1.2em;
+
+                border-top: 3px solid lightpink;
+                border-bottom: 3px solid lightpink;
+
+                li {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .key {
+                        width: 80%;
+                        text-align: start;
+                    }
+
+                    .weight {
+                        width: 20%;
+                        text-align: start;
+                    }
+                }
+            }
+
+            .ca-key-adder {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .ca-amounts {
+            margin: 1em 2em 1em 2em;
+            padding: 1em;
+
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+
+            h2 {
+                font-size: 2em;
+                text-decoration: underline;
+            }
+
+
+            ul {
+                width: 100%;
+                list-style-type: none;
+                padding: 1em 0 1em 0;
+                font-size: 1.2em;
+
+                border-top: 3px solid lightblue;
+                border-bottom: 3px solid lightblue;
+            
+                li {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-evenly;
+
+                    span {
+                        width: 100%;
+                        text-align: start;
+                    }
+                }
+            }
+
+            .ca-amount-adder {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+    }
+}

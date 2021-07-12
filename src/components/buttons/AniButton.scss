@@ -1,0 +1,51 @@
+.ani-button{
+    background: lightcoral;
+    color:#fff;
+    border:none;
+    position:relative;
+    padding: 0.5em;
+    cursor: pointer;
+    transition:800ms ease all;
+    outline:none;
+    width: 100%;
+    height: 40px;
+    font-size: 1em;
+    font-weight: 700;
+
+    &:hover{
+      background:#fff;
+      color: lightcoral;
+    }
+
+    &:before,
+    &:after{
+      content:'';
+      position:absolute;
+      top:0;
+      right:0;
+      height:2px;
+      width:0;
+      background: lightcoral;
+      transition:400ms ease all;
+    }
+
+    &:after{
+      right:inherit;
+      top:inherit;
+      left:0;
+      bottom:0;
+    }
+
+    &:hover:before,
+    &:hover:after{
+      width:100%;
+      transition:800ms ease all;
+    }
+
+    &:active:before,
+    &:active:after{
+      background: lightpink;
+      box-shadow: 1px 1px 25px 10px lightcoral;
+      transition: 300ms ease all;
+    }
+}

@@ -1,0 +1,163 @@
+.uk-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 3em;
+
+    h1 {
+        font-size: 3em;
+        font-weight: 800;
+        margin: 1em;
+    }
+
+    .uk-address-wrap,
+    .uk-amount-wrap {
+        width: 60%;
+        margin: 1em;
+        padding: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+
+        border-top: 7px solid lightgray;
+        border-bottom: 7px solid lightgray;
+
+        h2 {
+            width: 100%;
+            padding: 0.2em 0 0.2em 0;
+            margin: 1em;
+            font-size: 1.5em;
+            color: white;
+            background-color: lightgray;
+        }
+
+        ul {
+            width: 100%;
+            list-style-type: none;
+            padding: 0;
+            font-size: 1.2em;
+            margin: 1em 0 1em 0;
+            
+            li {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                padding: 0.2em 0 0.2em 0;
+                font-weight: 400;
+
+                text-decoration: none;
+                background-image: linear-gradient(to right,  lightgray, lightgray 100%);
+                background-size: 0 100%;
+                background-repeat: no-repeat;
+                transition: background .5s;
+                line-height: 0.7;
+                background-position: 0;
+                color: gray;
+
+                .key, .currency,
+                .weight, .amount {
+                    text-align: start;
+                }
+
+                .key {
+                    width: 80%;
+                }
+
+                .currency {
+                    width: 60%;
+                }
+
+                .weight {
+                    width: 20%;
+                }
+
+                .amount {
+                    width: 40%;
+                }
+
+                &:hover {
+                    background-size: 100% 100%;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .uk-input-wrap {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        
+        margin: 1em;
+        padding: 1em;
+
+        .uk-keys {
+            margin: 1em 2em 1em 2em;
+            padding: 1em;
+
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+
+            h2 {
+                font-size: 2em;
+                text-decoration: underline;
+            }
+
+            ul {
+                width: 100%;
+                list-style-type: none;
+                padding: 1em 0 1em 0;
+                font-size: 1.2em;
+
+                border-top: 3px solid lightpink;
+                border-bottom: 3px solid lightpink;
+
+                li {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .key {
+                        width: 80%;
+                        text-align: start;
+                    }
+
+                    .weight {
+                        width: 20%;
+                        text-align: start;
+                    }
+                }
+            }
+
+            .uk-key-adder {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .uk-keys-extra-input {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+    }
+}

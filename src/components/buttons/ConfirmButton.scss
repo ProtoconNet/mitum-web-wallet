@@ -1,0 +1,48 @@
+.confirm-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+
+    .confirm-button {
+        text-decoration: none;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        font-size: 1.5rem;
+        font-weight: 900;
+        padding: 0.8rem 3rem;
+        color: white;
+        background-color: lightpink;
+        text-transform: uppercase;
+
+        &:hover {
+            box-shadow: 1px 1px 25px 10px lightcoral;
+        }
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+              120deg,
+              transparent,
+              lightcoral,
+              transparent
+            );
+            transition: all 650ms;
+        }
+
+        &:hover:before {
+            left: 100%;
+        }  
+
+        &:active {
+            background-color: lightcoral;
+        }
+    }
+}

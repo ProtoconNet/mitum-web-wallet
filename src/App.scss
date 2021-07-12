@@ -1,0 +1,17 @@
+.link-help {
+    z-index: 1;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    text-align: center;
+    font-size: 1.5em;
+    color: aquamarine !important;
+
+    &:hover {
+        color: palevioletred !important;
+    }
+
+    &:active {
+        color: brown !important;
+    }
+}

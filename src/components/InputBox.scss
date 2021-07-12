@@ -1,0 +1,44 @@
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+
+    .input-box {
+        border: 2px solid lightblue;
+        border-radius: 5px;
+        padding: 0.2em;
+        font-size: 1em;
+        color: darkblue;
+        background-color: aliceblue;
+        letter-spacing: 2px;
+
+        &:focus {
+            outline: none !important;
+            border: 2px solid lightcoral;
+            background-color: beige;
+    
+        }
+    }
+
+    .big {
+        height: 45px;
+        width: 50vw;
+        font-size:1.2em;
+        font-weight: 400;
+    }
+
+    .medium {
+        height: 40px;
+        width: 600px;
+        font-size: 1.0em;
+        font-weight: 300;
+        /* font-size: 1.5em; */
+    }
+
+    .small {
+        height: 40px;
+        width: 150px;
+        font-size: 1em;
+    }
+}

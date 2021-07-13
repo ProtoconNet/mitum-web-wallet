@@ -3,9 +3,10 @@ import { Redirect } from 'react-router-dom';
 import './Wallet.scss';
 
 import copy from 'copy-to-clipboard';
-import axios from 'axios';
 
 import SelectButton from '../components/buttons/SelectButton';
+import { connect } from 'react-redux';
+import { login } from '../store/actions';
 
 const PATH_LOGIN = 'path-login';
 const PATH_SIGN = 'path-sign';
@@ -52,86 +53,20 @@ const key = (key) => {
     );
 }
 
-const getAccountInformation = async (account) => {
-    try {
-        return await axios.get(process.env.REACT_APP_API_ACCOUUNT + account);
-    } catch(e) {
-        alert(`Login Fail.\n${account}`);
-    }
-} 
-
 class Wallet extends React.Component {
  
     constructor(props){
         super(props);
 
-        if(!this.props.hasOwnProperty("location") || !this.props.location.hasOwnProperty("state")
-            || !this.props.location || !this.props.location.state) {
-                
-                this.state = { isRedirect: true, redirect: PATH_LOGIN };
-                return;
-        }
-        const _state = this.props.location.state;
-        if(!_state.hasOwnProperty("account") || !_state.hasOwnProperty("privateKey")
-            || !_state.account || !_state.privateKey) {
-                
-                this.state = { isRedirect: true, redirect: PATH_LOGIN };
-                return;
-        }
-        const { account, privateKey } = _state;
-        
-        let data;
-        if(!_state.hasOwnProperty("data") || !_state.data){
-            data = getAccountInformation(account)
-                .then( res => {
-                    data = res.data;
-                })
-                .catch(e => {
-                    alert('Could not open wallet!');
-                    this.state = { isRedirect: true, redirect: PATH_LOGIN };
-                    return;
-                })
-        }
-        else {
-            data = _state.data;
-        }
-
-        if(!data.hasOwnProperty('_embedded') || !data._embedded.hasOwnProperty('keys') 
-            || !data._embedded.keys.hasOwnProperty('keys') || !data._embedded.hasOwnProperty('balance')
-            || !data._embedded || !data._embedded.keys || !data._embedded.keys.keys || !data._embedded.balance){
-                this.state = { isRedirect: true, redirect: PATH_LOGIN };
-                return;
-        }
-
-        this.state = {
-            account: data._embedded.address,
-            accountType: data._embedded.keys.keys.length > 1 ? 'multi' : 'single',
-            balances: data._embedded.balance.map(
-                x => {
-                    return {
-                        currency: x.currency,
-                        amount: x.amount
-                    }
-                }
-            ),
-            privateKey: privateKey,
-            publicKeys: data._embedded.keys.keys.map(
-                x => {
-                    return {
-                        key: x.key,
-                        weight: x.weight
-                    }
-                }
-            ),
-
+        this.state = { 
             restoreKey: undefined,
 
             isDetailVisible: false,
             isPrivVisible: false,
             isResVisible: false,
             
-            isRedirect: false,
-            redirect: undefined,
+            isRedirect: this.props.isLogin ? false : true,
+            redirect: this.props.isLogin ? undefined : PATH_LOGIN,
             operation: undefined
         }
     }
@@ -184,21 +119,13 @@ class Wallet extends React.Component {
                 return <Redirect to={{
                             pathname: '/operation',
                             state: {
-                                privateKey: this.state.privateKey,
-                                account: this.state.account, 
                                 operation: this.state.operation,
-                                data: {
-                                    balance: this.state.balances,
-                                    publicKey: this.state.publicKeys
-                                }
                             }
                         }}/>;
             case PATH_SIGN:
                 return <Redirect to={{
                             pathname: '/sign',
                             state: {
-                                privateKey: this.state.privateKey,
-                                account: this.state.account,
                                 json: undefined
                             }
                         }} />
@@ -209,19 +136,19 @@ class Wallet extends React.Component {
     }
 
     render() {
+        const account = this.props.account;
         return(
             <div className="wallet-container">
                 { this.renderRedirect() }
-                {/* <div className="logout"></div> */}
                 <div className="wallet-info">
                     <span className="wallet-info-account">
-                        <h2>{ "ACCOUNT" + ( this.state.accountType === "multi" ? " - MUL" : " - SIN")}</h2>
-                        <p onClick={() => onCopy(this.state.account)}>{this.state.account}</p>
+                        <h2>{ "ACCOUNT" + ( account.accountType === "multi" ? " - MUL" : " - SIN")}</h2>
+                        <p onClick={() => onCopy(account.address)}>{account.address}</p>
                     </span>
                     <span className="wallet-info-detail">
                         <span className="wallet-amount">
                             <h2>BALANCE</h2>
-                            { this.state.balances ? this.state.balances.map(x => balance(x)) : false }
+                            { account.balances ? account.balances.map(x => balance(x)) : false }
                         </span>
                         <span className="wallet-more"
                             onClick={() => this.onMoreClick()}>
@@ -236,18 +163,18 @@ class Wallet extends React.Component {
                             <div>
                                 <div className="wallet-pub-key">
                                     <h2>PUBLIC KEY</h2>
-                                    { this.state.publicKeys ? this.state.publicKeys.map(x => publicKey(x)) : false }
+                                    { account.publicKeys ? account.publicKeys.map(x => publicKey(x)) : false }
                                 </div>
                                 <div className="wallet-priv-key">
                                     <h2>PRIVATE KEY</h2>
-                                    { this.state.isPrivVisible ? key(this.state.privateKey) : false }
+                                    { this.state.isPrivVisible ? key(account.privateKey) : false }
                                     <span onClick={() => this.onShowClick(SHOW_PRIVATE)}>
                                         { this.state.isPrivVisible ? "- HIDE -" : "! SHOW !" }
                                     </span>
                                 </div>
                                 <div className="wallet-res-key">
                                     <h2>RESTORE KEY</h2>
-                                    { this.state.isResVisible ? key(this.state.restoreKey) : false }
+                                    { this.state.isResVisible ? key(account.restoreKey) : false }
                                     <span onClick={() => this.onShowClick(SHOW_RESTORE)}>
                                         { this.state.isResVisible ? "- HIDE -" : "! SHOW !" }
                                     </span> 
@@ -272,4 +199,16 @@ class Wallet extends React.Component {
     }s
 }
 
-export default Wallet;
+const mapStateToProps = state => ({
+    isLogin: state.login.isLogin,
+    account: state.login.account
+});
+
+const mapDispatchToProps = dispatch => ({
+    signIn: (address, privateKey, data) => dispatch(login({address, privateKey, data})),
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Wallet);

@@ -35,8 +35,7 @@ class Transfer extends React.Component {
         this.renderRedirect = this.renderRedirect.bind(this);
         this.createdRef = createRef();
 
-        if(!this.props.hasOwnProperty('account') || !this.props.hasOwnProperty('privateKey') || !this.props.hasOwnProperty('data')
-            || !this.props.account || !this.props.privateKey || !this.props.data) {
+        if(!this.props.hasOwnProperty('account') || !this.props.account) {
                 this.state = { isRedirect: true }
                 return;
             }
@@ -45,10 +44,6 @@ class Transfer extends React.Component {
             isRedirect: false,
 
             amounts: [],
-
-            account: this.props.account,
-            privateKey: this.props.privateKey,
-            data: this.props.data,
 
             currency: "",
             amount: "",
@@ -61,20 +56,21 @@ class Transfer extends React.Component {
     onClick() {
         const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
 
+        const account = this.props.account;
         const amounts = generator.createAmounts(
             this.state.amounts.map(x => 
                 generator.formatAmount(parseInt(x.amount), x.currency))
         );
 
         const transfersFact = generator.createTransfersFact(
-            this.state.account,
+            account.address,
             [generator.createTransfersItem(
                 this.state.address, amounts
             )]
         );
 
         const transfers = generator.createOperation(transfersFact, "");
-        transfers.addSign(this.state.privateKey);
+        transfers.addSign(account.privateKey);
 
         this.setState({
             created: transfers.dict()
@@ -131,12 +127,13 @@ class Transfer extends React.Component {
     }
 
     render() {
+        const account = this.props.account;
         return (
             <div className="tf-container">
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
                     <ul>
-                        { this.state.data.balance ? this.state.data.balance.map(x => balance(x)) : false }
+                        { account.balances ? account.balances.map(x => balance(x)) : false }
                     </ul>
                 </div>
                 <div className="tf-input-wrap">
@@ -170,11 +167,7 @@ class Transfer extends React.Component {
 
                 <div ref={this.createdRef}></div>
                 { this.state.created ? 
-                    <NewOperation data={{
-                        json: this.state.created,
-                        privateKey: this.state.privateKey,
-                        account: this.state.account,
-                        accountType: this.state.accountType}}/> : false }
+                    <NewOperation json={this.state.created}/> : false }
 
                 <div ref={this.createdRef}></div>
             </div>

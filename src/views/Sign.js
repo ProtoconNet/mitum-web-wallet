@@ -11,6 +11,7 @@ import SmallButton from '../components/buttons/SmallButton';
 import axios from 'axios';
 
 import { Signer } from 'mitumc';
+import { connect } from 'react-redux';
 
 
 const CLEAR_DOWNLOAD = 'clear-download';
@@ -52,20 +53,20 @@ class Sign extends React.Component {
     constructor(props) {
         super(props);
 
+        this.createdRef = createRef();
+        this.responseRef = createRef();
+
         if(!this.props.hasOwnProperty('location') || !this.props.location.hasOwnProperty('state')
-            || !this.props.location || !this.props.location.state) {
+            || !this.props.location || !this.props.location.state || !this.props.isLogin) {
                 this.state = {
                     isRedirect: true
                 }
                 return;
         }
-        const data = this.props.location.state;
 
         this.state = {
             isRedirect: false,
-            privateKey: data.privateKey,
-            account: data.account,
-            json: data.json,
+            json: this.props.location.state.hasOwnProperty('json') ? this.props.location.state.json : {},
             
             jsonSelf: "",
             response: undefined,
@@ -73,9 +74,6 @@ class Sign extends React.Component {
             download: undefined,
             filename: ""
         }
-
-        this.createdRef = createRef();
-        this.responseRef = createRef();
     }
 
     clear(clr) {
@@ -245,7 +243,7 @@ class Sign extends React.Component {
                 return;
         }
 
-        const signer = new Signer('mitum', this.state.privateKey);
+        const signer = new Signer('mitum', this.props.account.privateKey);
 
         try {
             this.setState({
@@ -295,7 +293,7 @@ class Sign extends React.Component {
                 { this.state.isRedirect ? <Redirect to='/login'/> : false}
                 <h1>SIGN / SEND OPERATION</h1>
                 <div className="sign-account">
-                    <p>{ this.state.account }</p>
+                    <p>{ this.props.account.address }</p>
                 </div>
                 <div className="sign-operation">
                     <span className="sign-switch">
@@ -336,4 +334,11 @@ class Sign extends React.Component {
     }
 }
 
-export default Sign;
+const mapStateToProps = state => ({
+    isLogin: state.login.isLogin,
+    account: state.login.account
+});
+
+export default connect(
+    mapStateToProps,
+)(Sign);

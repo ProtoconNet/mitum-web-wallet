@@ -45,18 +45,13 @@ class CreateAccount extends React.Component {
         this.jsonRef = createRef();
         this.renderRedirect = this.renderRedirect.bind(this);
 
-        if(!this.props.hasOwnProperty('account') || !this.props.hasOwnProperty('privateKey') || !this.props.hasOwnProperty('data')
-            || !this.props.account || !this.props.privateKey || !this.props.data) {
-                this.state = { isRedirect: true }
-                return;
-            }
+        if(!this.props.hasOwnProperty('account') || !this.props.account) {
+            this.state = { isRedirect: true }
+            return;
+        }
 
         this.state = {
             isRedirect: false,
-
-            account: this.props.account,
-            privateKey: this.props.privateKey,
-            data: this.props.data,
 
             keys: [],
             amounts: [],
@@ -73,7 +68,8 @@ class CreateAccount extends React.Component {
 
     onClick() {
         const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
-        
+        const account = this.props.account;
+
         const keys = generator.createKeys(
             this.state.keys.map(x => 
                 generator.formatKey(x.key, parseInt(x.weight))),
@@ -86,14 +82,14 @@ class CreateAccount extends React.Component {
         );
 
         const createAccountsFact = generator.createCreateAccountsFact(
-            this.state.account,
+            account.address,
             [generator.createCreateAccountsItem(
                 keys, amounts
             )]
         );
 
         const createAccounts = generator.createOperation(createAccountsFact, "");
-        createAccounts.addSign(this.state.privateKey);
+        createAccounts.addSign(account.privateKey);
 
         this.setState({
             created: createAccounts.dict()
@@ -177,13 +173,14 @@ class CreateAccount extends React.Component {
     }
 
     render() {
+        const account = this.props.account;
         return (
             <div className="ca-container">
                 { this.renderRedirect() }
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">
                     <ul>
-                        { this.state.data.balance ? this.state.data.balance.map(x => balance(x)) : false }
+                        { account.balances ? account.balances.map(x => balance(x)) : false }
                     </ul>
                 </div>
                 <div ref={this.createdRef}></div>
@@ -234,10 +231,7 @@ class CreateAccount extends React.Component {
 
                 <div ref={this.jsonRef}></div>
                 { this.state.created ? 
-                    <NewOperation data={{
-                        json: this.state.created,
-                        privateKey: this.state.privateKey,
-                        account: this.state.account}}/> : false }
+                    <NewOperation json={this.state.created}/> : false }
             </div>
         );
     }

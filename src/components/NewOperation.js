@@ -23,9 +23,7 @@ class NewOperation extends React.Component {
             <Redirect to={{
                     pathname: '/sign',
                     state: {
-                        account: this.props.data.account,
-                            privateKey: this.props.data.privateKey,
-                            json: this.props.data.json
+                        json: this.props.json
                     }}}/> : false 
         );
     }
@@ -38,8 +36,8 @@ class NewOperation extends React.Component {
                     padding: '10px 30px',
                     margin: '0',
                     overflow: 'visible',}}
-                    onClick={() => onCopy(JSON.stringify(this.props.data.json, null, 4))}>
-                    { JSON.stringify(this.props.data.json, null, 4) }
+                    onClick={() => onCopy(JSON.stringify(this.props.json, null, 4))}>
+                    { JSON.stringify(this.props.json, null, 4) }
                 </pre>
                 <div className="json-confirm">
                     <ConfirmButton onClick={() => this.onClick()}>ACCEPT</ConfirmButton>

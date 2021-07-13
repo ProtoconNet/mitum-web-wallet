@@ -1,11 +1,26 @@
 import React from 'react';
-import './Login.scss';
+import {Redirect} from 'react-router-dom';
+import axios from 'axios'
+;import './Login.scss';
 
 import PrivateKeyLoginBox from '../components/PrivateKeyLoginBox';
 import RestoreKeyLoginBox from '../components/RestoreKeyLoginBox';
+import { login } from '../store/actions';
+import { connect } from 'react-redux';
+
+import {toKeypair} from 'mitumc';
 
 const MODE_PRIV_KEY = 'MODE_PRIV_KEY';
 const MODE_RES_KEY = 'MODE_RES_KEY';
+
+const getAccountInformation = async (account) => {
+    try {
+        return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
+    } catch(e) {
+        alert(`Could not sign in\n${account}`);
+    }
+} 
+
 
 class Login extends React.Component {
     constructor(props) {
@@ -18,6 +33,37 @@ class Login extends React.Component {
         }
         
         this.renderForm = this.renderForm.bind(this);
+    }
+
+    onLogin(addr, priv) {
+        let pubKey;
+        
+        try {
+            pubKey = toKeypair(priv, '').getPublicKey();
+        } catch(e) {
+            alert('Invalid private key');
+            return;
+        }
+
+        getAccountInformation(addr)
+                .then(
+                    res => {
+                        const pubKeys = res.data._embedded.keys.keys.map(x => x.key);
+                        for(let i=0; i < pubKeys.length; i++) {
+                            if(pubKeys[i] === pubKey) {
+                                this.props.signIn(addr, priv, res.data);
+                                return;
+                            }
+                        }
+                        alert(`Could not sign in\naccount: ${addr}`);
+                    }
+                )
+                .catch(
+                    e => {
+                        console.log(e);
+                        alert(`Could not sign in\naccount: ${addr}`);
+                    }
+                );
     }
 
     onChange() {
@@ -35,11 +81,11 @@ class Login extends React.Component {
 		const { mode } = this.state;
 		switch (mode) {
 			case MODE_PRIV_KEY: 
-				return	<PrivateKeyLoginBox />
+				return	<PrivateKeyLoginBox onLogin={(addr, priv) => this.onLogin(addr, priv)}/>
 			case MODE_RES_KEY:
 				return	<RestoreKeyLoginBox />;
 			default:
-				return	<PrivateKeyLoginBox />;
+				return	<PrivateKeyLoginBox onLogin={(addr, priv) => this.onLogin(addr, priv)}/>;
 		}
 	}
 
@@ -55,6 +101,7 @@ class Login extends React.Component {
     render() {
         return (
             <div className="login-container">
+                {  this.props.isLogin ? <Redirect to={`/wallet/${this.props.account.address}`} /> : false}
                 <div className="login-radio">
                     <label className="rad-label">
                         <input type="radio" className="rad-input" value={MODE_PRIV_KEY} name="rad" 
@@ -76,4 +123,16 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+    isLogin: state.login.isLogin,
+    account: state.login.account
+});
+
+const mapDispatchToProps = dispatch => ({
+    signIn: (address, privateKey, data) => dispatch(login(address, privateKey, data)),
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Login);

@@ -35,18 +35,13 @@ class UpdateKey extends React.Component {
         this.renderRedirect = this.renderRedirect.bind(this);
         this.createdRef = createRef();
         
-        if(!this.props.hasOwnProperty('account') || !this.props.hasOwnProperty('privateKey') || !this.props.hasOwnProperty('data')
-            || !this.props.account || !this.props.privateKey || !this.props.data) {
+        if(!this.props.hasOwnProperty('account') || !this.props.account) {
                 this.state = { isRedirect: true }
                 return;
         }
 
         this.state = {
             isRedirect: false,
-
-            account: this.props.account,
-            privateKey: this.props.privateKey,
-            data: this.props.data,
 
             keys: [],
             threshold: "",
@@ -62,6 +57,7 @@ class UpdateKey extends React.Component {
     onClick() {
         const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
         
+        const account = this.props.account;
         const keys = generator.createKeys(
             this.state.keys.map(x => 
                 generator.formatKey(x.key, parseInt(x.weight))),
@@ -69,11 +65,11 @@ class UpdateKey extends React.Component {
         );
 
         const keyUpdaterFact = generator.createKeyUpdaterFact(
-            this.state.account, this.state.currency, keys
+            account.address, this.state.currency, keys
         );
 
         const keyUpdater = generator.createOperation(keyUpdaterFact, "");
-        keyUpdater.addSign(this.state.privateKey);
+        keyUpdater.addSign(account.privateKey);
 
         this.setState({
             created: keyUpdater.dict()
@@ -135,16 +131,17 @@ class UpdateKey extends React.Component {
     }
 
     render() {
+        const account = this.props.account;
         return (
             <div className="uk-container">
             <h1>UPDATE KEY</h1>
             <div className="uk-address-wrap">
-                <h2>{this.state.account}</h2>
-                <ul>{this.state.data.publicKey ? this.state.data.publicKey.map(x => key(x)) : false }</ul>
+                <h2>{account.address}</h2>
+                <ul>{account.publicKeys ? account.publicKeys.map(x => key(x)) : false }</ul>
             </div>
             <div className="uk-amount-wrap">
                 <h2>BALANCE</h2>
-                <ul>{this.state.data.balance ? this.state.data.balance.map(x => balance(x)) : false }</ul>
+                <ul>{account.balances ? account.balances.map(x => balance(x)) : false }</ul>
             </div>
             <div className="uk-input-wrap">
                 <div className="uk-keys">
@@ -181,11 +178,7 @@ class UpdateKey extends React.Component {
                     onClick={() => this.onClick()}>UPDATE</ConfirmButton>
                     <div ref={this.createdRef}></div>
                     { this.state.created ? 
-                        <NewOperation data={{
-                            json: this.state.created,
-                            privateKey: this.state.privateKey,
-                            account: this.state.account,
-                            accountType: this.state.accountType}}/> : false }
+                        <NewOperation json={this.state.created}/> : false }
             </div>
         );
     }

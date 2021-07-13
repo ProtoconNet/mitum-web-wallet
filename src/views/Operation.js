@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import CreateAccount from '../components/CreateAccount';
 import UpdateKey from '../components/UpdateKey';
 import Transfer from '../components/Transfer';
+import { connect } from 'react-redux';
 
 const OPER_CREATE_ACCOUNT = 'oper-create-account';
 const OPER_UPDATE_KEY = 'oper-update-key';
@@ -13,54 +14,54 @@ class Operation extends React.Component {
     constructor(props) {
         super(props);
 
-        if(!this.props.hasOwnProperty('location')|| !this.props.location.hasOwnProperty('state')
-            || !this.props.location || !this.props.location.state) {
-            
+        if(!this.props.hasOwnProperty('location') || !this.props.location
+            || !this.props.location.hasOwnProperty('state') || !this.props.location.state 
+            || !this.props.location.state.hasOwnProperty('operation') || !this.props.location.state.operation
+            || !this.props.isLogin){
                 this.state = {
-                    isRedirect: true
+                    isRedirect: true,
+                    account: undefined,
+                    operation: undefined
                 }
                 return;
-        }
-        const _state = this.props.location.state;
-        if(!_state.hasOwnProperty('privateKey') || !_state.hasOwnProperty('operation') 
-            || !_state.hasOwnProperty('account') || !_state.hasOwnProperty('data')
-            || !_state.privateKey || !_state.operation || !_state.account || !_state.data){
-                
-                this.state = {
-                    isRedirect: true
-                }
-                return;   
-        }
+            }
 
         this.state = {
-            isRedirect: false,
-            privateKey: _state.privateKey,
-            operation: _state.operation,
-            account: _state.account,
-            data: _state.data
+            isRedirect: this.props.isLogin ? false : true,
+            account: this.props.account,
+            operation: this.props.location.state.operation
         }
     }
 
     render() {
+        let redirect;
+        if(this.props.isLogin) {
+            redirect = `/wallet/${this.props.account.address}`;
+        }
+        else{
+            redirect = '/login';
+        }
+
         return (
             <div className="oper-container">
-                { this.state.isRedirect ? <Redirect to='/login'/> : false}
+                { this.state.isRedirect ? <Redirect to={redirect}/> : false}
                 { this.state.operation === OPER_CREATE_ACCOUNT ?  
-                        <CreateAccount data={this.state.data} 
-                            privateKey={this.state.privateKey} 
-                            account={this.state.account}/> : (
+                        <CreateAccount account={this.state.account}/> : (
                     this.state.operation === OPER_UPDATE_KEY ? 
-                        <UpdateKey data={this.state.data}
-                            privateKey={this.state.privateKey} 
-                            account={this.state.account}/> : (
+                        <UpdateKey account={this.state.account}/> : (
                     this.state.operation === OPER_TRANSFER ? 
-                        <Transfer data={this.state.data}
-                            privateKey={this.state.privateKey} 
-                            account={this.state.account}/> : <Redirect to='/login' />
+                        <Transfer account={this.state.account}/> : <Redirect to={redirect} />
                 ))}
             </div>
         );
     }
 }
 
-export default Operation;
+const mapStateToProps = state => ({
+    isLogin: state.login.isLogin,
+    account: state.login.account
+});
+
+export default connect(
+    mapStateToProps,
+)(Operation);

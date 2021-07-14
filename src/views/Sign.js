@@ -139,7 +139,7 @@ class Sign extends React.Component {
                 const parsed = JSON.parse(reader.result);
                 if(!parsed.hasOwnProperty('hash') || !parsed.hasOwnProperty('fact') 
                     || !parsed.hasOwnProperty('fact_signs') || !parsed.hasOwnProperty('memo')
-                    || !parsed.hash || !parsed.fact || !parsed.fact_signs || !parsed.memo){
+                    || !parsed.hash || !parsed.fact || !parsed.fact_signs){
                     alert('Invalid format!\nOnly operation json file can be imported');
                 }
                 else {

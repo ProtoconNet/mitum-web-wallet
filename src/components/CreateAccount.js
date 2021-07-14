@@ -27,16 +27,6 @@ const key = (k) => {
     );
 }
 
-const amount = (am) => {
-    return (
-        <li key={am.currency}>
-            <span>{am.currency}</span>
-            <span>{am.amount}</span>
-        </li>
-    );
-};
-
-
 class CreateAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -210,7 +200,7 @@ class CreateAccount extends React.Component {
                         <div className="ca-amounts">
                             <h2>AMOUNTS</h2>
                             <ul>
-                                { this.state.amounts ? this.state.amounts.map(x => amount(x)) : false }
+                                { this.state.amounts ? this.state.amounts.map(x => balance(x)) : false }
                             </ul>
                             <span className="ca-amount-adder">
                                 <InputBox size="medium" useCopy={false} disabled={false} placeholder="currency" 

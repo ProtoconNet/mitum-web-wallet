@@ -18,15 +18,6 @@ const balance = (amount) => {
     );
 }
 
-const amount = (am) => {
-    return (
-        <li key={am.currency}>
-            <span>{am.currency}</span>
-            <span>{am.amount}</span>
-        </li>
-    );
-}
-
 class Transfer extends React.Component {
 
     constructor(props) {
@@ -146,7 +137,7 @@ class Transfer extends React.Component {
                         <div className="tf-amounts">
                             <h2>AMOUNTS</h2>
                             <ul>
-                                { this.state.amounts.map(x => amount(x)) }
+                                { this.state.amounts.map(x => balance(x)) }
                             </ul>
                             <span className="tf-amount-adder">
                                 <InputBox size="medium" useCopy={false} disabled={false} placeholder="currency" 

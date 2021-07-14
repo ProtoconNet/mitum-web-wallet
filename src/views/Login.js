@@ -33,6 +33,7 @@ class Login extends React.Component {
         }
         
         this.renderForm = this.renderForm.bind(this);
+        this.reloadAccount = this.reloadAccount.bind(this);
     }
 
     onLogin(addr, priv) {
@@ -98,7 +99,15 @@ class Login extends React.Component {
         else return;
     }
 
+    reloadAccount() {
+        this.onLogin(this.props.account.address, this.props.account.privateKey);
+    }
+
     render() {
+        if(this.props.isLogin){
+            this.reloadAccount();
+        }
+
         return (
             <div className="login-container">
                 {  this.props.isLogin ? <Redirect to={`/wallet/${this.props.account.address}`} /> : false}

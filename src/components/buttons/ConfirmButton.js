@@ -5,7 +5,7 @@ import './ConfirmButton.scss';
 
 class ConfirmButton extends React.Component {
     render() {
-        return(
+        return (
             <div className="confirm-button-container ">
                 <button className="confirm-button"
                     style={{ opacity: this.props.disabled ? 0.4 : 1.0 }}
@@ -19,7 +19,8 @@ class ConfirmButton extends React.Component {
 }
 
 ConfirmButton.propTypes = {
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    disabled: PropTypes.bool
 }
 
 export default ConfirmButton;

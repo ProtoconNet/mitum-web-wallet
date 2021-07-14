@@ -4,13 +4,13 @@
     background-color: transparent;
 
     span {
-        font-size: 1.6em;;
+        font-size: 1.6em;
         text-transform: uppercase;
         font-weight: bold;
         font-family: "Roboto", sans-serif;
         letter-spacing: 5px;
     }
-  
+
     &:after {
         position: absolute;
         top: 10px;
@@ -22,14 +22,14 @@
         z-index: -1;
         transition: transform 0.2s ease-in, width 0.2s ease-out 0.2s;
     }
-  
+
     &:hover {
         &:after {
             transform: translate(-10px, -10px);
             width: calc(100% - 10px);
         }
     }
-  
+
     &:active {
         background-color: aqua;
 
@@ -38,7 +38,7 @@
         }
     }
 }
-  
+
 .big {
     padding: 15px;
     margin: 15px;

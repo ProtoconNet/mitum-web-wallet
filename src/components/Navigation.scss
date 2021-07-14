@@ -23,18 +23,18 @@
             margin: 10px;
             border-radius: 70%;
             justify-self: center;
-        
-            &:active{
-              background: lightpink;
-              box-shadow: 1px 1px 25px 10px lightcoral;
-              transition: 300ms ease all;
+
+            &:active {
+                background: lightpink;
+                box-shadow: 1px 1px 25px 10px lightcoral;
+                transition: 300ms ease all;
             }
         }
     }
 
-    
 
-    span{
+
+    span {
         display: flex;
         flex-direction: column;
         border-radius: 5px;
@@ -55,7 +55,7 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .nav span{
+    .nav span {
         left: initial;
         top: initial;
         bottom: 0px;

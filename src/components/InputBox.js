@@ -11,8 +11,6 @@ class InputBox extends React.Component {
         this.state = {
             value: ""
         };
-
-        this.onChange = this.onChange.bind(this);
     }
 
     onChange(e) {
@@ -22,28 +20,32 @@ class InputBox extends React.Component {
     }
 
     render() {
-		return (
+        return (
             <div className="box">
-			    <input className={'input-box ' + this.props.size}
+                <input className={'input-box ' + this.props.size}
                     type="text"
-                    name="input-box" 
+                    name="input-box"
                     value={this.state.value ? this.state.value : this.props.value}
                     disabled={this.props.disabled}
-                    onChange={this.props.onChange ? this.props.onChange : this.onChange}
-                    placeholder={this.props.placeholder ? this.props.placeholder : ""}/>
-                <CopyButton visible={this.props.useCopy} 
+                    onChange={this.props.onChange ? this.props.onChange : () => this.onChange()}
+                    placeholder={this.props.placeholder ? this.props.placeholder : ""} />
+                <CopyButton visible={this.props.useCopy}
                     onClick={() => {
                         copy(this.props.value);
                         alert('copied!');
-                    }}/>
+                    }} />
             </div>
-		)
-	}
+        )
+    }
 }
 
 InputBox.propTypes = {
-	size: PropTypes.string.isRequired,
+    size: PropTypes.string.isRequired,
     useCopy: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+    placeholder: PropTypes.string
 }
 
 export default InputBox;

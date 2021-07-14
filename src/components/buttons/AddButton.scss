@@ -7,8 +7,8 @@
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
-  
-.add-button{
+
+.add-button {
     width: 60px;
     height: 60px;
     cursor: pointer;
@@ -35,9 +35,9 @@
         color: transparent;
         font-weight: bold;
     }
-      
+
     &:hover {
-        box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
         width: 60px;
         height: 60px;
 
@@ -48,7 +48,7 @@
         svg {
             animation: bounce 2s infinite linear;
         }
-    } 
+    }
 
     &:focus {
         outline: none;
@@ -56,11 +56,25 @@
 }
 
 
-  
+
 @keyframes bounce {
-    0% {transform: translateX(-50%) translateY(-50%)}
-    25% {transform: translateX(-50%) translateY(-65%)}
-    50% {transform: translateX(-50%) translateY(-50%)}
-    75% {transform: translateX(-50%) translateY(-35%)}
-    100% {transform: translateX(-50%) translateY(-50%)}
+    0% {
+        transform: translateX(-50%) translateY(-50%)
+    }
+
+    25% {
+        transform: translateX(-50%) translateY(-65%)
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-50%)
+    }
+
+    75% {
+        transform: translateX(-50%) translateY(-35%)
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(-50%)
+    }
 }

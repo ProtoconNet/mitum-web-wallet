@@ -5,9 +5,9 @@ const initialState = {
     account: undefined
 }
 
-export const reducer = (state=initialState, action) => {
-    switch(action.type) {
-        case actions.LOGIN :
+export const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case actions.LOGIN:
             return {
                 ...state,
                 isLogin: true,

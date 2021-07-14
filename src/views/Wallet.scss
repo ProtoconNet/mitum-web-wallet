@@ -34,8 +34,9 @@
             padding: 1em;
             margin: 0;
 
-            &:hover {      
-                color: white;        
+            &:hover {
+                color: white;
+
                 h2 {
                     background-size: 100% 100%;
                 }
@@ -45,14 +46,15 @@
                 }
             }
 
-            h2, p{
+            h2,
+            p {
                 flex: 1;
                 text-decoration: none;
-                background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                background-image: linear-gradient(to right, lightblue, lightblue 100%);
                 background-size: 0 100%;
                 background-repeat: no-repeat;
                 transition: background .5s;
-    
+
                 background-position: 0;
             }
 
@@ -70,7 +72,7 @@
                 line-height: 1.2;
             }
         }
-        
+
         .wallet-info-detail {
             width: 100%;
             padding: 1em;
@@ -86,18 +88,18 @@
                 padding: 0;
                 margin: 0;
 
-                &:hover {              
+                &:hover {
                     h2 {
                         color: white;
                         background-size: 100% 100%;
                     }
-    
+
                     div {
                         border-top: 3px solid lightblue;
                         border-bottom: 3px solid lightblue;
                     }
                 }
-    
+
                 div {
                     width: 100%;
                     display: flex;
@@ -108,7 +110,7 @@
 
                     border-top: 3px solid lightgrey;
                     border-bottom: 3px solid lightgrey;
-                    
+
                     &:hover {
                         p {
                             color: white;
@@ -117,29 +119,30 @@
                     }
                 }
 
-                h2, div p{
+                h2,
+                div p {
                     flex: 1;
                     text-decoration: none;
-                    background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                    background-image: linear-gradient(to right, lightblue, lightblue 100%);
                     background-size: 0 100%;
                     background-repeat: no-repeat;
                     transition: background .5s;
-        
+
                     background-position: 0;
                 }
-    
+
                 h2 {
                     font-size: 1.5em;
                     letter-spacing: 3px;
                     line-height: 1.5;
                     text-decoration: underline;
                 }
-    
+
                 div p {
                     font-size: 1.3em;
                     font-weight: 500;
                     letter-spacing: 2px;
-    
+
                     line-height: 1.2;
                 }
             }
@@ -161,9 +164,9 @@
                     align-items: center;
                     text-align: center;
                     justify-content: center;
-                    
+
                     text-decoration: none;
-                    background-image: linear-gradient(to right,  lightpink, lightpink 100%);
+                    background-image: linear-gradient(to right, lightpink, lightpink 100%);
                     background-size: 0 50%;
                     background-repeat: no-repeat;
                     transition: background .5s;
@@ -183,7 +186,7 @@
                     .more-up {
                         display: none;
                     }
-    
+
                     .more-down {
                         display: inherit;
                     }
@@ -194,8 +197,8 @@
                 display: none;
                 width: 100%;
                 padding: 0;
-                margin: 0; 
-                
+                margin: 0;
+
                 div {
                     display: flex;
                     width: 100%;
@@ -203,7 +206,7 @@
                     justify-content: center;
                     align-items: left;
                     padding: 0;
-                    margin: 0; 
+                    margin: 0;
 
                     .wallet-priv-key,
                     .wallet-res-key {
@@ -217,7 +220,7 @@
                             text-decoration: underline;
                         }
 
-                        div  {
+                        div {
                             font-size: 1.3em;
                             letter-spacing: 3px;
 
@@ -235,7 +238,7 @@
                             font-weight: 800;
                             color: red;
 
-                            background-image: linear-gradient(to right,  lightpink, lightpink 100%);
+                            background-image: linear-gradient(to right, lightpink, lightpink 100%);
                             background-size: 0 100%;
                             background-repeat: no-repeat;
                             transition: background .5s;
@@ -248,8 +251,9 @@
                             }
                         }
 
-                        h2, div {
-                            background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                        h2,
+                        div {
+                            background-image: linear-gradient(to right, lightblue, lightblue 100%);
                             background-size: 0 100%;
                             background-repeat: no-repeat;
                             transition: background .5s;
@@ -258,7 +262,7 @@
 
                         &:hover {
                             color: white;
-                            
+
                             h2 {
                                 background-size: 100% 100%;
                             }
@@ -273,8 +277,9 @@
                     .wallet-pub-key {
                         width: 100%;
 
-                        h2, div p {
-                            background-image: linear-gradient(to right,  lightblue, lightblue 100%);
+                        h2,
+                        div p {
+                            background-image: linear-gradient(to right, lightblue, lightblue 100%);
                             background-size: 0 100%;
                             background-repeat: no-repeat;
                             transition: background .5s;
@@ -295,7 +300,7 @@
                             font-size: 1.3em;
 
                             p {
-                                line-height: 1.2;    
+                                line-height: 1.2;
                             }
 
                             &:hover {

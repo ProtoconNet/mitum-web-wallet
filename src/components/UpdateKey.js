@@ -32,12 +32,11 @@ class UpdateKey extends React.Component {
     constructor(props) {
         super(props);
 
-        this.renderRedirect = this.renderRedirect.bind(this);
         this.createdRef = createRef();
-        
-        if(!this.props.hasOwnProperty('account') || !this.props.account) {
-                this.state = { isRedirect: true }
-                return;
+
+        if (!this.props.hasOwnProperty('account') || !this.props.account) {
+            this.state = { isRedirect: true }
+            return;
         }
 
         this.state = {
@@ -56,10 +55,10 @@ class UpdateKey extends React.Component {
 
     onClick() {
         const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
-        
+
         const account = this.props.account;
         const keys = generator.createKeys(
-            this.state.keys.map(x => 
+            this.state.keys.map(x =>
                 generator.formatKey(x.key, parseInt(x.weight))),
             parseInt(this.state.threshold)
         );
@@ -103,7 +102,7 @@ class UpdateKey extends React.Component {
     addKey() {
         this.setState({
             keys: [...this.state.keys, {
-                key: this.state.publicKey, 
+                key: this.state.publicKey,
                 weight: this.state.weight
             }],
             publicKey: "",
@@ -111,11 +110,11 @@ class UpdateKey extends React.Component {
         });
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.scrollToJSON();
     }
-    
-    componentDidUpdate () {
+
+    componentDidUpdate() {
         this.scrollToJSON();
     }
 
@@ -124,61 +123,56 @@ class UpdateKey extends React.Component {
         this.createdRef.current.scrollIntoView({ behavior: 'smooth' })
     }
 
-    renderRedirect() {
-        if(this.state.isRedirect) {
-            return <Redirect to='/login'/>
-        }
-    }
-
     render() {
         const account = this.props.account;
         return (
             <div className="uk-container">
-            <h1>UPDATE KEY</h1>
-            <div className="uk-address-wrap">
-                <h2>{account.address}</h2>
-                <ul>{account.publicKeys ? account.publicKeys.map(x => key(x)) : false }</ul>
-            </div>
-            <div className="uk-amount-wrap">
-                <h2>BALANCE</h2>
-                <ul>{account.balances ? account.balances.map(x => balance(x)) : false }</ul>
-            </div>
-            <div className="uk-input-wrap">
-                <div className="uk-keys">
-                    <h2>NEW KEYS</h2>
-                    <div className="uk-keys-extra-input">
-                        <InputBox 
-                            size="small" useCopy={false} disabled={false} placeholder='threshold'
-                            value={this.state.threshold}
-                            onChange={(e) => this.onChangeThres(e)}/>
-                        <InputBox 
-                            size="small" useCopy={false} disabled={false} placeholder='currency'
-                            value={this.state.currency}
-                            onChange={(e) => this.onChangeCurrency(e)}/>
-                    </div>
-                        
-                    <ul>
-                        { this.state.keys.map(x => key(x)) }
-                    </ul>
+                {this.state.isRedirect ? <Redirect to='/login' /> : false}
+                <h1>UPDATE KEY</h1>
+                <div className="uk-address-wrap">
+                    <h2>{account.address}</h2>
+                    <ul>{account.publicKeys ? account.publicKeys.map(x => key(x)) : false}</ul>
+                </div>
+                <div className="uk-amount-wrap">
+                    <h2>BALANCE</h2>
+                    <ul>{account.balances ? account.balances.map(x => balance(x)) : false}</ul>
+                </div>
+                <div className="uk-input-wrap">
+                    <div className="uk-keys">
+                        <h2>NEW KEYS</h2>
+                        <div className="uk-keys-extra-input">
+                            <InputBox
+                                size="small" useCopy={false} disabled={false} placeholder='threshold'
+                                value={this.state.threshold}
+                                onChange={(e) => this.onChangeThres(e)} />
+                            <InputBox
+                                size="small" useCopy={false} disabled={false} placeholder='currency'
+                                value={this.state.currency}
+                                onChange={(e) => this.onChangeCurrency(e)} />
+                        </div>
+
+                        <ul>
+                            {this.state.keys.map(x => key(x))}
+                        </ul>
                         <span className="uk-key-adder">
                             <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
-                                value={this.state.publicKey} 
-                                onChange={(e) => this.onChangePub(e)}/>
+                                value={this.state.publicKey}
+                                onChange={(e) => this.onChangePub(e)} />
                             <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
-                                value={this.state.weight} 
-                                onChange={(e) => this.onChangeWeight(e)}/>
-                            <AddButton 
-                                disabled={ !(this.state.publicKey && this.state.weight) ? true: false }
-                                onClick={() => this.addKey()}/>
+                                value={this.state.weight}
+                                onChange={(e) => this.onChangeWeight(e)} />
+                            <AddButton
+                                disabled={!(this.state.publicKey && this.state.weight) ? true : false}
+                                onClick={() => this.addKey()} />
                         </span>
                     </div>
                 </div>
                 <ConfirmButton
-                    disabled={ this.state.keys.length < 1 || this.state.threshold==="" || this.state.currency==="" ? true : false }
+                    disabled={this.state.keys.length < 1 || this.state.threshold === "" || this.state.currency === "" ? true : false}
                     onClick={() => this.onClick()}>UPDATE</ConfirmButton>
-                    <div ref={this.createdRef}></div>
-                    { this.state.created ? 
-                        <NewOperation json={this.state.created}/> : false }
+                <div ref={this.createdRef}></div>
+                {this.state.created ?
+                    <NewOperation json={this.state.created} /> : false}
             </div>
         );
     }

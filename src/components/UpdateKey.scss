@@ -44,7 +44,7 @@
             padding: 0;
             font-size: 1.2em;
             margin: 1em 0 1em 0;
-            
+
             li {
                 width: 100%;
                 display: flex;
@@ -55,7 +55,7 @@
                 font-weight: 400;
 
                 text-decoration: none;
-                background-image: linear-gradient(to right,  lightgray, lightgray 100%);
+                background-image: linear-gradient(to right, lightgray, lightgray 100%);
                 background-size: 0 100%;
                 background-repeat: no-repeat;
                 transition: background .5s;
@@ -63,8 +63,10 @@
                 background-position: 0;
                 color: gray;
 
-                .key, .currency,
-                .weight, .amount {
+                .key,
+                .currency,
+                .weight,
+                .amount {
                     text-align: start;
                 }
 
@@ -98,7 +100,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        
+
         margin: 1em;
         padding: 1em;
 
@@ -116,7 +118,7 @@
                 font-size: 2em;
                 text-decoration: underline;
             }
-               
+
 
             ul {
                 width: 100%;
@@ -124,7 +126,7 @@
                 padding: 0.5em;
                 font-size: 1.2em;
                 margin: 1em 0 1em 0;
-               
+
                 border: 3px solid lightpink;
 
                 li {
@@ -132,13 +134,13 @@
                     display: flex;
                     flex-direction: row;
                     align-items: center;
-    
+
                     padding: 0.2em 0 0.2em 0;
                     margin: 0.5em 0 0.5em 0;
                     font-weight: 400;
-    
+
                     text-decoration: none;
-                    background-image: linear-gradient(to right,  lightpink, lightpink 100%);
+                    background-image: linear-gradient(to right, lightpink, lightpink 100%);
                     background-size: 0 100%;
                     background-repeat: no-repeat;
                     transition: background .5s;
@@ -147,19 +149,20 @@
                     color: palevioletred;
                     font-weight: 500;
                     letter-spacing: 1px;
-    
-                    .key, .weight {
+
+                    .key,
+                    .weight {
                         text-align: start;
                     }
-    
+
                     .key {
                         width: 85%;
                     }
-    
+
                     .weight {
                         width: 15%;
                     }
-    
+
                     &:hover {
                         background-size: 100% 100%;
                         color: white;

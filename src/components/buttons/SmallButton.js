@@ -5,10 +5,10 @@ import './SmallButton.scss';
 
 function SmallButton(props) {
     return (
-        <button className="small-button draw-border" 
+        <button className="small-button draw-border"
             onClick={props.onClick}>
-                {props.children}
-            </button>
+            {props.children}
+        </button>
     );
 }
 

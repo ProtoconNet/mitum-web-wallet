@@ -22,31 +22,39 @@ const onCopy = (msg) => {
     alert('copied!');
 }
 
-const download = (json)  => {
-    if(!json || !json.hasOwnProperty('hash')){
-        return undefined
+const download = (json) => {
+    if (!json || !json.hasOwnProperty('hash')) {
+        return undefined;
     }
-    
+
     let file;
     try {
-        file = new File([JSON.stringify(json, null, 4)], `${json.hash}`, {type: 'application/json'});
+        file = new File([JSON.stringify(json, null, 4)], `${json.hash}`, { type: 'application/json' });
     } catch (e) {
         alert('Could not get url');
         return undefined;
     }
-    
+
     return URL.createObjectURL(file);
 }
 
 const broadcast = async (operation) => {
-    if(!operation || !operation.hasOwnProperty('hash') || !operation.hasOwnProperty('memo')
+    if (!operation || !operation.hasOwnProperty('hash') || !operation.hasOwnProperty('memo')
         || !operation.hasOwnProperty('fact') || !operation.hasOwnProperty('fact_signs')
-        || !operation.hash || !operation.fact || !operation.fact_signs){
-            return undefined;
+        || !operation.hash || !operation.fact || !operation.fact_signs) {
+        return undefined;
     }
 
     return await axios.post(process.env.REACT_APP_API_BROADCAST, operation);
-} 
+}
+
+const preStyle = {
+    display: 'block',
+    padding: '10px 30px',
+    margin: '0',
+    overflow: 'visible',
+    whiteSpace: "pre-wrap"
+}
 
 class Sign extends React.Component {
 
@@ -56,18 +64,18 @@ class Sign extends React.Component {
         this.createdRef = createRef();
         this.responseRef = createRef();
 
-        if(!this.props.hasOwnProperty('location') || !this.props.location.hasOwnProperty('state')
+        if (!this.props.hasOwnProperty('location') || !this.props.location.hasOwnProperty('state')
             || !this.props.location || !this.props.location.state || !this.props.isLogin) {
-                this.state = {
-                    isRedirect: true
-                }
-                return;
+            this.state = {
+                isRedirect: true
+            }
+            return;
         }
 
         this.state = {
             isRedirect: false,
             json: this.props.location.state.hasOwnProperty('json') ? this.props.location.state.json : {},
-            
+
             jsonSelf: "",
             response: undefined,
 
@@ -77,53 +85,51 @@ class Sign extends React.Component {
     }
 
     clear(clr) {
-        if(clr===CLEAR_DOWNLOAD){
+        if (clr === CLEAR_DOWNLOAD) {
             this.setState({
                 download: undefined,
                 filename: "",
             });
         }
-        else if(clr===CLEAR_RESPONSE) {
+        else if (clr === CLEAR_RESPONSE) {
             this.setState({
                 response: undefined
             });
         }
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.scrollToJSON();
     }
-    
-    componentDidUpdate () {
+
+    componentDidUpdate() {
         this.scrollToJSON();
     }
 
     scrollToJSON = () => {
-        if (this.responseRef.current && this.state.response){
+        if (this.responseRef.current && this.state.response) {
             this.responseRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        else if (this.createdRef.current && !this.state.response){
+        else if (this.createdRef.current && !this.state.response) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }
 
     jsonView() {
-
         return (
             <div className="sign-json">
-                { this.state.jsonSelf==="" ? (
-                    this.state.json 
-                    ? <pre style={{
-                        display: 'block',
-                        padding: '10px 30px',
-                        margin: '0',
-                        overflow: 'visible',
-                        whiteSpace: "pre-wrap"}}
-                        onClick={() => onCopy(JSON.stringify(this.state.json, null, 4))}>
-                        { JSON.stringify(this.state.json, null, 4) }
-                    </pre> : false) 
-                    : <textarea type="text" 
-                        onChange={(e) => this.onSelfChange(e)}/>
+                {this.state.jsonSelf === ""
+                    ? (
+                        this.state.json
+                            ? (
+                                <pre style={preStyle}
+                                    onClick={() => onCopy(JSON.stringify(this.state.json, null, 4))}>
+                                    {JSON.stringify(this.state.json, null, 4)}
+                                </pre>
+                            )
+                            : false
+                    )
+                    : <textarea type="text" onChange={(e) => this.onSelfChange(e)} />
                 }
             </div>
         );
@@ -134,24 +140,24 @@ class Sign extends React.Component {
         const reader = new FileReader();
         const json = this.state.json;
 
-        try{
+        try {
             reader.onload = () => {
                 const parsed = JSON.parse(reader.result);
-                if(!parsed.hasOwnProperty('hash') || !parsed.hasOwnProperty('fact') 
+                if (!parsed.hasOwnProperty('hash') || !parsed.hasOwnProperty('fact')
                     || !parsed.hasOwnProperty('fact_signs') || !parsed.hasOwnProperty('memo')
-                    || !parsed.hash || !parsed.fact || !parsed.fact_signs){
+                    || !parsed.hash || !parsed.fact || !parsed.fact_signs) {
                     alert('Invalid format!\nOnly operation json file can be imported');
                 }
                 else {
                     this.setState({
-                        json : parsed
+                        json: parsed
                     });
                     this.clear(CLEAR_DOWNLOAD);
                     this.clear(CLEAR_RESPONSE);
                 }
             };
             reader.readAsText(file, "utf-8");
-        } catch(e) {
+        } catch (e) {
             this.setState({
                 json: json
             });
@@ -160,7 +166,7 @@ class Sign extends React.Component {
     }
 
     onClickImport() {
-        if(this.state.jsonSelf){
+        if (this.state.jsonSelf) {
             this.clear(CLEAR_DOWNLOAD);
             this.clear(CLEAR_RESPONSE);
         }
@@ -173,7 +179,7 @@ class Sign extends React.Component {
     }
 
     onClickSelf() {
-        if(!this.state.jsonSelf){
+        if (!this.state.jsonSelf) {
             this.clear(CLEAR_DOWNLOAD);
             this.clear(CLEAR_RESPONSE);
         }
@@ -194,10 +200,10 @@ class Sign extends React.Component {
     onClickSend() {
         let target = {};
 
-        if(this.state.jsonSelf){
+        if (this.state.jsonSelf) {
             target = JSON.parse(this.state.jsonSelf);
         }
-        else if(this.state.json) {
+        else if (this.state.json) {
             target = this.state.json;
         }
         else {
@@ -206,13 +212,13 @@ class Sign extends React.Component {
             });
         }
 
-        if(!target.hasOwnProperty('hash') || !target.hasOwnProperty('fact')
+        if (!target.hasOwnProperty('hash') || !target.hasOwnProperty('fact')
             || !target.hasOwnProperty('fact_signs') || !target.hasOwnProperty('memo')) {
-                this.setState({
-                    response: undefined
-                });
-                return;
-            }
+            this.setState({
+                response: undefined
+            });
+            return;
+        }
 
         broadcast(target).then(
             res => {
@@ -234,13 +240,15 @@ class Sign extends React.Component {
         this.clear(CLEAR_RESPONSE);
         this.clear(CLEAR_DOWNLOAD);
 
-        let target = this.state.jsonSelf ? JSON.parse(this.state.jsonSelf) : (
-            this.state.json ? this.state.json : {}
-        );
+        let target = this.state.jsonSelf
+            ? JSON.parse(this.state.jsonSelf)
+            : (
+                this.state.json ? this.state.json : {}
+            );
 
-        if(!target.hasOwnProperty('hash') || !target.hasOwnProperty('fact_signs') 
-            || !target.hasOwnProperty('fact') || !target.hasOwnProperty('memo')){
-                return;
+        if (!target.hasOwnProperty('hash') || !target.hasOwnProperty('fact_signs')
+            || !target.hasOwnProperty('fact') || !target.hasOwnProperty('memo')) {
+            return;
         }
 
         const signer = new Signer('mitum', this.props.account.privateKey);
@@ -252,28 +260,28 @@ class Sign extends React.Component {
             });
             alert('Success!');
         }
-        catch(e) {
+        catch (e) {
             alert('Could not add sign to operation');
         }
     }
 
     _createFile(target) {
-        if(!target || !target.hasOwnProperty('hash') || !target.hash) {
+        if (!target || !target.hasOwnProperty('hash') || !target.hash) {
             throw new Error('Invalid json');
         }
         this.setState({
             download: download(target),
             filename: target.hash
-        });  
+        });
     }
 
     onCreateFile() {
-        try{
-            if(this.state.jsonSelf){
+        try {
+            if (this.state.jsonSelf) {
                 this._createFile(JSON.parse(this.state.jsonSelf));
                 alert('Success!');
             }
-            else if(this.state.json){
+            else if (this.state.json) {
                 this._createFile(this.state.json);
                 alert('Success!');
             }
@@ -282,7 +290,7 @@ class Sign extends React.Component {
                     download: undefined
                 })
             }
-        } catch(e) {
+        } catch (e) {
             alert('Could not create file!');
         }
     }
@@ -290,10 +298,10 @@ class Sign extends React.Component {
     render() {
         return (
             <div className="sign-container">
-                { this.state.isRedirect ? <Redirect to='/login'/> : false}
+                {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <h1>SIGN / SEND OPERATION</h1>
                 <div className="sign-account">
-                    <p>{ this.props.account.address }</p>
+                    <p>{this.props.account.address}</p>
                 </div>
                 <div className="sign-operation">
                     <span className="sign-switch">
@@ -301,34 +309,29 @@ class Sign extends React.Component {
                         <SelectButton onClick={() => this.onClickSelf()} size="big">WRITTEN</SelectButton>
                     </span>
                     <div ref={this.createdRef}></div>
-                    { this.jsonView() }
+                    {this.jsonView()}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
                         <SmallButton onClick={() => this.onCreateFile()} >to json file</SmallButton>
                     </div>
-                    { this.state.download ? <a target="_blank" download={`${this.state.filename}.json`} 
-                                href={this.state.download} rel="noreferrer">Download</a> : false }
+                    {this.state.download ? <a target="_blank" download={`${this.state.filename}.json`}
+                        href={this.state.download} rel="noreferrer">Download</a> : false}
                 </div>
                 <div className="sign-buttons">
                     <ConfirmButton onClick={() => this.onClickSend()}>SEND NOW</ConfirmButton>
                     <ConfirmButton onClick={() => this.onClickSign()}>ADD SIGN</ConfirmButton>
                 </div>
-                { this.state.response ? <div ref={this.responseRef}></div> : false }
-                { this.state.response 
-                    ? 
+                {this.state.response ? <div ref={this.responseRef}></div> : false}
+                {this.state.response
+                    ?
                     <div className="sign-response">
-                        <span>{(this.state.status===200 ? "Broadcast Success" : "Broadcast Fail") + `: ${this.state.status}`}</span>
-                        <pre 
-                            style={{
-                            display: 'block',
-                            padding: '10px 30px',
-                            margin: '0',
-                            overflow: 'visible',
-                            whiteSpace: 'pre-wrap'}}
+                        <span>{(this.state.status === 200 ? "Broadcast Success" : "Broadcast Fail") + `: ${this.state.status}`}</span>
+                        <pre
+                            style={preStyle}
                             onClick={() => onCopy(this.state.response)}>
-                            { JSON.stringify(this.state.response, null, 4) }
-                        </pre> 
-                    </div>: false }
+                            {JSON.stringify(this.state.response, null, 4)}
+                        </pre>
+                    </div> : false}
             </div>
         );
     }

@@ -20,13 +20,13 @@ class App extends React.Component {
       <div>
         <HashRouter className="app-container">
           <Link className='link-help' to="/help">HELP</Link>
-          <Navigation/>
+          <Navigation />
           <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login}/>
+          <Route path="/login" component={Login} />
           <Route path="/wallet/:account" component={Wallet} />
-          <Route path="/key-generate" component={KeyGen}/>
-          <Route path="/res-key-generate" component={ResKeyGen}/>
-          <Route path="/help" component={Help}/>
+          <Route path="/key-generate" component={KeyGen} />
+          <Route path="/res-key-generate" component={ResKeyGen} />
+          <Route path="/help" component={Help} />
           <Route path="/operation" component={Operation} />
           <Route path="/sign" component={Sign} />
         </HashRouter>

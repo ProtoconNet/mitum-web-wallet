@@ -6,7 +6,7 @@ import './CopyButton.scss';
 class CopyButton extends React.Component {
     render() {
         return (
-            <button className="copy-button" onClick={this.props.onClick} 
+            <button className="copy-button" onClick={this.props.onClick}
                 style={{ display: this.props.visible ? "inherit" : "none" }}>
                 COPY
             </button>

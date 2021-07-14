@@ -10,22 +10,16 @@ const onCopy = (msg) => {
 }
 
 class NewOperation extends React.Component {
-    state = {
-        isRedirect: false
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isRedirect: false
+        }
     }
 
     onClick() {
         this.setState({ isRedirect: true });
-    }
-    
-    renderRedirect() {
-        return (this.state.isRedirect ? 
-            <Redirect to={{
-                    pathname: '/sign',
-                    state: {
-                        json: this.props.json
-                    }}}/> : false 
-        );
     }
 
     render() {
@@ -35,14 +29,21 @@ class NewOperation extends React.Component {
                     display: 'block',
                     padding: '10px 30px',
                     margin: '0',
-                    overflow: 'visible',}}
+                    overflow: 'visible',
+                }}
                     onClick={() => onCopy(JSON.stringify(this.props.json, null, 4))}>
-                    { JSON.stringify(this.props.json, null, 4) }
+                    {JSON.stringify(this.props.json, null, 4)}
                 </pre>
                 <div className="json-confirm">
                     <ConfirmButton onClick={() => this.onClick()}>ACCEPT</ConfirmButton>
                 </div>
-                { this.renderRedirect() }            
+                {this.state.isRedirect ?
+                    <Redirect to={{
+                        pathname: '/sign',
+                        state: {
+                            json: this.props.json
+                        }
+                    }} /> : false}
             </div>
         );
     }

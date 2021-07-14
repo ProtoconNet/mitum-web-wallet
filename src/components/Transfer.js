@@ -23,13 +23,12 @@ class Transfer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.renderRedirect = this.renderRedirect.bind(this);
         this.createdRef = createRef();
 
-        if(!this.props.hasOwnProperty('account') || !this.props.account) {
-                this.state = { isRedirect: true }
-                return;
-            }
+        if (!this.props.hasOwnProperty('account') || !this.props.account) {
+            this.state = { isRedirect: true }
+            return;
+        }
 
         this.state = {
             isRedirect: false,
@@ -49,7 +48,7 @@ class Transfer extends React.Component {
 
         const account = this.props.account;
         const amounts = generator.createAmounts(
-            this.state.amounts.map(x => 
+            this.state.amounts.map(x =>
                 generator.formatAmount(parseInt(x.amount), x.currency))
         );
 
@@ -98,11 +97,11 @@ class Transfer extends React.Component {
         })
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.scrollToJSON();
     }
-    
-    componentDidUpdate () {
+
+    componentDidUpdate() {
         this.scrollToJSON();
     }
 
@@ -111,20 +110,15 @@ class Transfer extends React.Component {
         this.createdRef.current.scrollIntoView({ behavior: 'smooth' })
     }
 
-    renderRedirect() {
-        if(this.state.isRedirect) {
-            return <Redirect to='/login' />;
-        }
-    }
-
     render() {
         const account = this.props.account;
         return (
             <div className="tf-container">
+                {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
                     <ul>
-                        { account.balances ? account.balances.map(x => balance(x)) : false }
+                        {account.balances ? account.balances.map(x => balance(x)) : false}
                     </ul>
                 </div>
                 <div className="tf-input-wrap">
@@ -132,33 +126,33 @@ class Transfer extends React.Component {
                         <h2>TRANSFER TO</h2>
                         <InputBox size="medium" useCopy={false} disabled={false} placeholder="account address"
                             value={this.state.address}
-                            onChange={(e) => this.onChangeAddress(e)}/>
+                            onChange={(e) => this.onChangeAddress(e)} />
                     </div>
-                        <div className="tf-amounts">
-                            <h2>AMOUNTS</h2>
-                            <ul>
-                                { this.state.amounts.map(x => balance(x)) }
-                            </ul>
-                            <span className="tf-amount-adder">
-                                <InputBox size="medium" useCopy={false} disabled={false} placeholder="currency" 
-                                    onChange={(e) => this.onChangeCurrency(e)}
-                                    value={this.state.currency}/>
-                                <InputBox size="small" useCopy={false} disabled={false} placeholder="amount"
-                                    value={this.state.amount}
-                                    onChange={(e) => this.onChangeAmount(e)}/>
-                                <AddButton 
-                                    disabled={ !(this.state.currency && this.state.amount) ? true: false }
-                                    onClick={() => this.addAmount()}/>
-                            </span>
-                        </div>
+                    <div className="tf-amounts">
+                        <h2>AMOUNTS</h2>
+                        <ul>
+                            {this.state.amounts.map(x => balance(x))}
+                        </ul>
+                        <span className="tf-amount-adder">
+                            <InputBox size="medium" useCopy={false} disabled={false} placeholder="currency"
+                                onChange={(e) => this.onChangeCurrency(e)}
+                                value={this.state.currency} />
+                            <InputBox size="small" useCopy={false} disabled={false} placeholder="amount"
+                                value={this.state.amount}
+                                onChange={(e) => this.onChangeAmount(e)} />
+                            <AddButton
+                                disabled={!(this.state.currency && this.state.amount) ? true : false}
+                                onClick={() => this.addAmount()} />
+                        </span>
                     </div>
+                </div>
                 <ConfirmButton
-                    disabled={ this.state.amounts.length < 1 || this.state.address==="" ? true : false }
+                    disabled={this.state.amounts.length < 1 || this.state.address === "" ? true : false}
                     onClick={() => this.onClick()}>CREATE</ConfirmButton>
 
                 <div ref={this.createdRef}></div>
-                { this.state.created ? 
-                    <NewOperation json={this.state.created}/> : false }
+                {this.state.created ?
+                    <NewOperation json={this.state.created} /> : false}
 
                 <div ref={this.createdRef}></div>
             </div>

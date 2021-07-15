@@ -54,13 +54,13 @@ class KeyGen extends React.Component {
         return (
             <div className="key-gen-container">
                 <div className="key-selector">
-                    <SelectButton onClick={() => this.getKey(KEY_BTC)} size="big">BTC</SelectButton>
-                    <SelectButton onClick={() => this.getKey(KEY_ETHER)} size="big">ETHER</SelectButton>
-                    <SelectButton onClick={() => this.getKey(KEY_STELLAR)} size="big">STELLAR</SelectButton>
+                    <SelectButton onClick={() => this.getKey(KEY_BTC)}>BTC</SelectButton>
+                    <SelectButton onClick={() => this.getKey(KEY_ETHER)}>ETHER</SelectButton>
+                    <SelectButton onClick={() => this.getKey(KEY_STELLAR)}>STELLAR</SelectButton>
                 </div>
                 <div className="key-boxer">
-                    <InputBox disabled={true} useCopy={true} size="big" value={this.state.privKey} />
-                    <InputBox disabled={true} useCopy={true} size="big" value={this.state.pubKey} />
+                    <InputBox label="Private Key" disabled={true} useCopy={true} size="big" value={this.state.privKey} />
+                    <InputBox label="Public Key" disabled={true} useCopy={true} size="big" value={this.state.pubKey} />
                 </div>
             </div>
         )

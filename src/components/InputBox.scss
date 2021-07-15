@@ -6,12 +6,13 @@
 
     .input-box {
         border: 2px solid lightblue;
-        border-radius: 5px;
+        border-radius: 2px;
         padding: 0.2em;
         font-size: 1em;
-        color: darkblue;
+        font-weight: 800;
+        color: darkslategray;
         background-color: aliceblue;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
 
         &:focus {
             outline: none !important;
@@ -23,7 +24,7 @@
 
     .big {
         height: 45px;
-        width: 50vw;
+        width: 1000px;
         font-size: 1.2em;
         font-weight: 400;
     }

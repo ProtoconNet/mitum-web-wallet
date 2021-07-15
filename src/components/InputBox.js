@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './InputBox.scss';
-import CopyButton from './buttons/CopyButton';
 import copy from 'copy-to-clipboard';
+import SmallButton from './buttons/SmallButton';
 
 class InputBox extends React.Component {
     constructor(props) {
@@ -29,11 +29,12 @@ class InputBox extends React.Component {
                     disabled={this.props.disabled}
                     onChange={this.props.onChange ? this.props.onChange : () => this.onChange()}
                     placeholder={this.props.placeholder ? this.props.placeholder : ""} />
-                <CopyButton visible={this.props.useCopy}
+                <SmallButton className="input-copy-button"
+                    visible={this.props.useCopy}
                     onClick={() => {
                         copy(this.props.value);
                         alert('copied!');
-                    }} />
+                    }} >COPY</SmallButton>
             </div>
         )
     }

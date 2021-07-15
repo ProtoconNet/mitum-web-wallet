@@ -6,16 +6,15 @@ import './SelectButton.scss';
 class SelectButton extends React.Component {
     render() {
         return (
-            <button className={"select-button " + this.props.size}
+            <button className="select-button"
                 onClick={this.props.onClick}>
-                <span>{this.props.children}</span>
+                {this.props.children}
             </button>
         );
     }
 }
 
 SelectButton.propTypes = {
-    size: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired
 }
 

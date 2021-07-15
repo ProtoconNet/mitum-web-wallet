@@ -13,6 +13,12 @@ export const reducer = (state = initialState, action) => {
                 isLogin: true,
                 account: action.account
             }
+        case actions.LOGOUT:
+            return {
+                ...state,
+                isLogin: false,
+                account: undefined
+            }
         default:
             return state;
     }

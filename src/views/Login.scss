@@ -25,7 +25,7 @@
 
     &:hover,
     &:focus-within {
-        background: hsla(0, 0%, 80%, .14);
+        background: rgba(255, 164, 164, 0.788);
     }
 
     .rad-input {
@@ -42,7 +42,7 @@
         }
 
         &:checked~.rad-text {
-            color: hsl(0, 0%, 40%);
+            color: hsl(59, 84%, 81%);
         }
     }
 
@@ -69,7 +69,7 @@
     }
 
     .rad-text {
-        color: hsl(0, 0%, 60%);
+        color: hsl(0, 0%, 100%);
         margin-left: 14px;
         letter-spacing: 3px;
         text-transform: uppercase;

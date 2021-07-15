@@ -110,6 +110,10 @@ class Wallet extends React.Component {
     }
 
     renderRedirect() {
+        if(!this.props.account) {
+            return <Redirect to="/login" />;
+        }
+
         if (!this.state.isRedirect) {
             return false;
         }

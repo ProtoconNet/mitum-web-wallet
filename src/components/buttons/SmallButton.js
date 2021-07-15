@@ -6,6 +6,7 @@ import './SmallButton.scss';
 function SmallButton(props) {
     return (
         <button className="small-button draw-border"
+            style={{ display: props.visible ? "inherit" : "none" }}
             onClick={props.onClick}>
             {props.children}
         </button>

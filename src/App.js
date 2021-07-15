@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Link } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 import './App.scss';
 
 import Home from './views/Home';
@@ -12,14 +12,14 @@ import Operation from './views/Operation';
 import Sign from './views/Sign';
 
 import Navigation from './components/Navigation';
+import Logout from './views/Logout';
 
 class App extends React.Component {
   render() {
 
     return (
-      <div>
+      <div className="app-container">
         <HashRouter className="app-container">
-          <Link className='link-help' to="/help">HELP</Link>
           <Navigation />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
@@ -29,6 +29,7 @@ class App extends React.Component {
           <Route path="/help" component={Help} />
           <Route path="/operation" component={Operation} />
           <Route path="/sign" component={Sign} />
+          <Route path="/logout" component={Logout} />
         </HashRouter>
       </div>
     );

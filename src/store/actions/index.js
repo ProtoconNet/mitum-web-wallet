@@ -1,6 +1,7 @@
 import Account from '../../lib/Account';
 
 export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 
 export function login(address, privateKey, data) {
     const account = new Account(address, privateKey, data);
@@ -13,5 +14,11 @@ export function login(address, privateKey, data) {
             balances: account.balances,
             privateKey: account.privateKey
         }
+    }
+}
+
+export function logout() {
+    return {
+        type: LOGOUT
     }
 }

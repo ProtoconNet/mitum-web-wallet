@@ -2,60 +2,82 @@
     display: flex;
 
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
 
-    width: 300px;
+    width: 320px;
     z-index: 1;
     position: fixed;
-    top: 30px;
-    left: 10px;
+    top: 50px;
+    left: 20px;
 
-    div {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .side {
+        align-self: flex-start;
 
-        img {
-            width: 80px;
-            height: auto;
-            margin: 10px;
-            border-radius: 70%;
-            justify-self: center;
-
-            &:active {
-                background: lightpink;
-                box-shadow: 1px 1px 25px 10px lightcoral;
-                transition: 300ms ease all;
-            }
+        &:before {
+            background: darkslateblue;
         }
     }
 
+    .nav-title p {
+        font-size: 1.5em;
+    }
 
+    .main {
+        &:before {
+            background: darkolivegreen;
+        }
+    }
 
-    span {
-        display: flex;
-        flex-direction: column;
-        border-radius: 5px;
-        padding: 10px 20px;
+    a {
+        position: relative;
+        margin: 1em;
 
-        a {
+        &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 10px;
+            bottom: 5px;
+            transition: all 0.2s ease-out;
+        }
+
+        &:hover:before {
+            transform: translateY(10px)
+        }
+
+        &:active {
+            p {
+                color: darkred;
+            }
+        }
+
+        p {
             text-decoration: none;
-            color: #0008fc;
-            text-transform: uppercase;
-            text-align: center;
-            font-weight: 600;
+            margin: 0.5em;
 
-            &:not(:last-child) {
-                margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            font-size: 1.2em;
+            background: linear-gradient(to bottom, lightgray 100%, lightgray 60%, #fff 60%, #fff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-repeat: no-repeat;
+            transition: background 0.2s ease-out;
+            white-space: nowrap;
+
+            &:hover {
+                background-position: 0 0;
             }
         }
     }
 }
 
 @media screen and (max-width: 1090px) {
-    .nav span {
+    .nav a {
         left: initial;
         top: initial;
         bottom: 0px;

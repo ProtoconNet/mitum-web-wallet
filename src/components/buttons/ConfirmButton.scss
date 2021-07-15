@@ -7,18 +7,18 @@
     .confirm-button {
         text-decoration: none;
         border: 1px solid transparent;
-        border-radius: 10px;
+        border-radius: 5px;
         position: relative;
         overflow: hidden;
         font-size: 1.5rem;
         font-weight: 900;
         padding: 0.8rem 3rem;
-        color: white;
-        background-color: lightpink;
+        color: black;
+        background-color: white;
         text-transform: uppercase;
 
         &:hover {
-            box-shadow: 1px 1px 25px 10px lightcoral;
+            box-shadow: 1px 1px 25px 10px lightyellow;
         }
 
         &:before {
@@ -30,7 +30,7 @@
             height: 100%;
             background: linear-gradient(120deg,
                     transparent,
-                    lightcoral,
+                    lightyellow,
                     transparent);
             transition: all 650ms;
         }
@@ -40,7 +40,12 @@
         }
 
         &:active {
-            background-color: lightcoral;
+            background-color: lightsalmon;
+            
+            &::before,
+            &::after {
+                background-color: lightsalmon;
+            }
         }
     }
 }

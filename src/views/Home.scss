@@ -4,5 +4,82 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 
+    .home-wrapper {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            .home-title-wrapper {
+                img {
+                    opacity: 1.0;
+                }
+
+                .home-title h1 {
+                    background-size: 100% 100%;
+                }
+            }
+
+            .home-open {
+                opacity: 0.8;
+                background-color: white;
+            }
+        }
+
+        .home-title-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+
+            img {
+                position: relative;
+                margin: 0;
+                padding: 0;
+                width: 250px;
+                height: auto;
+
+                opacity: 0.5;
+            }
+
+            .home-title {
+                font-size: 2rem;
+
+                h1 {
+                    max-width: 300px;
+
+                    font-weight: 600;
+                    letter-spacing: 5px;
+
+                    color: lightgoldenrodyellow;
+
+                    width: 100%;
+                    background-image: linear-gradient(to right,
+                            rgba(172, 106, 172, 0) 70%,
+                            rgba(172, 106, 172, 1) 70%,
+                            rgba(172, 106, 172, 1) 80%,
+                            rgba(172, 106, 172, 0) 80%,
+                        );
+                    background-size: 0 100%;
+                    background-repeat: no-repeat;
+                    transition: 350ms linear;
+                }
+            }
+        }
+
+        .home-open {
+            letter-spacing: 5px;
+            font-size: 2em;
+            font-weight: 900;
+
+            opacity: 0;
+            color: black;
+
+            padding: 0.2em 0.5em 0.2em 0.5em;
+        }
+    }
 }

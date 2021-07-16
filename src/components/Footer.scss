@@ -1,0 +1,25 @@
+.footer-container {
+    z-index: 1;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+
+    a {
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
+        color: white;
+
+        opacity: 0.8;
+
+        &:hover {
+            color: cyan;
+            opacity: 1.0;
+            text-decoration: underline;
+        }
+
+        &:active {
+            color: red;
+        }
+    }
+}

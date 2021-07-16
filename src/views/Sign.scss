@@ -1,17 +1,18 @@
 .sign-container {
-    width: 100%;
-    height: 100%;
+    width: 85%;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     padding: 3em;
 
     h1 {
         font-size: 3em;
         font-weight: 800;
         margin: 1em;
+        letter-spacing: 5px;
     }
 
     .sign-account {
@@ -19,15 +20,18 @@
         margin: 2em;
         padding: 0;
 
-        border-top: 5px solid gray;
-        border-bottom: 5px solid gray;
+        border-top: 5px solid lightslategray;
+        border-bottom: 5px solid lightslategray;
 
         text-align: center;
         font-size: 1.2em;
+        font-weight: 600;
+
+        opacity: 0.8;
 
         p {
             padding: 0.5em 0 0.5em 0;
-            background-color: gray;
+            background-color: lightslategray;
             color: white;
         }
     }
@@ -64,16 +68,19 @@
 
             pre {
                 width: 100%;
-                border: 5px solid grey;
+                border: 3px solid white;
+                background-color: white;
+                opacity: 0.7;
+                color: black;
                 padding: 2em;
 
                 &:hover {
-                    border: 5px solid red;
+                    border: 3px solid red;
                     background-color: antiquewhite;
                 }
 
                 &:active {
-                    border: 5px solid yellowgreen;
+                    border: 3px solid yellowgreen;
                     background-color: aquamarine;
                 }
             }
@@ -82,7 +89,7 @@
                 width: 100%;
                 height: 500px;
 
-                border: 2px solid lightblue;
+                border: 2px solid white;
                 border-radius: 2px;
 
                 padding: 2em;
@@ -91,10 +98,12 @@
                 background-color: aliceblue;
                 letter-spacing: 1px;
 
+                opacity: 0.7;
+
                 &:focus {
                     outline: none !important;
                     border: 2px solid lightcoral;
-                    background-color: beige;
+                    background-color: antiquewhite;
                 }
             }
         }
@@ -123,15 +132,19 @@
 
             padding: 0.2em 0 0.2em 0;
 
-            background-color: lightsalmon;
-            color: white;
+            background-color: white;
+            text-decoration: underline;
+            color: black;
+
+            opacity: 0.8;
 
             &:hover {
-                background-color: lightcoral;
+                background-color: lightskyblue;
+                color: white;
             }
 
             &:active {
-                background-color: lightblue;
+                background-color: lightslategray;
             }
         }
     }
@@ -166,20 +179,26 @@
             font-size: 1em;
             color: red;
             margin: 0.2em;
+
+            display: inline-block;
+            text-align: start;
         }
 
         pre {
             width: 100%;
-            border: 5px solid grey;
+            border: 3px solid white;
+            background-color: white;
+            opacity: 0.7;
+            color: black;
             padding: 2em;
 
             &:hover {
-                border: 5px solid red;
+                border: 3px solid red;
                 background-color: antiquewhite;
             }
 
             &:active {
-                border: 5px solid yellowgreen;
+                border: 3px solid yellowgreen;
                 background-color: aquamarine;
             }
         }

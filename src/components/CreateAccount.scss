@@ -12,6 +12,7 @@
         font-size: 3em;
         font-weight: 800;
         margin: 1em;
+        letter-spacing: 5px;
     }
 
     .ca-balance-wrap {
@@ -25,8 +26,8 @@
         flex-direction: column;
         text-align: center;
 
-        border-top: 7px solid lightgray;
-        border-bottom: 7px solid lightgray;
+        border-top: 7px solid lightslategray;
+        border-bottom: 7px solid lightslategray;
 
         ul {
             width: 100%;
@@ -42,32 +43,39 @@
                 align-items: center;
 
                 text-decoration: none;
-                background-image: linear-gradient(to right, lightgray, lightgray 100%);
+                background-image: linear-gradient(to right, lightslategray, lightslategray 100%);
                 background-size: 0 100%;
                 background-repeat: no-repeat;
                 transition: background .5s;
                 line-height: 0.7;
                 background-position: 0;
-                color: gray;
+                color: white;
 
+                opacity: 0.8;
 
                 padding: 0.2em 0 0.2em 0;
                 font-weight: 500;
-                text-align: start;
+
+                .currency,
+                .amount {
+                    display: inline-block;
+                    text-align: start;
+                    padding-left: 0.2em;
+                    padding-right: 0.2em;
+                }
 
                 .currency {
-                    width: 60%;
+                    width: 70%;
                     font-size: 1.2em;
                 }
 
                 .amount {
-                    width: 40%;
+                    width: 30%;
                     font-size: 1.2em;
                 }
 
                 &:hover {
                     background-size: 100% 100%;
-                    color: white;
                 }
             }
         }
@@ -105,7 +113,7 @@
                 font-size: 1.2em;
                 margin: 1em 0 1em 0;
 
-                border: 3px solid lightpink;
+                border: 3px solid white;
 
                 li {
                     width: 100%;
@@ -118,32 +126,37 @@
                     font-weight: 400;
 
                     text-decoration: none;
-                    background-image: linear-gradient(to right, lightpink, lightpink 100%);
+                    background-image: linear-gradient(to right, lightslategray, lightslategray 100%);
                     background-size: 0 100%;
                     background-repeat: no-repeat;
                     transition: background .5s;
                     line-height: 0.7;
                     background-position: 0;
-                    color: palevioletred;
-                    font-weight: 500;
+                    color: white;
+                    font-weight: 600;
                     letter-spacing: 1px;
+
+                    opacity: 0.8;
 
                     .key,
                     .weight {
                         text-align: start;
+                        display: inline-block;
+                        text-align: start;
+                        padding-left: 0.2em;
+                        padding-right: 0.2em;
                     }
 
                     .key {
-                        width: 85%;
+                        width: 70%;
                     }
 
                     .weight {
-                        width: 15%;
+                        width: 30%;
                     }
 
                     &:hover {
                         background-size: 100% 100%;
-                        color: white;
                     }
                 }
             }
@@ -180,7 +193,7 @@
                 font-size: 1.2em;
                 margin: 1em 0 1em 0;
 
-                border: 3px solid lightblue;
+                border: 3px solid white;
 
                 li {
                     width: 100%;
@@ -190,35 +203,40 @@
 
                     padding: 0.2em 0 0.2em 0;
                     margin: 0.5em 0 0.5em 0;
-                    font-weight: 400;
+                    font-weight: 600;
 
                     text-decoration: none;
-                    background-image: linear-gradient(to right, lightblue, lightblue 100%);
+                    background-image: linear-gradient(to right, lightslategray, lightslategray 100%);
                     background-size: 0 100%;
                     background-repeat: no-repeat;
                     transition: background .5s;
                     line-height: 0.7;
                     background-position: 0;
-                    color: darkblue;
+                    color: white;
                     font-weight: 500;
                     letter-spacing: 1px;
+
+                    opacity: 0.8;
 
                     .currency,
                     .amount {
                         text-align: start;
+                        display: inline-block;
+                        text-align: start;
+                        padding-left: 0.2em;
+                        padding-right: 0.2em;
                     }
 
                     .currency {
-                        width: 60%;
+                        width: 70%;
                     }
 
                     .amount {
-                        width: 40%;
+                        width: 30%;
                     }
 
                     &:hover {
                         background-size: 100% 100%;
-                        color: white;
                     }
                 }
             }

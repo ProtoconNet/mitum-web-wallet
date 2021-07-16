@@ -63,6 +63,7 @@ class Sign extends React.Component {
 
         this.createdRef = createRef();
         this.responseRef = createRef();
+        this.jsonRef = createRef();
 
         if (!this.props.hasOwnProperty('location') || !this.props.location.hasOwnProperty('state')
             || !this.props.location || !this.props.location.state || !this.props.isLogin) {
@@ -109,6 +110,9 @@ class Sign extends React.Component {
     scrollToJSON = () => {
         if (this.responseRef.current && this.state.response) {
             this.responseRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else if (this.jsonRef.current && (this.state.jsonSelf || this.state.json)) {
+            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
         }
         else if (this.createdRef.current && !this.state.response) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -296,9 +300,16 @@ class Sign extends React.Component {
     }
 
     render() {
+        const containerStyle = {
+            height: !(this.state.response
+                || this.state.jsonSelf
+                || this.state.json) ? "130vh" : "100%"
+        };
+
         return (
-            <div className="sign-container">
+            <div className="sign-container" style={containerStyle}>
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
+                <div ref={this.createdRef}></div>
                 <h1>SIGN / SEND OPERATION</h1>
                 <div className="sign-account">
                     <p>{this.props.account.address}</p>
@@ -308,11 +319,11 @@ class Sign extends React.Component {
                         <SelectButton onClick={() => this.onClickImport()} size="big">IMPORTED</SelectButton>
                         <SelectButton onClick={() => this.onClickSelf()} size="big">WRITTEN</SelectButton>
                     </span>
-                    <div ref={this.createdRef}></div>
+                    <div ref={this.jsonRef}></div>
                     {this.jsonView()}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
-                        <SmallButton onClick={() => this.onCreateFile()} >to json file</SmallButton>
+                        <SmallButton visible={true} onClick={() => this.onCreateFile()} >to json file</SmallButton>
                     </div>
                     {this.state.download ? <a target="_blank" download={`${this.state.filename}.json`}
                         href={this.state.download} rel="noreferrer">Download</a> : false}
@@ -321,7 +332,7 @@ class Sign extends React.Component {
                     <ConfirmButton onClick={() => this.onClickSend()}>SEND NOW</ConfirmButton>
                     <ConfirmButton onClick={() => this.onClickSign()}>ADD SIGN</ConfirmButton>
                 </div>
-                {this.state.response ? <div ref={this.responseRef}></div> : false}
+                <div ref={this.responseRef}></div>
                 {this.state.response
                     ?
                     <div className="sign-response">

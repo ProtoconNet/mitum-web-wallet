@@ -13,13 +13,14 @@ import Sign from './views/Sign';
 
 import Navigation from './components/Navigation';
 import Logout from './views/Logout';
+import Footer from './components/Footer';
 
 class App extends React.Component {
   render() {
 
     return (
       <div className="app-container">
-        <HashRouter className="app-container">
+        <HashRouter >
           <Navigation />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
@@ -30,6 +31,7 @@ class App extends React.Component {
           <Route path="/operation" component={Operation} />
           <Route path="/sign" component={Sign} />
           <Route path="/logout" component={Logout} />
+          <Footer />
         </HashRouter>
       </div>
     );

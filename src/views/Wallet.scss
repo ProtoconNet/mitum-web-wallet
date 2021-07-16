@@ -1,16 +1,26 @@
 .wallet-container {
-    width: 100vw;
-    height: 100%;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    width: 95%;
+    height: 130vh;
+
+    padding: 3em;
 
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
 
+    h1 {
+        font-size: 3em;
+        font-weight: 800;
+        margin: 1em;
+        letter-spacing: 5px;
+    }
+
     .wallet-info {
-        width: 60vw;
+        width: 60%;
+
+        border-top: 7px solid white;
+        border-bottom: 7px solid white;
 
         display: flex;
         align-items: center;
@@ -19,145 +29,133 @@
 
         font-weight: 500;
         padding: 2em;
-
-        .wallet-copy-help {
-            font-size: 1em;
-            color: palevioletred;
-            align-self: flex-end;
-        }
+        margin: 0;
 
         .wallet-info-account {
-            border-top: 7px solid lightpink;
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
 
             width: 100%;
-            height: 100%;
-            padding: 1em;
+            padding: 1em 1em 1em 0;
             margin: 0;
-
-            &:hover {
-                color: white;
-
-                h2 {
-                    background-size: 100% 100%;
-                }
-
-                p {
-                    background-size: 100% 100%;
-                }
-            }
 
             h2,
             p {
-                flex: 1;
-                text-decoration: none;
-                background-image: linear-gradient(to right, lightblue, lightblue 100%);
-                background-size: 0 100%;
-                background-repeat: no-repeat;
-                transition: background .5s;
+                font-size: 1.4em;
 
-                background-position: 0;
+                width: 100%;
+                margin: 0.2em 0 0.2em 0;
+                padding: 0.2em 0.5em 0.2em 0.5em;
+
+                color: black;
+                background-color: white;
+                
+                opacity: 0.7;
             }
 
             h2 {
-                font-size: 1.5em;
-                letter-spacing: 3px;
-                line-height: 1.5;
                 text-decoration: underline;
+                font-weight: 700;
+                letter-spacing: 3px;
             }
 
             p {
-                font-size: 1.3em;
+                font-weight: 500;
                 letter-spacing: 2px;
 
-                line-height: 1.2;
+                &:hover {
+                    color: gray;
+                    text-decoration: underline;
+                }
             }
         }
 
         .wallet-info-detail {
             width: 100%;
-            padding: 1em;
+            padding: 1em 1em 1em 0;
             margin: 0;
-            border-bottom: 7px solid lightpink;
+
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
 
             .wallet-amount {
-                width: 100%;
-                padding: 0;
-                margin: 0;
 
-                &:hover {
-                    h2 {
-                        color: white;
-                        background-size: 100% 100%;
-                    }
-
-                    div {
-                        border-top: 3px solid lightblue;
-                        border-bottom: 3px solid lightblue;
-                    }
-                }
-
-                div {
-                    width: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    flex-direction: row;
-                    text-align: left;
-
-                    border-top: 3px solid lightgrey;
-                    border-bottom: 3px solid lightgrey;
-
-                    &:hover {
-                        p {
-                            color: white;
-                            background-size: 100% 100%;
-                        }
-                    }
-                }
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
 
                 h2,
-                div p {
-                    flex: 1;
-                    text-decoration: none;
-                    background-image: linear-gradient(to right, lightblue, lightblue 100%);
-                    background-size: 0 100%;
-                    background-repeat: no-repeat;
-                    transition: background .5s;
+                ul {
+                    font-size: 1.4em;
 
-                    background-position: 0;
+                    width: 100%;
+                    margin: 0.2em 0 0.2em 0;
+
+                    color: black;
                 }
 
                 h2 {
-                    font-size: 1.5em;
-                    letter-spacing: 3px;
-                    line-height: 1.5;
+                    background-color: white;
+                    padding: 0.2em 0.5em 0.2em 0.5em;
                     text-decoration: underline;
+                    letter-spacing: 3px;
+
+                    opacity: 0.7;
                 }
 
-                div p {
-                    font-size: 1.3em;
-                    font-weight: 500;
-                    letter-spacing: 2px;
+                ul {
 
-                    line-height: 1.2;
+                    padding: 0;
+
+                    li {
+                        width: 100%;
+                        margin: 0;
+                        padding: 0.2em 0.5em 0.2em 0.5em;
+
+                        display: flex;
+                        flex-direction: row;
+                        align-items: flex-start;
+
+                        background-color: white;
+
+                        opacity: 0.7;
+
+                        .currency,
+                        .amount {
+                            display: inline-block;
+                            text-align: start;
+                            letter-spacing: 2px;
+                        }
+
+                        .currency {
+                            width: 70%;
+                        }
+
+                        .amount {
+                            width: 30%;
+                        }
+
+                    }
                 }
+
             }
 
             .wallet-more {
                 width: 100%;
-                font-size: 1.5em;
+                font-size: 1.4em;
                 font-weight: 800;
                 letter-spacing: 15px;
-                padding: 0;
-                margin: 0;
+                padding: 0 0 0 1em;
+                margin: 0 0 0 0;
 
                 section {
-                    color: darkblue;
+                    color: white;
                     width: 100%;
+
 
                     display: flex;
                     flex-direction: row;
@@ -166,7 +164,7 @@
                     justify-content: center;
 
                     text-decoration: none;
-                    background-image: linear-gradient(to right, lightpink, lightpink 100%);
+                    background-image: linear-gradient(to right, lightslategray, lightslategray 100%);
                     background-size: 0 50%;
                     background-repeat: no-repeat;
                     transition: background .5s;
@@ -174,7 +172,7 @@
                     line-height: 1.5;
 
                     &:hover {
-                        color: white;
+                        color: black;
                         background-size: 100% 50%;
                     }
 
@@ -211,117 +209,130 @@
                     .wallet-priv-key,
                     .wallet-res-key {
                         width: 100%;
-                        margin: 0;
-
-                        h2 {
-                            font-size: 1.5em;
-                            letter-spacing: 3px;
-                            line-height: 1.5;
-                            text-decoration: underline;
-                        }
-
-                        div {
-                            font-size: 1.3em;
-                            letter-spacing: 3px;
-
-                            &:active {
-                                color: cornflowerblue;
-                            }
-                        }
-
-                        span {
-                            width: 100%;
-                            margin: 0.5em 0 0 0;
-                            text-align: center;
-                            font-size: 1.3em;
-                            letter-spacing: 15px;
-                            font-weight: 800;
-                            color: red;
-
-                            background-image: linear-gradient(to right, lightpink, lightpink 100%);
-                            background-size: 0 100%;
-                            background-repeat: no-repeat;
-                            transition: background .5s;
-                            background-position: 0;
-                            line-height: 1.5;
-
-                            &:hover {
-                                background-size: 100% 100%;
-                                color: white;
-                            }
-                        }
+                        padding: 1em 0 1em 0;
+                        margin: 0.5em 0 0.5em 0;
 
                         h2,
-                        div {
-                            background-image: linear-gradient(to right, lightblue, lightblue 100%);
-                            background-size: 0 100%;
+                        p {
+                            font-size: 1.4em;
+
+                            width: 100%;
+                            margin: 0.2em 0 0.2em 0;
+                            padding: 0.2em 0.5em 0.2em 0.5em;
+
+                            color: black;
+                            background-color: white;
+
+                            opacity: 0.7;
+                        }
+
+                        h2 {
+                            text-decoration: underline;
+                            font-weight: 700;
+                            letter-spacing: 3px;
+                        }
+
+                        p {
+                            font-weight: 500;
+                            letter-spacing: 2px;
+
+                            &:hover {
+                                color: gray;
+                                text-decoration: underline;
+                            }
+                        }
+
+                        label {
+                            width: 100%;
+
+                            color: white;
+                            font-size: 1.2em;
+                            letter-spacing: 3px;
+                            padding: 0.5em 0.5em 0.5em 0.5em;
+                            margin: 0.5em 0 0 0;
+
+                            display: inline-block;
+                            text-align: center;
+
+                            text-decoration: none;
+                            background-image: linear-gradient(to right, lightslategray, lightslategray 100%);
+                            background-size: 0 50%;
                             background-repeat: no-repeat;
                             transition: background .5s;
                             background-position: 0;
-                        }
+                            line-height: 1.5;
 
-                        &:hover {
-                            color: white;
 
-                            h2 {
-                                background-size: 100% 100%;
+                            &:hover {
+                                color: black;
+                                background-size: 100% 50%;
                             }
 
-                            div {
-                                color: white;
-                                background-size: 100% 100%;
+                            &:active {
+                                color: red;
+                                background-size: 100% 50%;
+                            }
+
+                            .more-up {
+                                display: none;
+                            }
+
+                            .more-down {
+                                display: inherit;
                             }
                         }
                     }
 
                     .wallet-pub-key {
-                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        margin: 0.5em 0 0.5em 0;
 
                         h2,
-                        div p {
-                            background-image: linear-gradient(to right, lightblue, lightblue 100%);
-                            background-size: 0 100%;
-                            background-repeat: no-repeat;
-                            transition: background .5s;
-                            background-position: 0;
-                            letter-spacing: 3px;
+                        ul {
+                            font-size: 1.4em;
+
+                            width: 100%;
+                            margin: 0.2em 0 0.2em 0;
+
+                            color: black;
                         }
 
                         h2 {
-                            font-size: 1.5em;
-                            line-height: 1.5;
+                            background-color: white;
+                            padding: 0.2em 0.5em 0.2em 0.5em;
                             text-decoration: underline;
+                            letter-spacing: 3px;
+
+                            opacity: 0.7;
                         }
 
-                        div {
-                            border-top: 3px solid lightgrey;
-                            border-bottom: 3px solid lightgrey;
+                        ul {
 
-                            font-size: 1.3em;
+                            padding: 0;
 
-                            p {
-                                line-height: 1.2;
-                            }
+                            li {
+                                width: 100%;
+                                margin: 0;
+                                padding: 0.2em 0.5em 0.2em 0.5em;
 
-                            &:hover {
-                                p {
-                                    background-size: 100% 100%;
-                                    color: white;
+
+                                text-align: start;
+                                background-color: white;
+
+                                opacity: 0.7;
+
+                                letter-spacing: 2px;
+
+                                &:hover {
+                                    color: gray;
+                                    text-decoration: underline;
                                 }
+
                             }
                         }
 
-                        &:hover {
-                            h2 {
-                                color: white;
-                                background-size: 100% 100%;
-                            }
-
-                            div {
-                                border-top: 3px solid lightblue;
-                                border-bottom: 3px solid lightblue;
-                            }
-                        }
                     }
                 }
             }

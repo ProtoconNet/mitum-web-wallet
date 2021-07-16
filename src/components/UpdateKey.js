@@ -33,6 +33,8 @@ class UpdateKey extends React.Component {
         super(props);
 
         this.createdRef = createRef();
+        this.jsonRef = createRef();
+        this.titleRef = createRef();
 
         if (!this.props.hasOwnProperty('account') || !this.props.account) {
             this.state = { isRedirect: true }
@@ -111,16 +113,23 @@ class UpdateKey extends React.Component {
     }
 
     componentDidMount() {
-        this.scrollToJSON();
+        this.scrollToInput();
     }
 
     componentDidUpdate() {
-        this.scrollToJSON();
+        this.scrollToInput();
     }
 
-    scrollToJSON = () => {
-        if (!this.createdRef.current) return;
-        this.createdRef.current.scrollIntoView({ behavior: 'smooth' })
+    scrollToInput = () => {
+        if (this.jsonRef.current && this.state.created) {
+            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else if (this.createdRef.current && !this.state.created && this.state.keys.length > 0) {
+            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else if (this.titleRef.current && !this.state.created) {
+            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
     render() {
@@ -128,6 +137,7 @@ class UpdateKey extends React.Component {
         return (
             <div className="uk-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
+                <div ref={this.titleRef}></div>
                 <h1>UPDATE KEY</h1>
                 <div className="uk-address-wrap">
                     <h2>{account.address}</h2>
@@ -137,6 +147,7 @@ class UpdateKey extends React.Component {
                     <h2>BALANCE</h2>
                     <ul>{account.balances ? account.balances.map(x => balance(x)) : false}</ul>
                 </div>
+                <div ref={this.createdRef}></div>
                 <div className="uk-input-wrap">
                     <div className="uk-keys">
                         <h2>NEW KEYS</h2>
@@ -170,7 +181,7 @@ class UpdateKey extends React.Component {
                 <ConfirmButton
                     disabled={this.state.keys.length < 1 || this.state.threshold === "" || this.state.currency === "" ? true : false}
                     onClick={() => this.onClick()}>UPDATE</ConfirmButton>
-                <div ref={this.createdRef}></div>
+                <div ref={this.jsonRef}></div>
                 {this.state.created ?
                     <NewOperation json={this.state.created} /> : false}
             </div>

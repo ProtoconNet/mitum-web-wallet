@@ -24,6 +24,8 @@ class Transfer extends React.Component {
         super(props);
 
         this.createdRef = createRef();
+        this.jsonRef = createRef();
+        this.titleRef = createRef();
 
         if (!this.props.hasOwnProperty('account') || !this.props.account) {
             this.state = { isRedirect: true }
@@ -98,16 +100,24 @@ class Transfer extends React.Component {
     }
 
     componentDidMount() {
-        this.scrollToJSON();
+        this.scrollToInput();
     }
 
     componentDidUpdate() {
-        this.scrollToJSON();
+        this.scrollToInput();
     }
 
-    scrollToJSON = () => {
-        if (!this.createdRef.current) return;
-        this.createdRef.current.scrollIntoView({ behavior: 'smooth' })
+    scrollToInput = () => {
+
+        if (this.jsonRef.current && this.state.created) {
+            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else if (this.createdRef.current && !this.state.created && this.state.amounts.length > 0) {
+            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else if (this.titleRef.current && !this.state.created) {
+            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
     render() {
@@ -115,12 +125,14 @@ class Transfer extends React.Component {
         return (
             <div className="tf-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
+                <div ref={this.titleRef}></div>
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
                     <ul>
                         {account.balances ? account.balances.map(x => balance(x)) : false}
                     </ul>
                 </div>
+                <div ref={this.createdRef}></div>
                 <div className="tf-input-wrap">
                     <div className="tf-address">
                         <h2>TRANSFER TO</h2>
@@ -150,11 +162,9 @@ class Transfer extends React.Component {
                     disabled={this.state.amounts.length < 1 || this.state.address === "" ? true : false}
                     onClick={() => this.onClick()}>CREATE</ConfirmButton>
 
-                <div ref={this.createdRef}></div>
+                <div ref={this.jsonRef}></div>
                 {this.state.created ?
                     <NewOperation json={this.state.created} /> : false}
-
-                <div ref={this.createdRef}></div>
             </div>
         );
     }

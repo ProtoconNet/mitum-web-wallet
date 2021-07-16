@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
+import './Operation.scss';
+
 import CreateAccount from '../components/CreateAccount';
 import UpdateKey from '../components/UpdateKey';
 import Transfer from '../components/Transfer';

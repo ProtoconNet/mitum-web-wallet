@@ -33,6 +33,7 @@ class CreateAccount extends React.Component {
 
         this.createdRef = createRef();
         this.jsonRef = createRef();
+        this.titleRef = createRef();
 
         if (!this.props.hasOwnProperty('account') || !this.props.account) {
             this.state = { isRedirect: true }
@@ -138,28 +139,32 @@ class CreateAccount extends React.Component {
     }
 
     componentDidMount() {
-        this.scrollToJSON();
+        this.scrollToInput();
     }
 
     componentDidUpdate() {
-        this.scrollToJSON();
+        this.scrollToInput();
     }
 
-    scrollToJSON = () => {
+    scrollToInput = () => {
 
-        if (this.jsonRef.current) {
+        if (this.jsonRef.current && this.state.created) {
             this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        else if (this.createdRef.current) {
+        else if (this.createdRef.current && !this.state.created && (this.state.keys.length > 0 || this.state.amount.length > 0)) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
+        else if (this.titleRef.current && !this.state.created) {
+            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
     }
-    s
+
     render() {
         const account = this.props.account;
         return (
             <div className="ca-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
+                <div ref={this.titleRef}></div>
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">
                     <ul>

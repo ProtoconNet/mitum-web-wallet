@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { Redirect } from 'react-router-dom';
 import './Wallet.scss';
 
@@ -26,19 +26,19 @@ const onCopy = (msg) => {
 
 const balance = (bal) => {
     return (
-        <div key={bal.currency}>
-            <p>{bal.currency}</p>
-            <p>{bal.amount}</p>
-        </div>
+        <li key={bal.currency}>
+            <span className="currency">{bal.currency}</span>
+            <span className="amount">{bal.amount}</span>
+        </li>
     );
 }
 
 const publicKey = (key) => {
     return (
-        <div key={key.key}
+        <li key={key.key}
             onClick={() => onCopy(key.key)}>
-            <p>{key.key}</p>
-        </div>
+            {key.key}
+        </li>
     )
 }
 
@@ -47,9 +47,9 @@ const key = (key) => {
         return false;
     }
     return (
-        <div onClick={() => onCopy(key)}>
+        <p onClick={() => onCopy(key)}>
             {key}
-        </div>
+        </p>
     );
 }
 
@@ -57,6 +57,9 @@ class Wallet extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.walletRef = createRef();
+        this.detailRef = createRef();
 
         this.state = {
             restoreKey: undefined,
@@ -110,7 +113,9 @@ class Wallet extends React.Component {
     }
 
     renderRedirect() {
-        if(!this.props.account) {
+        if (!this.props.account || !this.props.account.accountType
+            || !this.props.account.publicKeys || !this.props.account.balances
+            || !this.props.account.privateKey) {
             return <Redirect to="/login" />;
         }
 
@@ -139,20 +144,40 @@ class Wallet extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.scrollToAccount();
+    }
+
+    componentDidUpdate() {
+        this.scrollToAccount();
+    }
+
+    scrollToAccount = () => {
+        if (this.walletRef.current && !this.state.isDetailVisible) {
+            this.walletRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else if (this.detailRef.current && this.state.isDetailVisible) {
+            this.detailRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
     render() {
-        const account = this.props.account;
         return (
             <div className="wallet-container">
                 {this.renderRedirect()}
+                <div ref={this.walletRef}></div>
+                <h1>ACCOUNT INFO</h1>
                 <div className="wallet-info">
                     <span className="wallet-info-account">
-                        <h2>{"ACCOUNT" + (account.accountType === "multi" ? " - MUL" : " - SIN")}</h2>
-                        <p onClick={() => onCopy(account.address)}>{account.address}</p>
+                        <h2>{"ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE")}</h2>
+                        <p onClick={() => onCopy(this.props.account.address)}>{this.props.account.address}</p>
                     </span>
                     <span className="wallet-info-detail">
                         <span className="wallet-amount">
                             <h2>BALANCE</h2>
-                            {account.balances ? account.balances.map(x => balance(x)) : false}
+                            <ul>
+                                {this.props.account.balances ? this.props.account.balances.map(x => balance(x)) : false}
+                            </ul>
                         </span>
                         <span className="wallet-more"
                             onClick={() => this.onMoreClick()}>
@@ -162,31 +187,33 @@ class Wallet extends React.Component {
                                 <p className="more-up" style={{ display: this.state.isDetailVisible ? "inherit" : "none" }}>△</p>
                             </section>
                         </span>
+                        <div ref={this.detailRef}></div>
                         <span className="wallet-more-detail"
                             style={{ display: this.state.isDetailVisible ? "inherit" : "none" }}>
                             <div>
                                 <div className="wallet-pub-key">
                                     <h2>PUBLIC KEY</h2>
-                                    {account.publicKeys ? account.publicKeys.map(x => publicKey(x)) : false}
+                                    <ul>
+                                        {this.props.account.publicKeys ? this.props.account.publicKeys.map(x => publicKey(x)) : false}
+                                    </ul>
                                 </div>
                                 <div className="wallet-priv-key">
                                     <h2>PRIVATE KEY</h2>
-                                    {this.state.isPrivVisible ? key(account.privateKey) : false}
-                                    <span onClick={() => this.onShowClick(SHOW_PRIVATE)}>
+                                    {this.state.isPrivVisible ? key(this.props.account.privateKey) : false}
+                                    <label onClick={() => this.onShowClick(SHOW_PRIVATE)}>
                                         {this.state.isPrivVisible ? "- HIDE -" : "! SHOW !"}
-                                    </span>
+                                    </label>
                                 </div>
                                 <div className="wallet-res-key">
                                     <h2>RESTORE KEY</h2>
-                                    {this.state.isResVisible ? key(account.restoreKey) : false}
-                                    <span onClick={() => this.onShowClick(SHOW_RESTORE)}>
+                                    {this.state.isResVisible ? key(this.props.account.restoreKey) : false}
+                                    <label onClick={() => this.onShowClick(SHOW_RESTORE)}>
                                         {this.state.isResVisible ? "- HIDE -" : "! SHOW !"}
-                                    </span>
+                                    </label>
                                 </div>
                             </div>
                         </span>
                     </span>
-                    <p className="wallet-copy-help">CLICK EACH KEY TO COPY...</p>
                 </div>
                 <div className="wallet-operation">
                     <SelectButton size="wide" onClick={() => this.onSelect(OPER_CREATE_ACCOUNT)}>CREATE ACCOUNT</SelectButton>
@@ -195,7 +222,7 @@ class Wallet extends React.Component {
                 </div>
                 <div className="wallet-sign">
                     <SelectButton onClick={() => this.onSelect(PATH_SIGN)} size="wide">
-                        Sign or Send
+                        Sign / Send
                     </SelectButton>
                 </div>
             </div>

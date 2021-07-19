@@ -5,7 +5,7 @@
     align-items: flex-end;
     justify-content: center;
 
-    width: 320px;
+    width: 300px;
     z-index: 1;
     position: fixed;
     top: 50px;
@@ -20,7 +20,7 @@
     }
 
     .nav-title p {
-        font-size: 1.5em;
+        font-size: 1.4em;
     }
 
     .main {
@@ -61,6 +61,7 @@
             position: relative;
             display: inline-block;
             font-size: 1.2em;
+
             background: linear-gradient(to bottom, lightgray 100%, lightgray 60%, #fff 60%, #fff 100%);
             background-clip: text;
             -webkit-background-clip: text;

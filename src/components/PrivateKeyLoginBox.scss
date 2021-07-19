@@ -1,6 +1,17 @@
 .private-login-container {
+    width: 100%;
+
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
+    .private-input-container {
+        width: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
 }

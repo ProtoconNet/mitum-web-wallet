@@ -175,7 +175,7 @@ class CreateAccount extends React.Component {
                 <div className="ca-input-wrap">
                     <div className="ca-keys">
                         <h2>KEYS</h2>
-                        <InputBox
+                        <InputBox className="ca-thres-input"
                             size="small" useCopy={false} disabled={false} placeholder='threshold'
                             value={this.state.threshold}
                             onChange={(e) => this.onChangeThres(e)} />
@@ -183,10 +183,10 @@ class CreateAccount extends React.Component {
                             {this.state.keys ? this.state.keys.map(x => key(x)) : false}
                         </ul>
                         <span className="ca-key-adder">
-                            <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
+                            <InputBox className="ca-pub-input" size="medium" useCopy={false} disabled={false} placeholder="public key"
                                 value={this.state.publicKey}
                                 onChange={(e) => this.onChangePub(e)} />
-                            <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
+                            <InputBox className="ca-weight-input" size="small" useCopy={false} disabled={false} placeholder="weight"
                                 value={this.state.weight}
                                 onChange={(e) => this.onChangeWeight(e)} />
                             <AddButton
@@ -201,10 +201,12 @@ class CreateAccount extends React.Component {
                             {this.state.amounts ? this.state.amounts.map(x => balance(x)) : false}
                         </ul>
                         <span className="ca-amount-adder">
-                            <InputBox size="medium" useCopy={false} disabled={false} placeholder="currency"
+                            <InputBox className="ca-currency-input"
+                                size="medium" useCopy={false} disabled={false} placeholder="currency"
                                 onChange={(e) => this.onChangeCurrency(e)}
                                 value={this.state.currency} />
-                            <InputBox size="small" useCopy={false} disabled={false} placeholder="amount"
+                            <InputBox className="ca-amount-input" 
+                                size="small" useCopy={false} disabled={false} placeholder="amount"
                                 value={this.state.amount}
                                 onChange={(e) => this.onChangeAmount(e)} />
                             <AddButton

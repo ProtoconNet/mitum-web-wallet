@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/mitum-web-wallet/static/css/main.cebe7a38.chunk.css",
-    "main.js": "/mitum-web-wallet/static/js/main.e1a69d1d.chunk.js",
-    "main.js.map": "/mitum-web-wallet/static/js/main.e1a69d1d.chunk.js.map",
-    "runtime-main.js": "/mitum-web-wallet/static/js/runtime-main.caff2820.js",
-    "runtime-main.js.map": "/mitum-web-wallet/static/js/runtime-main.caff2820.js.map",
-    "static/js/2.e92fde02.chunk.js": "/mitum-web-wallet/static/js/2.e92fde02.chunk.js",
-    "static/js/2.e92fde02.chunk.js.map": "/mitum-web-wallet/static/js/2.e92fde02.chunk.js.map",
-    "static/js/3.a10b441c.chunk.js": "/mitum-web-wallet/static/js/3.a10b441c.chunk.js",
-    "static/js/3.a10b441c.chunk.js.map": "/mitum-web-wallet/static/js/3.a10b441c.chunk.js.map",
+    "main.css": "/mitum-web-wallet/static/css/main.3c267737.chunk.css",
+    "main.js": "/mitum-web-wallet/static/js/main.88852f5b.chunk.js",
+    "main.js.map": "/mitum-web-wallet/static/js/main.88852f5b.chunk.js.map",
+    "runtime-main.js": "/mitum-web-wallet/static/js/runtime-main.132d8451.js",
+    "runtime-main.js.map": "/mitum-web-wallet/static/js/runtime-main.132d8451.js.map",
+    "static/js/2.ec91ff4d.chunk.js": "/mitum-web-wallet/static/js/2.ec91ff4d.chunk.js",
+    "static/js/2.ec91ff4d.chunk.js.map": "/mitum-web-wallet/static/js/2.ec91ff4d.chunk.js.map",
+    "static/js/3.163f74eb.chunk.js": "/mitum-web-wallet/static/js/3.163f74eb.chunk.js",
+    "static/js/3.163f74eb.chunk.js.map": "/mitum-web-wallet/static/js/3.163f74eb.chunk.js.map",
     "index.html": "/mitum-web-wallet/index.html",
-    "static/css/main.cebe7a38.chunk.css.map": "/mitum-web-wallet/static/css/main.cebe7a38.chunk.css.map",
-    "static/js/2.e92fde02.chunk.js.LICENSE.txt": "/mitum-web-wallet/static/js/2.e92fde02.chunk.js.LICENSE.txt",
+    "static/css/main.3c267737.chunk.css.map": "/mitum-web-wallet/static/css/main.3c267737.chunk.css.map",
+    "static/js/2.ec91ff4d.chunk.js.LICENSE.txt": "/mitum-web-wallet/static/js/2.ec91ff4d.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/mitum-web-wallet/static/media/background.eca262ee.jpg",
     "static/media/logo_trans.39b47b2b.png": "/mitum-web-wallet/static/media/logo_trans.39b47b2b.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.caff2820.js",
-    "static/js/2.e92fde02.chunk.js",
-    "static/css/main.cebe7a38.chunk.css",
-    "static/js/main.e1a69d1d.chunk.js"
+    "static/js/runtime-main.132d8451.js",
+    "static/js/2.ec91ff4d.chunk.js",
+    "static/css/main.3c267737.chunk.css",
+    "static/js/main.88852f5b.chunk.js"
   ]
 }

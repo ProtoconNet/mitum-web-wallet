@@ -21,8 +21,8 @@ class InputBox extends React.Component {
 
     render() {
         return (
-            <div className="box">
-                <input className={'input-box ' + this.props.size}
+            <div className={"box " + this.props.size}>
+                <input className='input-box'
                     type="text"
                     name="input-box"
                     value={this.state.value ? this.state.value : this.props.value}

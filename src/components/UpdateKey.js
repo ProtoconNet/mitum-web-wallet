@@ -180,7 +180,7 @@ class UpdateKey extends React.Component {
                 </div>
                 <ConfirmButton
                     disabled={this.state.keys.length < 1 || this.state.threshold === "" || this.state.currency === "" ? true : false}
-                    onClick={() => this.onClick()}>UPDATE</ConfirmButton>
+                    onClick={() => this.onClick()}>CREATE</ConfirmButton>
                 <div ref={this.jsonRef}></div>
                 {this.state.created ?
                     <NewOperation json={this.state.created} /> : false}

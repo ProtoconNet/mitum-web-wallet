@@ -23,7 +23,7 @@ const onCopy = (msg) => {
 }
 
 const download = (json) => {
-    if (!json || !json.hasOwnProperty('hash')) {
+    if (!json || !Object.prototype.hasOwnProperty.call(json, 'hash')) {
         return undefined;
     }
 
@@ -39,8 +39,8 @@ const download = (json) => {
 }
 
 const broadcast = async (operation) => {
-    if (!operation || !operation.hasOwnProperty('hash') || !operation.hasOwnProperty('memo')
-        || !operation.hasOwnProperty('fact') || !operation.hasOwnProperty('fact_signs')
+    if (!operation || !Object.prototype.hasOwnProperty.call(operation, 'hash') || !Object.prototype.hasOwnProperty.call(operation, 'memo')
+        || !Object.prototype.hasOwnProperty.call(operation, 'fact') || !Object.prototype.hasOwnProperty.call(operation, 'fact_signs')
         || !operation.hash || !operation.fact || !operation.fact_signs) {
         return undefined;
     }
@@ -65,7 +65,7 @@ class Sign extends React.Component {
         this.responseRef = createRef();
         this.jsonRef = createRef();
 
-        if (!this.props.hasOwnProperty('location') || !this.props.location.hasOwnProperty('state')
+        if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !Object.prototype.hasOwnProperty.call(this.props.loaction, 'state')
             || !this.props.location || !this.props.location.state || !this.props.isLogin) {
             this.state = {
                 isRedirect: true
@@ -75,7 +75,7 @@ class Sign extends React.Component {
 
         this.state = {
             isRedirect: false,
-            json: this.props.location.state.hasOwnProperty('json') ? this.props.location.state.json : {},
+            json: Object.prototype.hasOwnProperty.call(this.props.loaction.state, 'json') ? this.props.location.state.json : {},
 
             jsonSelf: "",
             response: undefined,
@@ -147,8 +147,8 @@ class Sign extends React.Component {
         try {
             reader.onload = () => {
                 const parsed = JSON.parse(reader.result);
-                if (!parsed.hasOwnProperty('hash') || !parsed.hasOwnProperty('fact')
-                    || !parsed.hasOwnProperty('fact_signs') || !parsed.hasOwnProperty('memo')
+                if (!Object.prototype.hasOwnProperty.call(parsed, 'hash') || !Object.prototype.hasOwnProperty.call(parsed, 'fact')
+                    || !Object.prototype.hasOwnProperty.call(parsed, 'fact_signs') || !Object.prototype.hasOwnProperty.call(parsed, 'memo')
                     || !parsed.hash || !parsed.fact || !parsed.fact_signs) {
                     alert('Invalid format!\nOnly operation json file can be imported');
                 }
@@ -216,8 +216,8 @@ class Sign extends React.Component {
             });
         }
 
-        if (!target.hasOwnProperty('hash') || !target.hasOwnProperty('fact')
-            || !target.hasOwnProperty('fact_signs') || !target.hasOwnProperty('memo')) {
+        if (!Object.prototype.hasOwnProperty.call(target, 'hash') || !Object.prototype.hasOwnProperty.call(target, 'fact')
+            || !Object.prototype.hasOwnProperty.call(target, 'fact_signs') || !Object.prototype.hasOwnProperty.call(target, 'memo')) {
             this.setState({
                 response: undefined
             });
@@ -250,8 +250,8 @@ class Sign extends React.Component {
                 this.state.json ? this.state.json : {}
             );
 
-        if (!target.hasOwnProperty('hash') || !target.hasOwnProperty('fact_signs')
-            || !target.hasOwnProperty('fact') || !target.hasOwnProperty('memo')) {
+        if (!Object.prototype.hasOwnProperty.call(target, 'hash') || !Object.prototype.hasOwnProperty.call(target, 'fact_signs')
+            || !Object.prototype.hasOwnProperty.call(target, 'fact') || !Object.prototype.hasOwnProperty.call(target, 'memo')) {
             return;
         }
 
@@ -270,7 +270,7 @@ class Sign extends React.Component {
     }
 
     _createFile(target) {
-        if (!target || !target.hasOwnProperty('hash') || !target.hash) {
+        if (!target || !Object.prototype.hasOwnProperty.call(target, 'hash') || !target.hash) {
             throw new Error('Invalid json');
         }
         this.setState({

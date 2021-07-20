@@ -36,7 +36,7 @@ class UpdateKey extends React.Component {
         this.jsonRef = createRef();
         this.titleRef = createRef();
 
-        if (!this.props.hasOwnProperty('account') || !this.props.account) {
+        if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
             this.state = { isRedirect: true }
             return;
         }

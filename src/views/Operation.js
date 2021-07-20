@@ -17,9 +17,9 @@ class Operation extends React.Component {
     constructor(props) {
         super(props);
 
-        if (!this.props.hasOwnProperty('location') || !this.props.location
-            || !this.props.location.hasOwnProperty('state') || !this.props.location.state
-            || !this.props.location.state.hasOwnProperty('operation') || !this.props.location.state.operation
+        if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !this.props.location
+            || !Object.prototype.hasOwnProperty.call(this.props.location, 'state') || !this.props.location.state
+            || !Object.prototype.hasOwnProperty.call(this.props.location.state, 'operation') || !this.props.location.state.operation
             || !this.props.isLogin) {
             this.state = {
                 isRedirect: true,

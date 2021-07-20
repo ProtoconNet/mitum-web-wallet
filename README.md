@@ -30,16 +30,10 @@ $ git clone https://github.com/ProtoconNet/mitum-web-wallet.git
 
 $ cd mitum-web-wallet
 
-/mitum-web-wallet$ npm install
+/mitum-web-wallet$ yarn install
 
 /mitum-web-wallet$ npm link mitumc
 
-/mitum-web-wallet$ npm start
-```
-
-You can use yarn instead of npm.
-
-```sh
 /mitum-web-wallet$ yarn start
 ```
 
@@ -50,5 +44,5 @@ Before running build for 'mitum-web-wallet', 'mitum-js-util' must be installed a
 Refer to 'Install and Run'.
 
 ```sh
-/mitum-web-wallet$ npm run build
+/mitum-web-wallet$ yarn run build
 ```

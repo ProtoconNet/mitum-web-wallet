@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/mitum-web-wallet/static/css/main.e514142a.chunk.css",
-    "main.js": "/mitum-web-wallet/static/js/main.734a563a.chunk.js",
-    "main.js.map": "/mitum-web-wallet/static/js/main.734a563a.chunk.js.map",
+    "main.js": "/mitum-web-wallet/static/js/main.394cf106.chunk.js",
+    "main.js.map": "/mitum-web-wallet/static/js/main.394cf106.chunk.js.map",
     "runtime-main.js": "/mitum-web-wallet/static/js/runtime-main.61e61e33.js",
     "runtime-main.js.map": "/mitum-web-wallet/static/js/runtime-main.61e61e33.js.map",
     "static/js/2.7301d572.chunk.js": "/mitum-web-wallet/static/js/2.7301d572.chunk.js",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.61e61e33.js",
     "static/js/2.7301d572.chunk.js",
     "static/css/main.e514142a.chunk.css",
-    "static/js/main.734a563a.chunk.js"
+    "static/js/main.394cf106.chunk.js"
   ]
 }

@@ -65,7 +65,7 @@ class Sign extends React.Component {
         this.responseRef = createRef();
         this.jsonRef = createRef();
 
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !Object.prototype.hasOwnProperty.call(this.props.loaction, 'state')
+        if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !Object.prototype.hasOwnProperty.call(this.props.location, 'state')
             || !this.props.location || !this.props.location.state || !this.props.isLogin) {
             this.state = {
                 isRedirect: true

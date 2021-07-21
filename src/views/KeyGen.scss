@@ -21,6 +21,10 @@
         display: flex;
         justify-content: center;
         align-items: center;  
-        flex-direction: column;    
+        flex-direction: column;
+
+        div button {
+            margin-left: 1em;
+        }
     }
 }

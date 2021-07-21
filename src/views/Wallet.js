@@ -59,7 +59,6 @@ class Wallet extends React.Component {
         super(props);
 
         this.walletRef = createRef();
-        this.detailRef = createRef();
 
         this.state = {
             restoreKey: undefined,
@@ -153,65 +152,87 @@ class Wallet extends React.Component {
     }
 
     scrollToAccount = () => {
-        if (this.walletRef.current && !this.state.isDetailVisible) {
+        if (this.walletRef.current) {
             this.walletRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        else if (this.detailRef.current && this.state.isDetailVisible) {
-            this.detailRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+    }
+
+    refresh() {
+        this.setState({
+            isRedirect: true,
+            redirect: PATH_LOGIN
+        })
     }
 
     render() {
         return (
             <div className="wallet-container">
                 {this.renderRedirect()}
-                <div ref={this.walletRef}></div>
+                <span className="wallet-refresh" >
+                        <p onClick={() => this.refresh()}>
+                            ⟳
+                        </p>
+                </span>
+                <div className="wallet-ref" ref={this.walletRef}></div>
                 <h1>ACCOUNT INFO</h1>
                 <div className="wallet-info">
-                    <span className="wallet-info-account">
-                        <h2>{"ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE")}</h2>
-                        <p onClick={() => onCopy(this.props.account.address)}>{this.props.account.address}</p>
-                    </span>
+                    {this.state.isDetailVisible
+                        ? false
+                        : (
+                            <span className="wallet-info-account">
+                                <h2>{"ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE")}</h2>
+                                <p onClick={() => onCopy(this.props.account.address)}>{this.props.account.address}</p>
+                            </span>
+                        )
+                    }
                     <span className="wallet-info-detail">
-                        <span className="wallet-amount">
-                            <h2>BALANCE</h2>
-                            <ul>
-                                {this.props.account.balances ? this.props.account.balances.map(x => balance(x)) : false}
-                            </ul>
-                        </span>
+                        {this.state.isDetailVisible
+                            ? (
+                                <span className="wallet-more-detail"
+                                    style={{ display: this.state.isDetailVisible ? "inherit" : "none" }}>
+                                    <div>
+                                        <div className="wallet-pub-key">
+                                            <h2>PUBLIC KEY</h2>
+                                            <ul>
+                                                {this.props.account.publicKeys ? this.props.account.publicKeys.map(x => publicKey(x)) : false}
+                                            </ul>
+                                        </div>
+                                        <div className="wallet-priv-key">
+                                            <h2>PRIVATE KEY</h2>
+                                            {this.state.isPrivVisible ? key(this.props.account.privateKey) : false}
+                                            <label onClick={() => this.onShowClick(SHOW_PRIVATE)}>
+                                                {this.state.isPrivVisible ? "- HIDE -" : "! SHOW !"}
+                                            </label>
+                                        </div>
+                                        {this.props.account && this.props.account.restoreKey
+                                            ? (
+                                                <div className="wallet-res-key">
+                                                    <h2>RESTORE KEY</h2>
+                                                    {this.state.isResVisible ? key(this.props.account.restoreKey) : false}
+                                                    <label onClick={() => this.onShowClick(SHOW_RESTORE)}>
+                                                        {this.state.isResVisible ? "- HIDE -" : "! SHOW !"}
+                                                    </label>
+                                                </div>
+                                            )
+                                            : false
+                                        }
+                                    </div>
+                                </span>
+                            )
+                            : (
+                                <span className="wallet-amount">
+                                    <h2>BALANCE</h2>
+                                    <ul>
+                                        {this.props.account.balances ? this.props.account.balances.map(x => balance(x)) : false}
+                                    </ul>
+                                </span>
+                            )
+                        }
                         <span className="wallet-more"
                             onClick={() => this.onMoreClick()}>
                             <section>
-                                <p>MORE </p>
-                                <p className="more-down" style={{ display: this.state.isDetailVisible ? "none" : "inherit" }}>▽</p>
-                                <p className="more-up" style={{ display: this.state.isDetailVisible ? "inherit" : "none" }}>△</p>
+                                <p>{this.state.isDetailVisible ? "BACK" : "MORE"}</p>
                             </section>
-                        </span>
-                        <div ref={this.detailRef}></div>
-                        <span className="wallet-more-detail"
-                            style={{ display: this.state.isDetailVisible ? "inherit" : "none" }}>
-                            <div>
-                                <div className="wallet-pub-key">
-                                    <h2>PUBLIC KEY</h2>
-                                    <ul>
-                                        {this.props.account.publicKeys ? this.props.account.publicKeys.map(x => publicKey(x)) : false}
-                                    </ul>
-                                </div>
-                                <div className="wallet-priv-key">
-                                    <h2>PRIVATE KEY</h2>
-                                    {this.state.isPrivVisible ? key(this.props.account.privateKey) : false}
-                                    <label onClick={() => this.onShowClick(SHOW_PRIVATE)}>
-                                        {this.state.isPrivVisible ? "- HIDE -" : "! SHOW !"}
-                                    </label>
-                                </div>
-                                <div className="wallet-res-key">
-                                    <h2>RESTORE KEY</h2>
-                                    {this.state.isResVisible ? key(this.props.account.restoreKey) : false}
-                                    <label onClick={() => this.onShowClick(SHOW_RESTORE)}>
-                                        {this.state.isResVisible ? "- HIDE -" : "! SHOW !"}
-                                    </label>
-                                </div>
-                            </div>
                         </span>
                     </span>
                 </div>

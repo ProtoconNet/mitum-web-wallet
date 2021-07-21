@@ -9,11 +9,52 @@
     flex-direction: column;
     justify-content: center;
 
+    .wallet-ref {
+        margin: 0;
+        padding: 0;
+    }
+
     h1 {
         font-size: 3em;
         font-weight: 800;
-        margin: 1em;
+        margin: 0 1em 1em 1em;
         letter-spacing: 5px;
+    }
+
+    .wallet-refresh {
+        width: 60%;
+        padding: 0;
+        margin: 0;
+
+        font-size: 1.5em;
+        font-weight: 400;
+
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: flex-end;
+
+        p {
+            color: white;
+            background-color: transparent;
+
+            padding: 0.2em 0.5em 0.2em 0.5em;
+            margin: 0;
+          
+            text-align: center;
+            border-radius: 10%;
+            border: 2px solid white;
+
+            &:active {
+                color: white;
+                background-color: red;
+            }
+
+            &:hover {
+                background-color: white;
+                color: black;
+            }
+        }
     }
 
     .wallet-info {
@@ -28,7 +69,7 @@
         justify-content: center;
 
         font-weight: 500;
-        padding: 2em;
+        padding: 2em 2em 0.5em 2em;
         margin: 0;
 
         .wallet-info-account {
@@ -51,7 +92,7 @@
 
                 color: black;
                 background-color: white;
-                
+
                 opacity: 0.7;
             }
 
@@ -337,5 +378,7 @@
                 }
             }
         }
+
+        
     }
 }

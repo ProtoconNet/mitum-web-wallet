@@ -12,7 +12,8 @@ export function login(address, privateKey, data) {
             accountType: account.accountType,
             publicKeys: account.publicKeys,
             balances: account.balances,
-            privateKey: account.privateKey
+            privateKey: account.privateKey,
+            restoreKey: undefined
         }
     }
 }

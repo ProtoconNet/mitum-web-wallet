@@ -2,7 +2,8 @@
     display: flex;
 
     flex-direction: column;
-    align-items: flex-end;
+    // align-items: flex-end;
+    align-items: flex-start;
     justify-content: center;
 
     width: 320px;
@@ -11,11 +12,9 @@
     top: 50px;
     left: 20px;
 
-    .side {
-        align-self: flex-start;
-
+    .nav-title {
         &:before {
-            background: darkslateblue;
+            background: darkslategray;
         }
     }
 
@@ -23,15 +22,42 @@
         font-size: 1.4em;
     }
 
-    .main {
+    .on {
         &:before {
             background: darkolivegreen;
+        }
+        margin-bottom: 0;
+    }
+
+    .off {
+        &:before {
+            background: darkslateblue;
+        }
+    }
+
+    #nav-addr {
+        margin: 0.2em 0 0.5em 0.5em;
+        font-size: 1em;
+        text-decoration: underline;
+
+        &:hover {
+            color: lightgreen;
+        }
+
+        &:active {
+            color: red;
+        }
+    }
+
+    .main {
+        &:before {
+            background: darkslateblue;
         }
     }
 
     a {
         position: relative;
-        margin: 1em;
+        margin: 0.5em;
 
         &:before {
             content: "";

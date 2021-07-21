@@ -75,7 +75,7 @@ class Sign extends React.Component {
 
         this.state = {
             isRedirect: false,
-            json: Object.prototype.hasOwnProperty.call(this.props.loaction.state, 'json') ? this.props.location.state.json : {},
+            json: Object.prototype.hasOwnProperty.call(this.props.location.state, 'json') ? this.props.location.state.json : {},
 
             jsonSelf: "",
             response: undefined,

@@ -25,7 +25,7 @@ class InputBox extends React.Component {
                 <input className='input-box'
                     type="text"
                     name="input-box"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={this.state.value ? this.state.value : this.props.value}
                     disabled={this.props.disabled}
                     onChange={this.props.onChange ? this.props.onChange : () => this.onChange()}

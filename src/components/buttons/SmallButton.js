@@ -7,6 +7,7 @@ function SmallButton(props) {
     return (
         <button className="small-button draw-border"
             style={{ display: props.visible ? "inherit" : "none" }}
+            disabled={props.disabled ? true : false}
             onClick={props.onClick}>
             {props.children}
         </button>

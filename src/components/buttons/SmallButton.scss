@@ -74,7 +74,7 @@
 }
 
 .draw-border {
-    @include btn-border-drawing(lightblue, lightpink, 4px, bottom, right);
+    @include btn-border-drawing(rgb(120, 135, 139), lightpink, 4px, bottom, right);
 }
 
 .small-button {
@@ -83,6 +83,7 @@
     cursor: pointer;
     line-height: 1;
     font: 700 1em 'Roboto Slab', sans-serif;
-    padding: 0.5em;
     letter-spacing: 1px;
+
+    margin: 1em;
 }

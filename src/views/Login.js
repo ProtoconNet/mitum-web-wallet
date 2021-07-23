@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import './Login.scss';
 
@@ -143,7 +143,7 @@ const mapDispatchToProps = dispatch => ({
     signIn: (address, privateKey, data) => dispatch(login(address, privateKey, data)),
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps,
-)(Login);
+)(Login));

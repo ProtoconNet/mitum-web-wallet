@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import './Wallet.scss';
 
 import copy from 'copy-to-clipboard';
@@ -260,7 +260,7 @@ const mapDispatchToProps = dispatch => ({
     signIn: (address, privateKey, data) => dispatch(login({ address, privateKey, data })),
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Wallet);
+)(Wallet));

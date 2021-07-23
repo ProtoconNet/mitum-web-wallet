@@ -2,12 +2,12 @@ import React, { createRef } from 'react';
 import './Transfer.scss';
 
 import InputBox from './InputBox';
-import AddButton from './buttons/AddButton';
 import ConfirmButton from './buttons/ConfirmButton';
-import NewOperation from './NewOperation';
 
 import { Generator } from 'mitumc';
 import { Redirect } from 'react-router-dom';
+import SmallButton from './buttons/SmallButton';
+import OperationConfirm from './modals/OperationConfirm';
 
 const balance = (amount) => {
     return (
@@ -18,13 +18,28 @@ const balance = (amount) => {
     );
 }
 
+const download = (json) => {
+    if (!json || !Object.prototype.hasOwnProperty.call(json, 'hash')) {
+        return undefined;
+    }
+
+    let file;
+    try {
+        file = new File([JSON.stringify(json, null, 4)], `${json.hash}`, { type: 'application/json' });
+    } catch (e) {
+        alert('Could not get url');
+        return undefined;
+    }
+
+    return URL.createObjectURL(file);
+}
+
 class Transfer extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.createdRef = createRef();
-        this.jsonRef = createRef();
         this.titleRef = createRef();
 
         if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
@@ -41,8 +56,16 @@ class Transfer extends React.Component {
             amount: "",
             address: "",
 
-            created: undefined
+            created: undefined,
+            isModalOpen: false,
+
+            download: undefined,
+            filename: ""
         }
+    }
+
+    closeModal() {
+        this.setState({ isModalOpen: false })
     }
 
     onClick() {
@@ -64,9 +87,14 @@ class Transfer extends React.Component {
         const transfers = generator.createOperation(transfersFact, "");
         transfers.addSign(account.privateKey);
 
+        const created = transfers.dict();
+
         this.setState({
-            created: transfers.dict()
-        })
+            created: created,
+            isModalOpen: true,
+            download: download(created),
+            filename: created.hash
+        });
     }
 
 
@@ -109,10 +137,7 @@ class Transfer extends React.Component {
 
     scrollToInput = () => {
 
-        if (this.jsonRef.current && this.state.created) {
-            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.createdRef.current && !this.state.created && this.state.amounts.length > 0) {
+        if (this.createdRef.current && !this.state.created && this.state.amounts.length > 0) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
         else if (this.titleRef.current && !this.state.created) {
@@ -122,6 +147,23 @@ class Transfer extends React.Component {
 
     render() {
         const account = this.props.account;
+        const labelStyle = {
+            textAlign: 'center'
+        };
+        const lineStyle = {
+            border: '2px solid white',
+            backgroundColor: 'white'
+        };
+        const emptyliStyle = {
+            opacity: '0.6'
+        }
+        const emptyStyle = {
+            backgroundColor: 'white',
+            textAlign: 'center',
+            color: 'black',
+            padding: '0.3em',
+            margin: '0.2em'
+        }
         return (
             <div className="tf-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
@@ -143,28 +185,46 @@ class Transfer extends React.Component {
                     <div className="tf-amounts">
                         <h2>AMOUNTS</h2>
                         <ul>
-                            {this.state.amounts.map(x => balance(x))}
+                            <li>
+                                <span style={labelStyle} className='currency'>CURRENCY</span>
+                                <span style={labelStyle} className='amount'>AMOUNT</span>
+                            </li>
+                            <li>
+                                <span style={lineStyle}></span>
+                                <span style={lineStyle}></span>
+                            </li>
+                            {this.state.amounts.length < 1
+                                ? (
+                                    <li style={emptyliStyle} >
+                                        <span style={emptyStyle} className='currency'>-</span>
+                                        <span style={emptyStyle} className='amount'>-</span>
+                                    </li>
+                                ) : false}
+                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
                         </ul>
                         <span className="tf-amount-adder">
-                            <InputBox size="medium" useCopy={false} disabled={false} placeholder="currency"
+                            <InputBox size="small" useCopy={false} disabled={false} placeholder="currency"
                                 onChange={(e) => this.onChangeCurrency(e)}
                                 value={this.state.currency} />
-                            <InputBox size="small" useCopy={false} disabled={false} placeholder="amount"
+                            <InputBox size="medium" useCopy={false} disabled={false} placeholder="amount"
                                 value={this.state.amount}
                                 onChange={(e) => this.onChangeAmount(e)} />
-                            <AddButton
+                            <SmallButton
+                                visible={true}
                                 disabled={!(this.state.currency && this.state.amount) ? true : false}
-                                onClick={() => this.addAmount()} />
+                                onClick={() => this.addAmount()}>ADD</SmallButton>
                         </span>
                     </div>
                 </div>
                 <ConfirmButton
                     disabled={this.state.amounts.length < 1 || this.state.address === "" ? true : false}
-                    onClick={() => this.onClick()}>CREATE</ConfirmButton>
+                    onClick={() => this.onClick()}>TRANSFER</ConfirmButton>
 
-                <div ref={this.jsonRef}></div>
-                {this.state.created ?
-                    <NewOperation json={this.state.created} /> : false}
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
+                    title="Are you sure?"
+                    json={this.state.created}
+                    filename={this.state.file}
+                    download={this.state.download} />
             </div>
         );
     }

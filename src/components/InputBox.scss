@@ -3,7 +3,6 @@
     justify-content: center;
     align-items: center;
     margin: 1em;
-    height: 50px;
 
     .input-box {
         height: 100%;
@@ -12,13 +11,14 @@
         border: 2px solid lightblue;
         border-radius: 2px;
         padding: 0.2em;
-        font-size: 1em;
-        font-weight: 800;
         color: darkslategray;
         background-color: aliceblue;
         letter-spacing: 1px;
 
         opacity: 0.6;
+
+        font-weight: 400;
+        
 
         &:focus {
             outline: none !important;
@@ -31,18 +31,27 @@
 
 .big {
     width: 60%;
-    font-size: 1.2em;
-    font-weight: 500;
+    height: 50px;
+
+    .input-box{
+        font-size: 1.4em;
+    }
 }
 
 .medium {
-    width: 70%;
-    font-size: 1.0em;
-    font-weight: 500;
+    width: 65%;
+    height: 40px;
+
+    .input-box{
+        font-size: 1.2em;
+    }
 }
 
 .small {
-    width: 15%;
-    font-size: 1.0em;
-    font-weight: 500;
+    width: 25%;
+    height: 40px;
+
+    .input-box{
+        font-size: 1.2em;
+    }
 }

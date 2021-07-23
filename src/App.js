@@ -14,6 +14,7 @@ import Sign from './views/Sign';
 import Navigation from './components/Navigation';
 import Logout from './views/Logout';
 import Footer from './components/Footer';
+import Response from './views/Response';
 
 class App extends React.Component {
   render() {
@@ -31,6 +32,7 @@ class App extends React.Component {
           <Route path="/operation" component={Operation} />
           <Route path="/sign" component={Sign} />
           <Route path="/logout" component={Logout} />
+          <Route path="/response" component={Response} />
           <Footer />
         </HashRouter>
       </div>

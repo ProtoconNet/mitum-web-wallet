@@ -1,12 +1,18 @@
+html,
 body {
-  background-image: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url('./image/background.jpg');
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+
+  overflow: auto;
+}
+
+body {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('./image/background.jpg');
   background-repeat: no-repeat;
   background-size: cover;
 
   color: white;
-
-  height: 100%;
-  width: 100%;
 
   margin: 0;
 

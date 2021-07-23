@@ -52,7 +52,7 @@
                 color: white;
 
                 padding: 0.2em 0 0.2em 0;
-                font-weight: 500;
+                font-weight: 400;
 
                 opacity: 0.8;
 
@@ -62,15 +62,19 @@
 
                     display: inline-block;
                     text-align: start;
+
+                    overflow: visible;
+                    white-space: pre-wrap;
+                    word-break: break-all;
                 }
 
                 .currency {
-                    width: 70%;
+                    width: 40%;
                     font-size: 1.2em;
                 }
 
                 .amount {
-                    width: 30%;
+                    width: 60%;
                     font-size: 1.2em;
                 }
 
@@ -115,6 +119,8 @@
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
+
+            letter-spacing: 1px;
 
             h2 {
                 font-size: 2em;
@@ -161,14 +167,18 @@
 
                         padding-left: 0.2em;
                         padding-right: 0.2em;
+
+                        overflow: visible;
+                        white-space: pre-wrap;
+                        word-break: break-all;
                     }
 
                     .currency {
-                        width: 70%;
+                        width: 40%;
                     }
 
                     .amount {
-                        width: 30%;
+                        width: 60%;
                     }
 
                     &:hover {
@@ -183,6 +193,10 @@
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
+
+                button {
+                    padding: 1em;
+                }
             }
         }
     }

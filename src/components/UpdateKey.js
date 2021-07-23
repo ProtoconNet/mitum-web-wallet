@@ -2,12 +2,12 @@ import React, { createRef } from 'react';
 import './UpdateKey.scss';
 
 import InputBox from './InputBox';
-import AddButton from './buttons/AddButton';
 import ConfirmButton from './buttons/ConfirmButton';
-import NewOperation from './NewOperation';
 
 import { Generator } from 'mitumc';
 import { Redirect } from 'react-router-dom';
+import SmallButton from './buttons/SmallButton';
+import OperationConfirm from './modals/OperationConfirm';
 
 const balance = (amount) => {
     return (
@@ -27,13 +27,28 @@ const key = (k) => {
     );
 }
 
+const download = (json) => {
+    if (!json || !Object.prototype.hasOwnProperty.call(json, 'hash')) {
+        return undefined;
+    }
+
+    let file;
+    try {
+        file = new File([JSON.stringify(json, null, 4)], `${json.hash}`, { type: 'application/json' });
+    } catch (e) {
+        alert('Could not get url');
+        return undefined;
+    }
+
+    return URL.createObjectURL(file);
+}
+
 class UpdateKey extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.createdRef = createRef();
-        this.jsonRef = createRef();
         this.titleRef = createRef();
 
         if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
@@ -51,8 +66,16 @@ class UpdateKey extends React.Component {
             publicKey: "",
             weight: "",
 
-            created: undefined
+            created: undefined,
+            isModalOpen: false,
+
+            download: undefined,
+            filename: ""
         }
+    }
+
+    closeModal() {
+        this.setState({ isModalOpen: false })
     }
 
     onClick() {
@@ -72,9 +95,14 @@ class UpdateKey extends React.Component {
         const keyUpdater = generator.createOperation(keyUpdaterFact, "");
         keyUpdater.addSign(account.privateKey);
 
+        const created = keyUpdater.dict();
+
         this.setState({
-            created: keyUpdater.dict()
-        })
+            created: created,
+            isModalOpen: true,
+            download: download(created),
+            filename: created.hash
+        });
     }
 
     onChangePub(e) {
@@ -121,10 +149,7 @@ class UpdateKey extends React.Component {
     }
 
     scrollToInput = () => {
-        if (this.jsonRef.current && this.state.created) {
-            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.createdRef.current && !this.state.created && this.state.keys.length > 0) {
+        if (this.createdRef.current && !this.state.created && this.state.keys.length > 0) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
         else if (this.titleRef.current && !this.state.created) {
@@ -134,6 +159,23 @@ class UpdateKey extends React.Component {
 
     render() {
         const account = this.props.account;
+        const labelStyle={
+            textAlign: 'center'
+        };
+        const lineStyle={
+            border: '2px solid white',
+            backgroundColor: 'white'
+        };
+        const emptyliStyle = {
+            opacity: '0.6'
+        }
+        const emptyStyle = {
+            backgroundColor: 'white',
+            textAlign: 'center',
+            color: 'black',
+            padding: '0.3em',
+            margin: '0.2em'
+        }
         return (
             <div className="uk-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
@@ -141,7 +183,9 @@ class UpdateKey extends React.Component {
                 <h1>UPDATE KEY</h1>
                 <div className="uk-address-wrap">
                     <h2>{account.address}</h2>
-                    <ul>{account.publicKeys ? account.publicKeys.map(x => key(x)) : false}</ul>
+                    <ul>
+                        {account.publicKeys ? account.publicKeys.map(x => key(x)) : false}
+                    </ul>
                 </div>
                 <div className="uk-amount-wrap">
                     <h2>BALANCE</h2>
@@ -163,7 +207,22 @@ class UpdateKey extends React.Component {
                         </div>
 
                         <ul>
-                            {this.state.keys.map(x => key(x))}
+                            <li>
+                                <span style={labelStyle} className='key'>KEY</span>
+                                <span style={labelStyle} className='weight'>WEIGHT</span>
+                            </li>
+                            <li>
+                                <span style={lineStyle}></span>
+                                <span style={lineStyle}></span>
+                            </li>
+                            {this.state.keys.length < 1
+                                ? (
+                                    <li style={emptyliStyle} >
+                                        <span style={emptyStyle} className='key'>-</span>
+                                        <span style={emptyStyle} className='weight'>-</span>
+                                    </li>
+                                ) : false}
+                            {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
                         </ul>
                         <span className="uk-key-adder">
                             <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
@@ -172,18 +231,21 @@ class UpdateKey extends React.Component {
                             <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
                                 value={this.state.weight}
                                 onChange={(e) => this.onChangeWeight(e)} />
-                            <AddButton
+                            <SmallButton
+                                visible={true}
                                 disabled={!(this.state.publicKey && this.state.weight) ? true : false}
-                                onClick={() => this.addKey()} />
+                                onClick={() => this.addKey()}>ADD</SmallButton>
                         </span>
                     </div>
                 </div>
                 <ConfirmButton
                     disabled={this.state.keys.length < 1 || this.state.threshold === "" || this.state.currency === "" ? true : false}
-                    onClick={() => this.onClick()}>CREATE</ConfirmButton>
-                <div ref={this.jsonRef}></div>
-                {this.state.created ?
-                    <NewOperation json={this.state.created} /> : false}
+                    onClick={() => this.onClick()}>UPDATE</ConfirmButton>
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
+                    title="Are you sure?"
+                    json={this.state.created}
+                    filename={this.state.file}
+                    download={this.state.download}/>
             </div>
         );
     }

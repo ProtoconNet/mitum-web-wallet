@@ -1,13 +1,13 @@
 import React, { createRef } from 'react';
 import './CreateAccount.scss';
 
-import AddButton from './buttons/AddButton';
 import ConfirmButton from './buttons/ConfirmButton';
 import InputBox from './InputBox';
-import NewOperation from './NewOperation';
 
 import { Generator } from 'mitumc';
 import { Redirect } from 'react-router-dom';
+import SmallButton from './buttons/SmallButton';
+import OperationConfirm from './modals/OperationConfirm';
 
 const balance = (amount) => {
     return (
@@ -27,12 +27,27 @@ const key = (k) => {
     );
 }
 
+const download = (json) => {
+    if (!json || !Object.prototype.hasOwnProperty.call(json, 'hash')) {
+        return undefined;
+    }
+
+    let file;
+    try {
+        file = new File([JSON.stringify(json, null, 4)], `${json.hash}`, { type: 'application/json' });
+    } catch (e) {
+        alert('Could not get url');
+        return undefined;
+    }
+
+    return URL.createObjectURL(file);
+}
+
 class CreateAccount extends React.Component {
     constructor(props) {
         super(props);
 
         this.createdRef = createRef();
-        this.jsonRef = createRef();
         this.titleRef = createRef();
 
         if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
@@ -52,8 +67,16 @@ class CreateAccount extends React.Component {
             currency: "",
             amount: "",
 
-            created: undefined
+            created: undefined,
+            isModalOpen: false,
+
+            download: undefined,
+            filename: ""
         }
+    }
+
+    closeModal() {
+        this.setState({ isModalOpen: false })
     }
 
     onClick() {
@@ -81,8 +104,13 @@ class CreateAccount extends React.Component {
         const createAccounts = generator.createOperation(createAccountsFact, "");
         createAccounts.addSign(account.privateKey);
 
+        const created = createAccounts.dict();
+
         this.setState({
-            created: createAccounts.dict()
+            created: created,
+            isModalOpen: true,
+            download: download(created),
+            filename: created.hash
         });
     }
 
@@ -148,10 +176,7 @@ class CreateAccount extends React.Component {
 
     scrollToInput = () => {
 
-        if (this.jsonRef.current && this.state.created) {
-            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.createdRef.current && !this.state.created && (this.state.keys.length > 0 || this.state.amount.length > 0)) {
+    if (this.createdRef.current && !this.state.created && (this.state.keys.length > 0 || this.state.amount.length > 0)) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
         else if (this.titleRef.current && !this.state.created) {
@@ -161,6 +186,23 @@ class CreateAccount extends React.Component {
 
     render() {
         const account = this.props.account;
+        const labelStyle = {
+            textAlign: 'center'
+        };
+        const lineStyle = {
+            border: '2px solid white',
+            backgroundColor: 'white'
+        };
+        const emptyliStyle = {
+            opacity: '0.6'
+        }
+        const emptyStyle = {
+            backgroundColor: 'white',
+            textAlign: 'center',
+            color: 'black',
+            padding: '0.3em',
+            margin: '0.2em'
+        }
         return (
             <div className="ca-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
@@ -175,12 +217,29 @@ class CreateAccount extends React.Component {
                 <div className="ca-input-wrap">
                     <div className="ca-keys">
                         <h2>KEYS</h2>
-                        <InputBox className="ca-thres-input"
-                            size="small" useCopy={false} disabled={false} placeholder='threshold'
-                            value={this.state.threshold}
-                            onChange={(e) => this.onChangeThres(e)} />
+                        <span>
+                            <InputBox className="ca-thres-input"
+                                size="small" useCopy={false} disabled={false} placeholder='threshold'
+                                value={this.state.threshold}
+                                onChange={(e) => this.onChangeThres(e)} />
+                        </span>
                         <ul>
-                            {this.state.keys ? this.state.keys.map(x => key(x)) : false}
+                            <li>
+                                <span style={labelStyle} className='key'>KEY</span>
+                                <span style={labelStyle} className='weight'>WEIGHT</span>
+                            </li>
+                            <li>
+                                <span style={lineStyle}></span>
+                                <span style={lineStyle}></span>
+                            </li>
+                            {this.state.keys.length < 1
+                                ? (
+                                    <li style={emptyliStyle} >
+                                        <span style={emptyStyle} className='key'>-</span>
+                                        <span style={emptyStyle} className='weight'>-</span>
+                                    </li>
+                                ) : false}
+                            {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
                         </ul>
                         <span className="ca-key-adder">
                             <InputBox className="ca-pub-input" size="medium" useCopy={false} disabled={false} placeholder="public key"
@@ -189,29 +248,46 @@ class CreateAccount extends React.Component {
                             <InputBox className="ca-weight-input" size="small" useCopy={false} disabled={false} placeholder="weight"
                                 value={this.state.weight}
                                 onChange={(e) => this.onChangeWeight(e)} />
-                            <AddButton
+                            <SmallButton
+                                visible={true}
                                 disabled={!(this.state.publicKey && this.state.weight) ? true : false}
-                                onClick={() => this.addKey()} />
+                                onClick={() => this.addKey()}>ADD</SmallButton>
                         </span>
                     </div>
 
                     <div className="ca-amounts">
                         <h2>AMOUNTS</h2>
                         <ul>
-                            {this.state.amounts ? this.state.amounts.map(x => balance(x)) : false}
+                            <li>
+                                <span style={labelStyle} className="currency">CURRENCY</span>
+                                <span style={labelStyle} className="amount">AMOUNT</span>
+                            </li>
+                            <li>
+                                <span style={lineStyle}></span>
+                                <span style={lineStyle}></span>
+                            </li>
+                            {this.state.amounts.length < 1
+                                ? (
+                                    <li style={emptyliStyle} >
+                                        <span style={emptyStyle} className='currency'>-</span>
+                                        <span style={emptyStyle} className='amount'>-</span>
+                                    </li>
+                                ) : false}
+                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
                         </ul>
                         <span className="ca-amount-adder">
                             <InputBox className="ca-currency-input"
-                                size="medium" useCopy={false} disabled={false} placeholder="currency"
+                                size="small" useCopy={false} disabled={false} placeholder="currency"
                                 onChange={(e) => this.onChangeCurrency(e)}
                                 value={this.state.currency} />
-                            <InputBox className="ca-amount-input" 
-                                size="small" useCopy={false} disabled={false} placeholder="amount"
+                            <InputBox className="ca-amount-input"
+                                size="medium" useCopy={false} disabled={false} placeholder="amount"
                                 value={this.state.amount}
                                 onChange={(e) => this.onChangeAmount(e)} />
-                            <AddButton
+                            <SmallButton
+                                visible={true}
                                 disabled={!(this.state.currency && this.state.amount) ? true : false}
-                                onClick={() => this.addAmount()}>ADD</AddButton>
+                                onClick={() => this.addAmount()}>ADD</SmallButton>
                         </span>
                     </div>
                 </div>
@@ -219,9 +295,11 @@ class CreateAccount extends React.Component {
                     disabled={this.state.amounts.length < 1 || this.state.keys.length < 1 || this.state.threshold === "" ? true : false}
                     onClick={() => this.onClick()}>CREATE</ConfirmButton>
 
-                <div ref={this.jsonRef}></div>
-                {this.state.created ?
-                    <NewOperation json={this.state.created} /> : false}
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
+                    title="Are you sure?"
+                    json={this.state.created}
+                    filename={this.state.file}
+                    download={this.state.download}/>
             </div>
         );
     }

@@ -1,5 +1,6 @@
 .sign-container {
     width: 85%;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
@@ -120,6 +121,10 @@
                 margin: 1em;
                 font-size: 1em;
                 vertical-align: center;
+            }
+
+            button {
+                padding: 0.5em;
             }
         }
 

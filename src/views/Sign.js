@@ -201,7 +201,7 @@ class Sign extends React.Component {
         })
     }
 
-    onClickSend() {
+    eonClickSend() {
         let target = {};
 
         if (this.state.jsonSelf) {
@@ -300,14 +300,8 @@ class Sign extends React.Component {
     }
 
     render() {
-        const containerStyle = {
-            height: !(this.state.response
-                || this.state.jsonSelf
-                || this.state.json) ? "130vh" : "100%"
-        };
-
         return (
-            <div className="sign-container" style={containerStyle}>
+            <div className="sign-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.createdRef}></div>
                 <h1>SIGN / SEND OPERATION</h1>

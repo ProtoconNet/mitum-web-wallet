@@ -30,6 +30,8 @@
         border-top: 7px solid lightslategray;
         border-bottom: 7px solid lightslategray;
 
+        letter-spacing: 1px;
+
         h2 {
             width: 100%;
             padding: 0.2em 0 0.2em 0;
@@ -76,17 +78,27 @@
                     padding-left: 0.2em;
                     padding-right: 0.2em;
 
-                    font-weight: 600;
+                    font-weight: 400;
+
+                    overflow: visible;
+                    white-space: pre-wrap;
+                    word-break: break-all;
                 }
 
-                .key,
-                .currency {
+                .key {
                     width: 70%;
                 }
 
-                .weight,
                 .amount {
+                    width: 60%;
+                }
+
+                .weight {
                     width: 30%;
+                }
+
+                .currency {
+                    width: 60%;
                 }
 
                 &:hover {
@@ -159,6 +171,10 @@
                     .weight {
                         display: inline-block;
                         text-align: start;
+
+                        overflow: visible;
+                        white-space: pre-wrap;
+                        word-break: break-all;
                     }
 
                     .key {
@@ -182,6 +198,10 @@
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
+
+                button {
+                    padding: 1em;
+                }
             }
 
             .uk-keys-extra-input {

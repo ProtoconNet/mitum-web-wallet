@@ -12,8 +12,8 @@ import OperationConfirm from './modals/OperationConfirm';
 const balance = (amount) => {
     return (
         <li key={amount.currency}>
-            <span className="currency">{amount.currency}</span>
-            <span className="amount">{amount.amount}</span>
+            <p className="currency">{amount.currency}</p>
+            <p className="amount">{amount.amount}</p>
         </li>
     );
 }
@@ -21,8 +21,8 @@ const balance = (amount) => {
 const key = (k) => {
     return (
         <li key={k}>
-            <span className="key">{k.key}</span>
-            <span className="weight">{k.weight}</span>
+            <p className="key">{k.key}</p>
+            <p className="weight">{k.weight}</p>
         </li>
     );
 }
@@ -159,82 +159,91 @@ class UpdateKey extends React.Component {
 
     render() {
         const account = this.props.account;
-        const labelStyle={
-            textAlign: 'center'
-        };
-        const lineStyle={
-            border: '2px solid white',
-            backgroundColor: 'white'
-        };
-        const emptyliStyle = {
-            opacity: '0.6'
-        }
-        const emptyStyle = {
-            backgroundColor: 'white',
-            textAlign: 'center',
-            color: 'black',
-            padding: '0.3em',
-            margin: '0.2em'
-        }
         return (
             <div className="uk-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.titleRef}></div>
                 <h1>UPDATE KEY</h1>
-                <div className="uk-address-wrap">
-                    <h2>{account.address}</h2>
-                    <ul>
-                        {account.publicKeys ? account.publicKeys.map(x => key(x)) : false}
-                    </ul>
-                </div>
-                <div className="uk-amount-wrap">
-                    <h2>BALANCE</h2>
-                    <ul>{account.balances ? account.balances.map(x => balance(x)) : false}</ul>
-                </div>
-                <div ref={this.createdRef}></div>
-                <div className="uk-input-wrap">
-                    <div className="uk-keys">
-                        <h2>NEW KEYS</h2>
-                        <div className="uk-keys-extra-input">
-                            <InputBox
-                                size="small" useCopy={false} disabled={false} placeholder='threshold'
-                                value={this.state.threshold}
-                                onChange={(e) => this.onChangeThres(e)} />
-                            <InputBox
-                                size="small" useCopy={false} disabled={false} placeholder='currency'
-                                value={this.state.currency}
-                                onChange={(e) => this.onChangeCurrency(e)} />
-                        </div>
-
+                <div className="uk-info-wrap">
+                    <div id="address">
+                        <p id="head">ADDRESS</p>
+                        <p id="body">{account.address}</p>
+                    </div>
+                    <div id="pub">
+                        <p>CURRENT PUBLIC KEYS</p>
                         <ul>
-                            <li>
-                                <span style={labelStyle} className='key'>KEY</span>
-                                <span style={labelStyle} className='weight'>WEIGHT</span>
-                            </li>
-                            <li>
-                                <span style={lineStyle}></span>
-                                <span style={lineStyle}></span>
-                            </li>
+                            {account.publicKeys ? account.publicKeys.map(x => key(x)) : false}
+                        </ul>
+                    </div>
+                    <div id="balance">
+                        <p>CURRENT BALANCES</p>
+                        <ul>
+                            {account.balances ? account.balances.map(x => balance(x)) : false}
+                        </ul>
+                    </div>
+                </div>
+                <div className="uk-input-wrap">
+                    <p>Fill the below section with new keys. Additionally, You must give currency ID for paying fees. This page is for updating keys of the account.</p>
+                    <div ref={this.createdRef} />
+                    <div className="uk-keys">
+                        <p id="head">NEW KEYS</p>
+                        <p id="exp">
+                            You need at least one pair of mitum-style public key and weight value. The total weight of all weights must be equal to or more than threshold.
+                            Old keys will be replaced with new keys but there isn't any change with your account address.
+                        </p>
+                        <div id="label">
+                            <p className='key'>KEY</p>
+                            <p className='weight'>WEIGHT</p>
+                        </div>
+                        <ul>
                             {this.state.keys.length < 1
                                 ? (
-                                    <li style={emptyliStyle} >
-                                        <span style={emptyStyle} className='key'>-</span>
-                                        <span style={emptyStyle} className='weight'>-</span>
+                                    <li key="empty" >
+                                        <p className='key'>-</p>
+                                        <p className='weight'>-</p>
                                     </li>
                                 ) : false}
                             {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
                         </ul>
+                        <div id="thres">
+                            <p id="head">THRESHOLD</p>
+                            <p id="body">{this.state.threshold ? this.state.threshold : "-"}</p>
+                        </div>
+                        <div id="currency">
+                            <p id="head">CURRENCY ID</p>
+                            <p id="body">{this.state.currency ? this.state.currency : "-"}</p>
+                        </div>
+                    </div>
+
+                    <div className="uk-adder">
+                        <span className="uk-currency-adder">
+                            <p>CURRENCY ID:</p>
+                            <InputBox
+                                size="small" useCopy={false} disabled={false} placeholder='currency'
+                                value={this.state.currency}
+                                onChange={(e) => this.onChangeCurrency(e)} />
+                        </span>
+                        <span className="uk-thres-adder">
+                            <p>THRESHOLD  :</p>
+                            <InputBox
+                                size="small" useCopy={false} disabled={false} placeholder='threshold'
+                                value={this.state.threshold}
+                                onChange={(e) => this.onChangeThres(e)} />
+                        </span>
                         <span className="uk-key-adder">
-                            <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
-                                value={this.state.publicKey}
-                                onChange={(e) => this.onChangePub(e)} />
-                            <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
-                                value={this.state.weight}
-                                onChange={(e) => this.onChangeWeight(e)} />
-                            <SmallButton
-                                visible={true}
-                                disabled={!(this.state.publicKey && this.state.weight) ? true : false}
-                                onClick={() => this.addKey()}>ADD</SmallButton>
+                            <p>ADD KEY</p>
+                            <div id="adder">
+                                <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
+                                    value={this.state.publicKey}
+                                    onChange={(e) => this.onChangePub(e)} />
+                                <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
+                                    value={this.state.weight}
+                                    onChange={(e) => this.onChangeWeight(e)} />
+                                <SmallButton
+                                    visible={true}
+                                    disabled={!(this.state.publicKey && this.state.weight) ? true : false}
+                                    onClick={() => this.addKey()}>ADD</SmallButton>
+                            </div>
                         </span>
                     </div>
                 </div>
@@ -245,7 +254,7 @@ class UpdateKey extends React.Component {
                     title="Are you sure?"
                     json={this.state.created}
                     filename={this.state.filename}
-                    download={this.state.download}/>
+                    download={this.state.download} />
             </div>
         );
     }

@@ -147,72 +147,66 @@ class Transfer extends React.Component {
 
     render() {
         const account = this.props.account;
-        const labelStyle = {
-            textAlign: 'center'
-        };
-        const lineStyle = {
-            border: '2px solid white',
-            backgroundColor: 'white'
-        };
-        const emptyliStyle = {
-            opacity: '0.6'
-        }
-        const emptyStyle = {
-            backgroundColor: 'white',
-            textAlign: 'center',
-            color: 'black',
-            padding: '0.3em',
-            margin: '0.2em'
-        }
         return (
             <div className="tf-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.titleRef}></div>
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
+                    <p>CURRENT BALANCES</p>
                     <ul>
                         {account.balances ? account.balances.map(x => balance(x)) : false}
                     </ul>
                 </div>
-                <div ref={this.createdRef}></div>
                 <div className="tf-input-wrap">
-                    <div className="tf-address">
-                        <h2>TRANSFER TO</h2>
-                        <InputBox size="medium" useCopy={false} disabled={false} placeholder="account address"
-                            value={this.state.address}
-                            onChange={(e) => this.onChangeAddress(e)} />
+                    <p>Fill the below section with pairs of currency ID and amount to transfer.</p>
+                    <div ref={this.createdRef} />
+                    <div id="address">
+                        <p id="head">TRANSFER TO</p>
+                        <p id="body">{this.state.address ? this.state.address : "-"}</p>
                     </div>
                     <div className="tf-amounts">
-                        <h2>AMOUNTS</h2>
+                        <p id="head">AMOUNTS</p>
+                        <p id="exp">You need at least one pair of valid currency ID and amount value. Those amounts will be sent to receiver.</p>
+                        <div id="label">
+                            <p className='currency'>CURRENCY ID</p>
+                            <p className='amount'>AMOUNT</p>
+                        </div>
                         <ul>
-                            <li>
-                                <span style={labelStyle} className='currency'>CURRENCY</span>
-                                <span style={labelStyle} className='amount'>AMOUNT</span>
-                            </li>
-                            <li>
-                                <span style={lineStyle}></span>
-                                <span style={lineStyle}></span>
-                            </li>
                             {this.state.amounts.length < 1
                                 ? (
-                                    <li style={emptyliStyle} >
-                                        <span style={emptyStyle} className='currency'>-</span>
-                                        <span style={emptyStyle} className='amount'>-</span>
+                                    <li key="empty">
+                                        <p className='currency'>-</p>
+                                        <p className='amount'>-</p>
                                     </li>
                                 ) : false}
                             {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
                         </ul>
+                    </div>
+                    <div className="tf-adder">
+                        <span className="tf-address-adder">
+                            <p>RECEIVER'S ADDRESS:</p>
+                            <InputBox
+                                size="medium" useCopy={false} disabled={false} placeholder='target address'
+                                value={this.state.threshold}
+                                onChange={(e) => this.onChangeAddress(e)} />
+                        </span>
                         <span className="tf-amount-adder">
-                            <InputBox size="small" useCopy={false} disabled={false} placeholder="currency"
-                                onChange={(e) => this.onChangeCurrency(e)}
-                                value={this.state.currency} />
-                            <InputBox size="medium" useCopy={false} disabled={false} placeholder="amount"
-                                value={this.state.amount}
-                                onChange={(e) => this.onChangeAmount(e)} />
-                            <SmallButton
-                                visible={true}
-                                disabled={!(this.state.currency && this.state.amount) ? true : false}
-                                onClick={() => this.addAmount()}>ADD</SmallButton>
+                            <p>ADD AMOUNT</p>
+                            <div id="adder">
+                                <InputBox
+                                    size="small" useCopy={false} disabled={false} placeholder="currency"
+                                    onChange={(e) => this.onChangeCurrency(e)}
+                                    value={this.state.currency} />
+                                <InputBox
+                                    size="medium" useCopy={false} disabled={false} placeholder="amount"
+                                    value={this.state.amount}
+                                    onChange={(e) => this.onChangeAmount(e)} />
+                                <SmallButton
+                                    visible={true}
+                                    disabled={!(this.state.currency && this.state.amount) ? true : false}
+                                    onClick={() => this.addAmount()}>ADD</SmallButton>
+                            </div>
                         </span>
                     </div>
                 </div>

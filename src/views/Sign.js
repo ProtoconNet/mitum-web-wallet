@@ -41,7 +41,7 @@ const preStyle = {
 
 const sig = (x) => {
     return (
-        <li>{x}</li>
+        <li key={x}>{x}</li>
     );
 }
 
@@ -51,6 +51,7 @@ class Sign extends React.Component {
         super(props);
 
         this.createdRef = createRef();
+        this.infoRef = createRef();
         this.jsonRef = createRef();
 
         if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !Object.prototype.hasOwnProperty.call(this.props.location, 'state')
@@ -70,6 +71,7 @@ class Sign extends React.Component {
             type: "",
 
             isModalOpen: false,
+            isJsonOpen: false
         }
     }
 
@@ -86,8 +88,11 @@ class Sign extends React.Component {
     }
 
     scrollToJSON = () => {
-        if (this.jsonRef.current && this.state.json) {
+        if (this.jsonRef.current && this.state.isJsonOpen) {
             this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else if (this.infoRef.current && this.state.json && !this.state.isJsonOpen) {
+            this.infoRef.current.scrollIntoView({behavior : 'smooth'});
         }
         else if (this.createdRef.current) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -195,16 +200,22 @@ class Sign extends React.Component {
         }
     }
 
+    openJSON() {
+        this.setState({
+            isJsonOpen: !this.state.isJsonOpen
+        })
+    }
+
     render() {
         return (
             <div className="sign-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
-                <div ref={this.createdRef}></div>
+                <div ref={this.createdRef} />
                 <h1>SIGN / SEND OPERATION</h1>
                 <div className="sign-account">
                     <p>{this.props.account.address}</p>
                 </div>
-                <div ref={this.jsonRef}></div>
+                <div ref={this.infoRef} />
                 <div className="sign-operation">
                     <div className="sign-info">
                         <span id="other">
@@ -233,7 +244,15 @@ class Sign extends React.Component {
                             </ul>
                         </span>
                     </div>
-                    {this.jsonView()}
+                    <div ref={this.jsonRef} />
+                    {this.state.json 
+                        ? (
+                            <div className='sign-view-json'
+                                onClick={() => this.openJSON()}>
+                                <p>{this.state.isJsonOpen ? "CLOSE" : "VIEW JSON"}</p>
+                            </div>
+                         ) : false}
+                    {this.state.isJsonOpen ? this.jsonView() : false}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
                     </div>

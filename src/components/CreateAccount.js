@@ -12,8 +12,8 @@ import OperationConfirm from './modals/OperationConfirm';
 const balance = (amount) => {
     return (
         <li key={amount.currency}>
-            <span className="currency">{amount.currency}</span>
-            <span className="amount">{amount.amount}</span>
+            <p className="currency">{amount.currency}</p>
+            <p className="amount">{amount.amount}</p>
         </li>
     );
 }
@@ -21,8 +21,8 @@ const balance = (amount) => {
 const key = (k) => {
     return (
         <li key={k}>
-            <span className="key">{k.key}</span>
-            <span className="weight">{k.weight}</span>
+            <p className="key">{k.key}</p>
+            <p className="weight">{k.weight}</p>
         </li>
     );
 }
@@ -176,7 +176,7 @@ class CreateAccount extends React.Component {
 
     scrollToInput = () => {
 
-    if (this.createdRef.current && !this.state.created && (this.state.keys.length > 0 || this.state.amount.length > 0)) {
+        if (this.createdRef.current && !this.state.created && (this.state.keys.length > 0 || this.state.amount.length > 0)) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
         else if (this.titleRef.current && !this.state.created) {
@@ -186,108 +186,103 @@ class CreateAccount extends React.Component {
 
     render() {
         const account = this.props.account;
-        const labelStyle = {
-            textAlign: 'center'
-        };
-        const lineStyle = {
-            border: '2px solid white',
-            backgroundColor: 'white'
-        };
-        const emptyliStyle = {
-            opacity: '0.6'
-        }
-        const emptyStyle = {
-            backgroundColor: 'white',
-            textAlign: 'center',
-            color: 'black',
-            padding: '0.3em',
-            margin: '0.2em'
-        }
         return (
             <div className="ca-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.titleRef}></div>
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">
+                    <p>CURRENT BALANCES</p>
                     <ul>
                         {account.balances ? account.balances.map(x => balance(x)) : false}
                     </ul>
                 </div>
-                <div ref={this.createdRef}></div>
                 <div className="ca-input-wrap">
+                    <p>For each section, fill it with at least one item. This page is for creating account.</p>
+                    <div ref={this.createdRef}></div>
                     <div className="ca-keys">
-                        <h2>KEYS</h2>
-                        <span>
+                        <p id="head">KEYS</p>
+                        <p id="exp">You need at least one pair of mitum-style public key and weight value. The total weight of all weights must be equal to or more than threshold.</p>
+                        <div id="label">
+                            <p className='key'>KEY</p>
+                            <p className='weight'>WEIGHT</p>
+                        </div>
+                        <ul>
+                            {this.state.keys.length < 1
+                                ? (
+                                    <li key="empty" >
+                                        <p className='key'>-</p>
+                                        <p className='weight'>-</p>
+                                    </li>
+                                ) : false}
+                            {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
+                        </ul>
+                        <div id="thres">
+                            <p id="head">THRESHOLD</p>
+                            <p id="body">{this.state.threshold ? this.state.threshold : "-"}</p>
+                        </div>
+                    </div>
+
+                    <div className="ca-amounts">
+                        <p id="head">AMOUNTS</p>
+                        <p id="exp">You need at least one pair of valid currency ID and amount value. They will be initial balance of new account.</p>
+                        <div id="label">
+                            <p className='currency'>CURRENCY ID</p>
+                            <p className='amount'>AMOUNT</p>
+                        </div>
+                        <ul>
+                            {this.state.amounts.length < 1
+                                ? (
+                                    <li key="empty">
+                                        <p className='currency'>-</p>
+                                        <p className='amount'>-</p>
+                                    </li>
+                                ) : false}
+                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
+                        </ul>
+                    </div>
+
+                    <div className="ca-adder">
+                        <span className="ca-thres-adder">
+                            <p>THRESHOLD:</p>
                             <InputBox className="ca-thres-input"
                                 size="small" useCopy={false} disabled={false} placeholder='threshold'
                                 value={this.state.threshold}
                                 onChange={(e) => this.onChangeThres(e)} />
                         </span>
-                        <ul>
-                            <li>
-                                <span style={labelStyle} className='key'>KEY</span>
-                                <span style={labelStyle} className='weight'>WEIGHT</span>
-                            </li>
-                            <li>
-                                <span style={lineStyle}></span>
-                                <span style={lineStyle}></span>
-                            </li>
-                            {this.state.keys.length < 1
-                                ? (
-                                    <li style={emptyliStyle} >
-                                        <span style={emptyStyle} className='key'>-</span>
-                                        <span style={emptyStyle} className='weight'>-</span>
-                                    </li>
-                                ) : false}
-                            {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
-                        </ul>
-                        <span className="ca-key-adder">
-                            <InputBox className="ca-pub-input" size="medium" useCopy={false} disabled={false} placeholder="public key"
-                                value={this.state.publicKey}
-                                onChange={(e) => this.onChangePub(e)} />
-                            <InputBox className="ca-weight-input" size="small" useCopy={false} disabled={false} placeholder="weight"
-                                value={this.state.weight}
-                                onChange={(e) => this.onChangeWeight(e)} />
-                            <SmallButton
-                                visible={true}
-                                disabled={!(this.state.publicKey && this.state.weight) ? true : false}
-                                onClick={() => this.addKey()}>ADD</SmallButton>
-                        </span>
-                    </div>
 
-                    <div className="ca-amounts">
-                        <h2>AMOUNTS</h2>
-                        <ul>
-                            <li>
-                                <span style={labelStyle} className="currency">CURRENCY</span>
-                                <span style={labelStyle} className="amount">AMOUNT</span>
-                            </li>
-                            <li>
-                                <span style={lineStyle}></span>
-                                <span style={lineStyle}></span>
-                            </li>
-                            {this.state.amounts.length < 1
-                                ? (
-                                    <li style={emptyliStyle} >
-                                        <span style={emptyStyle} className='currency'>-</span>
-                                        <span style={emptyStyle} className='amount'>-</span>
-                                    </li>
-                                ) : false}
-                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
-                        </ul>
+                        <span className="ca-key-adder">
+                            <p>ADD KEY</p>
+                            <div id="adder">
+                                <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
+                                    value={this.state.publicKey}
+                                    onChange={(e) => this.onChangePub(e)} />
+                                <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
+                                    value={this.state.weight}
+                                    onChange={(e) => this.onChangeWeight(e)} />
+                                <SmallButton
+                                    visible={true}
+                                    disabled={!(this.state.publicKey && this.state.weight) ? true : false}
+                                    onClick={() => this.addKey()}>ADD</SmallButton>
+                            </div>
+                        </span>
+
                         <span className="ca-amount-adder">
-                            <InputBox className="ca-currency-input"
-                                size="small" useCopy={false} disabled={false} placeholder="currency"
-                                onChange={(e) => this.onChangeCurrency(e)}
-                                value={this.state.currency} />
-                            <InputBox className="ca-amount-input"
-                                size="medium" useCopy={false} disabled={false} placeholder="amount"
-                                value={this.state.amount}
-                                onChange={(e) => this.onChangeAmount(e)} />
-                            <SmallButton
-                                visible={true}
-                                disabled={!(this.state.currency && this.state.amount) ? true : false}
-                                onClick={() => this.addAmount()}>ADD</SmallButton>
+                            <p>ADD AMOUNT</p>
+                            <div id="adder">
+                                <InputBox className="ca-currency-input"
+                                    size="small" useCopy={false} disabled={false} placeholder="currency"
+                                    onChange={(e) => this.onChangeCurrency(e)}
+                                    value={this.state.currency} />
+                                <InputBox className="ca-amount-input"
+                                    size="medium" useCopy={false} disabled={false} placeholder="amount"
+                                    value={this.state.amount}
+                                    onChange={(e) => this.onChangeAmount(e)} />
+                                <SmallButton
+                                    visible={true}
+                                    disabled={!(this.state.currency && this.state.amount) ? true : false}
+                                    onClick={() => this.addAmount()}>ADD</SmallButton>
+                            </div>
                         </span>
                     </div>
                 </div>
@@ -299,7 +294,7 @@ class CreateAccount extends React.Component {
                     title="Are you sure?"
                     json={this.state.created}
                     filename={this.state.filename}
-                    download={this.state.download}/>
+                    download={this.state.download} />
             </div>
         );
     }

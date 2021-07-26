@@ -96,7 +96,9 @@ class Wallet extends React.Component {
     }
 
     onSelect(oper) {
-        if (oper === PATH_OPER) {
+        if (oper === OPER_CREATE_ACCOUNT 
+                || oper === OPER_UPDATE_KEY
+                || oper === OPER_TRANSFER) {
             this.setState({
                 isRedirect: true,
                 redirect: PATH_OPER,

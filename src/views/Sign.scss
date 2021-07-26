@@ -18,7 +18,7 @@
 
     .sign-account {
         width: 65%;
-        margin: 2em;
+        margin: 2em 0 0 0;
         padding: 0;
 
         border-top: 5px solid lightslategray;
@@ -32,6 +32,7 @@
 
         p {
             padding: 0.5em 0 0.5em 0;
+            margin: 0.2em 0 0.2em 0;
             background-color: lightslategray;
             color: white;
         }
@@ -47,14 +48,6 @@
 
         margin: 2em;
 
-        .sign-switch {
-            width: 50%;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-evenly;
-        }
-
         .sign-json {
             width: 100%;
 
@@ -68,7 +61,7 @@
             letter-spacing: 1px;
 
             pre {
-                width: 100%;
+                width: 90%;
                 border: 3px solid white;
                 background-color: white;
                 opacity: 0.7;
@@ -85,26 +78,81 @@
                     background-color: aquamarine;
                 }
             }
+        }
 
-            textarea {
+        .sign-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            margin-top: 0;
+            margin-bottom: 1em;
+            padding: 0;
+            width: 100%;
+
+            opacity: 0.8;
+
+            #other {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
                 width: 100%;
-                height: 500px;
 
-                border: 2px solid white;
-                border-radius: 2px;
+                #head,
+                #body {
+                    padding: 0.2em 0.5em 0.2em 0.5em;
+                    margin-top: 0;
+                    margin-bottom: 0.5em;
+                }
 
-                padding: 2em;
+                #head {
+                    margin-right: 1em;
+                    width: 20%;
+                    border-top: 1px solid white;
+                    border-bottom: 1px solid white;
+                    color: white;
+                    text-align: center;
+                    font-weight: 400;
+                }
 
-                color: darkblue;
-                background-color: aliceblue;
-                letter-spacing: 1px;
+                #body {
+                    width: 80%;
+                    background-color: white;
+                    color: black;
+                }
+            }
 
-                opacity: 0.7;
+            #sig {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
 
-                &:focus {
-                    outline: none !important;
-                    border: 2px solid lightcoral;
-                    background-color: antiquewhite;
+                #head {
+                    width: 100%;
+                    color: white;
+                    border-top: 1px solid white;
+                    border-bottom: 1px solid white;
+                    text-align: center;
+                    padding: 0.2em 0 0.2em 0;
+                    font-weight: 400;
+                    margin-bottom: 0.2em;
+                }
+
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                    width: 100%;
+                    margin: 0 1em 1em 1em;
+
+                    li {
+                        color: black;
+                        background-color: white;
+                        margin-top: 0.2em;
+                        padding: 0.2em 0.5em 0.2em 0.5em;
+                        margin-bottom: 0.2em;
+                    }
                 }
             }
         }
@@ -127,31 +175,6 @@
                 padding: 0.5em;
             }
         }
-
-        a {
-            width: 100%;
-
-            font-size: 1.5em;
-            font-weight: 500;
-            text-align: center;
-
-            padding: 0.2em 0 0.2em 0;
-
-            background-color: white;
-            text-decoration: underline;
-            color: black;
-
-            opacity: 0.8;
-
-            &:hover {
-                background-color: lightskyblue;
-                color: white;
-            }
-
-            &:active {
-                background-color: lightslategray;
-            }
-        }
     }
 
     .sign-buttons {
@@ -165,47 +188,5 @@
         padding: 1em;
 
         margin-bottom: 2em;
-    }
-
-    .sign-response {
-        width: 65%;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        padding: 1em;
-        font-size: 1em;
-        letter-spacing: 1px;
-
-        span {
-            align-self: flex-start;
-            font-size: 1em;
-            color: red;
-            margin: 0.2em;
-
-            display: inline-block;
-            text-align: start;
-        }
-
-        pre {
-            width: 100%;
-            border: 3px solid white;
-            background-color: white;
-            opacity: 0.7;
-            color: black;
-            padding: 2em;
-
-            &:hover {
-                border: 3px solid red;
-                background-color: antiquewhite;
-            }
-
-            &:active {
-                border: 3px solid yellowgreen;
-                background-color: aquamarine;
-            }
-        }
     }
 }

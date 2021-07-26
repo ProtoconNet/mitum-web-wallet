@@ -16,15 +16,15 @@ class Navigation extends React.Component {
 
     close() {
         isClose = true;
-        this.setState({rand: this.state.rand + 1})
+        this.setState({ rand: this.state.rand + 1 })
     }
 
     check() {
-        if(isClose){
+        if (isClose) {
             isClose = false;
             return <Redirect to="/logout" />
         }
-        else{
+        else {
             return false;
         }
     }
@@ -43,6 +43,18 @@ class Navigation extends React.Component {
                     <p>OPEN WALLET</p>
                 </Link>
                 {isLogin ? <p onClick={() => this.close()} id="nav-addr">{addr}</p> : false}
+                {isLogin
+                    ? (
+                        <Link className="nav-sign" 
+                            to={{
+                                pathname: '/sign',
+                                state: {
+                                    json: undefined
+                                }
+                            }}>
+                            <p>SIGN OPERATION</p>
+                        </Link>
+                    ) : false}
                 <Link className="main" to="/key-generate">
                     <p>GENERATE KEYPAIR</p>
                 </Link>

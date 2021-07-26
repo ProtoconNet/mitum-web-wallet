@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/mitum-web-wallet/static/css/main.7527f9d1.chunk.css",
-    "main.js": "/mitum-web-wallet/static/js/main.f0bce5ae.chunk.js",
-    "main.js.map": "/mitum-web-wallet/static/js/main.f0bce5ae.chunk.js.map",
+    "main.css": "/mitum-web-wallet/static/css/main.59555fe2.chunk.css",
+    "main.js": "/mitum-web-wallet/static/js/main.ba33daac.chunk.js",
+    "main.js.map": "/mitum-web-wallet/static/js/main.ba33daac.chunk.js.map",
     "runtime-main.js": "/mitum-web-wallet/static/js/runtime-main.61e61e33.js",
     "runtime-main.js.map": "/mitum-web-wallet/static/js/runtime-main.61e61e33.js.map",
-    "static/js/2.e4db4347.chunk.js": "/mitum-web-wallet/static/js/2.e4db4347.chunk.js",
-    "static/js/2.e4db4347.chunk.js.map": "/mitum-web-wallet/static/js/2.e4db4347.chunk.js.map",
+    "static/js/2.ddcd73fb.chunk.js": "/mitum-web-wallet/static/js/2.ddcd73fb.chunk.js",
+    "static/js/2.ddcd73fb.chunk.js.map": "/mitum-web-wallet/static/js/2.ddcd73fb.chunk.js.map",
     "static/js/3.8356bb3a.chunk.js": "/mitum-web-wallet/static/js/3.8356bb3a.chunk.js",
     "static/js/3.8356bb3a.chunk.js.map": "/mitum-web-wallet/static/js/3.8356bb3a.chunk.js.map",
     "index.html": "/mitum-web-wallet/index.html",
-    "static/css/main.7527f9d1.chunk.css.map": "/mitum-web-wallet/static/css/main.7527f9d1.chunk.css.map",
-    "static/js/2.e4db4347.chunk.js.LICENSE.txt": "/mitum-web-wallet/static/js/2.e4db4347.chunk.js.LICENSE.txt",
+    "static/css/main.59555fe2.chunk.css.map": "/mitum-web-wallet/static/css/main.59555fe2.chunk.css.map",
+    "static/js/2.ddcd73fb.chunk.js.LICENSE.txt": "/mitum-web-wallet/static/js/2.ddcd73fb.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/mitum-web-wallet/static/media/background.eca262ee.jpg",
     "static/media/logo_trans.39b47b2b.png": "/mitum-web-wallet/static/media/logo_trans.39b47b2b.png"
   },
   "entrypoints": [
     "static/js/runtime-main.61e61e33.js",
-    "static/js/2.e4db4347.chunk.js",
-    "static/css/main.7527f9d1.chunk.css",
-    "static/js/main.f0bce5ae.chunk.js"
+    "static/js/2.ddcd73fb.chunk.js",
+    "static/css/main.59555fe2.chunk.css",
+    "static/js/main.ba33daac.chunk.js"
   ]
 }

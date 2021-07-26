@@ -4,18 +4,11 @@ import copy from 'copy-to-clipboard';
 
 import './Sign.scss';
 
-import SelectButton from '../components/buttons/SelectButton';
 import ConfirmButton from '../components/buttons/ConfirmButton';
-import SmallButton from '../components/buttons/SmallButton';
-
-import axios from 'axios';
 
 import { Signer } from 'mitumc';
 import { connect } from 'react-redux';
-
-
-const CLEAR_DOWNLOAD = 'clear-download';
-const CLEAR_RESPONSE = 'clear-response';
+import OperationConfirm from '../components/modals/OperationConfirm';
 
 const onCopy = (msg) => {
     copy(msg);
@@ -38,16 +31,6 @@ const download = (json) => {
     return URL.createObjectURL(file);
 }
 
-const broadcast = async (operation) => {
-    if (!operation || !Object.prototype.hasOwnProperty.call(operation, 'hash') || !Object.prototype.hasOwnProperty.call(operation, 'memo')
-        || !Object.prototype.hasOwnProperty.call(operation, 'fact') || !Object.prototype.hasOwnProperty.call(operation, 'fact_signs')
-        || !operation.hash || !operation.fact || !operation.fact_signs) {
-        return undefined;
-    }
-
-    return await axios.post(process.env.REACT_APP_API_BROADCAST, operation);
-}
-
 const preStyle = {
     display: 'block',
     padding: '10px 30px',
@@ -56,13 +39,18 @@ const preStyle = {
     whiteSpace: "pre-wrap"
 }
 
+const sig = (x) => {
+    return (
+        <li>{x}</li>
+    );
+}
+
 class Sign extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.createdRef = createRef();
-        this.responseRef = createRef();
         this.jsonRef = createRef();
 
         if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !Object.prototype.hasOwnProperty.call(this.props.location, 'state')
@@ -76,27 +64,17 @@ class Sign extends React.Component {
         this.state = {
             isRedirect: false,
             json: Object.prototype.hasOwnProperty.call(this.props.location.state, 'json') ? this.props.location.state.json : {},
-
-            jsonSelf: "",
-            response: undefined,
-
+            sigs: [],
             download: undefined,
-            filename: ""
+            filename: "",
+            type: "",
+
+            isModalOpen: false,
         }
     }
 
-    clear(clr) {
-        if (clr === CLEAR_DOWNLOAD) {
-            this.setState({
-                download: undefined,
-                filename: "",
-            });
-        }
-        else if (clr === CLEAR_RESPONSE) {
-            this.setState({
-                response: undefined
-            });
-        }
+    closeModal() {
+        this.setState({ isModalOpen: false })
     }
 
     componentDidMount() {
@@ -108,13 +86,10 @@ class Sign extends React.Component {
     }
 
     scrollToJSON = () => {
-        if (this.responseRef.current && this.state.response) {
-            this.responseRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.jsonRef.current && (this.state.jsonSelf || this.state.json)) {
+        if (this.jsonRef.current && this.state.json) {
             this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        else if (this.createdRef.current && !this.state.response) {
+        else if (this.createdRef.current) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }
@@ -122,19 +97,13 @@ class Sign extends React.Component {
     jsonView() {
         return (
             <div className="sign-json">
-                {this.state.jsonSelf === ""
+                {this.state.json
                     ? (
-                        this.state.json
-                            ? (
-                                <pre style={preStyle}
-                                    onClick={() => onCopy(JSON.stringify(this.state.json, null, 4))}>
-                                    {JSON.stringify(this.state.json, null, 4)}
-                                </pre>
-                            )
-                            : false
-                    )
-                    : <textarea type="text" onChange={(e) => this.onSelfChange(e)} />
-                }
+                        <pre style={preStyle}
+                            onClick={() => onCopy(JSON.stringify(this.state.json, null, 4))}>
+                            {JSON.stringify(this.state.json, null, 4)}
+                        </pre>
+                    ) : false}
             </div>
         );
     }
@@ -154,148 +123,75 @@ class Sign extends React.Component {
                 }
                 else {
                     this.setState({
-                        json: parsed
+                        json: parsed,
+                        type: parsed._hint,
+                        download: download(parsed),
+                        filename: parsed.hash,
+                        sigs: parsed.fact_signs.map(x => x.signature)
                     });
-                    this.clear(CLEAR_DOWNLOAD);
-                    this.clear(CLEAR_RESPONSE);
                 }
             };
             reader.readAsText(file, "utf-8");
         } catch (e) {
             this.setState({
-                json: json
+                json: json,
+                type: json._hint,
+                download: download(json),
+                filename: Object.prototype.hasOwnProperty.call(json, 'hash') ? json.hash : "",
+                sigs: Object.prototype.hasOwnProperty.call(json, 'fact_signs') ? json.fact_signs.map(x => x.signature) : []
             });
             alert('Invalid format!\nOnly operation json file can be imported');
         }
     }
 
-    onClickImport() {
-        if (this.state.jsonSelf) {
-            this.clear(CLEAR_DOWNLOAD);
-            this.clear(CLEAR_RESPONSE);
-        }
-
-        this.setState({
-            jsonSelf: "",
-            download: undefined,
-            filename: ""
-        });
-    }
-
-    onClickSelf() {
-        if (!this.state.jsonSelf) {
-            this.clear(CLEAR_DOWNLOAD);
-            this.clear(CLEAR_RESPONSE);
-        }
-
-        this.setState({
-            jsonSelf: "{\n}",
-            download: undefined,
-            filename: ""
-        })
-    }
-
-    onSelfChange(e) {
-        this.setState({
-            jsonSelf: e.target.value ? e.target.value : "{\n}"
-        })
-    }
-
-    eonClickSend() {
-        let target = {};
-
-        if (this.state.jsonSelf) {
-            target = JSON.parse(this.state.jsonSelf);
-        }
-        else if (this.state.json) {
-            target = this.state.json;
-        }
-        else {
-            this.setState({
-                response: undefined
-            });
-        }
-
+    onClickSend() {
+        const target = this.state.json;
         if (!Object.prototype.hasOwnProperty.call(target, 'hash') || !Object.prototype.hasOwnProperty.call(target, 'fact')
             || !Object.prototype.hasOwnProperty.call(target, 'fact_signs') || !Object.prototype.hasOwnProperty.call(target, 'memo')) {
-            this.setState({
-                response: undefined
-            });
+            alert('Invalid operation!')
             return;
         }
 
-        broadcast(target).then(
-            res => {
-                this.setState({
-                    status: res.request.status,
-                    response: res.data
-                });
-            }
-        ).catch(e => {
-            this.setState({
-                status: e.response.status,
-                response: e.response.data
-            })
-            alert('Could not send operation');
-        });
+        if (!this.state.download) {
+            return;
+        }
+
+        this.setState({
+            isModalOpen: true
+        })
     }
 
     onClickSign() {
-        this.clear(CLEAR_RESPONSE);
-        this.clear(CLEAR_DOWNLOAD);
 
-        let target = this.state.jsonSelf
-            ? JSON.parse(this.state.jsonSelf)
-            : (
-                this.state.json ? this.state.json : {}
-            );
+        let target = this.state.json;
 
         if (!Object.prototype.hasOwnProperty.call(target, 'hash') || !Object.prototype.hasOwnProperty.call(target, 'fact_signs')
             || !Object.prototype.hasOwnProperty.call(target, 'fact') || !Object.prototype.hasOwnProperty.call(target, 'memo')) {
             return;
         }
 
-        const signer = new Signer('mitum', this.props.account.privateKey);
+        const signer = new Signer(process.env.REACT_APP_NETWORK_ID, this.props.account.privateKey);
 
         try {
+            const json = signer.signOperation(target);
             this.setState({
-                json: signer.signOperation(target),
-                jsonSelf: ""
+                json: json,
+                type: json._hint,
+                download: download(json),
+                filename: json.hash,
+                sigs: json.fact_signs.map(x => x.signature)
             });
             alert('Success!');
         }
         catch (e) {
+            this.setState({
+                json: target,
+                type: Object.prototype.hasOwnProperty.call(target, '_hint') ? target._hint : "",
+                download: download(target),
+                filename: target.hash,
+                sigs: target.fact_signs.map(x => x.signature)
+            })
             alert('Could not add sign to operation');
-        }
-    }
-
-    _createFile(target) {
-        if (!target || !Object.prototype.hasOwnProperty.call(target, 'hash') || !target.hash) {
-            throw new Error('Invalid json');
-        }
-        this.setState({
-            download: download(target),
-            filename: target.hash
-        });
-    }
-
-    onCreateFile() {
-        try {
-            if (this.state.jsonSelf) {
-                this._createFile(JSON.parse(this.state.jsonSelf));
-                alert('Success!');
-            }
-            else if (this.state.json) {
-                this._createFile(this.state.json);
-                alert('Success!');
-            }
-            else {
-                this.setState({
-                    download: undefined
-                })
-            }
-        } catch (e) {
-            alert('Could not create file!');
         }
     }
 
@@ -308,35 +204,49 @@ class Sign extends React.Component {
                 <div className="sign-account">
                     <p>{this.props.account.address}</p>
                 </div>
+                <div ref={this.jsonRef}></div>
                 <div className="sign-operation">
-                    <span className="sign-switch">
-                        <SelectButton onClick={() => this.onClickImport()} size="big">IMPORTED</SelectButton>
-                        <SelectButton onClick={() => this.onClickSelf()} size="big">WRITTEN</SelectButton>
-                    </span>
-                    <div ref={this.jsonRef}></div>
+                    <div className="sign-info">
+                        <span id="other">
+                            <p id="head">FACT HASH</p>
+                            <p id="body">
+                                {
+                                    this.state.json && Object.prototype.hasOwnProperty.call(this.state.json, 'fact')
+                                        ? this.state.json.fact.hash
+                                        : "NONE"
+                                }
+                            </p>
+                        </span>
+                        <span id="other">
+                            <p id="head">TYPE</p>
+                            <p id="body">{this.state.type ? this.state.type : "NONE"}</p>
+                        </span>
+                        <span id="sig">
+                            <p id="head">SIGNATURES</p>
+                            <ul>
+                                {this.state.sigs.length > 0
+                                    ? this.state.sigs.map(x => sig(x))
+                                    : (
+                                        <li style={{textAlign: "center"}}>-</li>
+                                    )
+                                }
+                            </ul>
+                        </span>
+                    </div>
                     {this.jsonView()}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
-                        <SmallButton visible={true} onClick={() => this.onCreateFile()} >to json file</SmallButton>
                     </div>
-                    {this.state.download ? <a target="_blank" download={`${this.state.filename}.json`}
-                        href={this.state.download} rel="noreferrer">Download</a> : false}
                 </div>
                 <div className="sign-buttons">
-                    <ConfirmButton onClick={() => this.onClickSend()}>SEND NOW</ConfirmButton>
-                    <ConfirmButton onClick={() => this.onClickSign()}>ADD SIGN</ConfirmButton>
+                    <ConfirmButton onClick={() => this.onClickSend()}>SEND</ConfirmButton>
+                    <ConfirmButton onClick={() => this.onClickSign()}>SIGN</ConfirmButton>
                 </div>
-                <div ref={this.responseRef}></div>
-                {this.state.response
-                    ?
-                    <div className="sign-response">
-                        <span>{(this.state.status === 200 ? "Broadcast Success" : "Broadcast Fail") + `: ${this.state.status}`}</span>
-                        <pre
-                            style={preStyle}
-                            onClick={() => onCopy(this.state.response)}>
-                            {JSON.stringify(this.state.response, null, 4)}
-                        </pre>
-                    </div> : false}
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
+                    title="Are you sure?"
+                    json={this.state.json}
+                    filename={this.state.filename}
+                    download={this.state.download} />
             </div>
         );
     }

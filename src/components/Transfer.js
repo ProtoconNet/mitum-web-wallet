@@ -223,7 +223,7 @@ class Transfer extends React.Component {
                 <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
                     title="Are you sure?"
                     json={this.state.created}
-                    filename={this.state.file}
+                    filename={this.state.filename}
                     download={this.state.download} />
             </div>
         );

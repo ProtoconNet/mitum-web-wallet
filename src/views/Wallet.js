@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { login } from '../store/actions';
 
 const PATH_LOGIN = 'path-login';
-const PATH_SIGN = 'path-sign';
+// const PATH_SIGN = 'path-sign';
 const PATH_OPER = 'path-operation';
 
 const OPER_CREATE_ACCOUNT = 'oper-create-account';
@@ -96,13 +96,7 @@ class Wallet extends React.Component {
     }
 
     onSelect(oper) {
-        if (oper === PATH_SIGN) {
-            this.setState({
-                isRedirect: true,
-                redirect: PATH_SIGN
-            })
-        }
-        else {
+        if (oper === PATH_OPER) {
             this.setState({
                 isRedirect: true,
                 redirect: PATH_OPER,
@@ -130,13 +124,6 @@ class Wallet extends React.Component {
                         operation: this.state.operation,
                     }
                 }} />;
-            case PATH_SIGN:
-                return <Redirect to={{
-                    pathname: '/sign',
-                    state: {
-                        json: undefined
-                    }
-                }} />
             case PATH_LOGIN:
                 return <Redirect to='/login' />
             default: return false;
@@ -169,9 +156,9 @@ class Wallet extends React.Component {
             <div className="wallet-container">
                 {this.renderRedirect()}
                 <span className="wallet-refresh" >
-                        <p onClick={() => this.refresh()}>
-                            ⟳
-                        </p>
+                    <p onClick={() => this.refresh()}>
+                        ⟳
+                    </p>
                 </span>
                 <div className="wallet-ref" ref={this.walletRef}></div>
                 <h1>ACCOUNT INFO</h1>
@@ -240,11 +227,6 @@ class Wallet extends React.Component {
                     <SelectButton size="wide" onClick={() => this.onSelect(OPER_CREATE_ACCOUNT)}>CREATE ACCOUNT</SelectButton>
                     <SelectButton size="wide" onClick={() => this.onSelect(OPER_UPDATE_KEY)}>UPDATE KEY</SelectButton>
                     <SelectButton size="wide" onClick={() => this.onSelect(OPER_TRANSFER)}>TRANSFER</SelectButton>
-                </div>
-                <div className="wallet-sign">
-                    <SelectButton onClick={() => this.onSelect(PATH_SIGN)} size="wide">
-                        Sign / Send
-                    </SelectButton>
                 </div>
             </div>
         );

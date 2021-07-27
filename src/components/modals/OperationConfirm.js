@@ -34,14 +34,16 @@ class OperationConfirm extends React.Component {
                     response: res.data
                 });
             }
-        ).catch(e => {
-            this.setState({
-                isRedirect: true,
-                status: e.response.status,
-                response: e.response.data
-            })
-            alert('Could not send operation');
-        });
+        ).catch(
+            e => {
+                this.setState({
+                    isRedirect: true,
+                    status: e.response.data.status,
+                    response: e.response.data
+                })
+                alert('Could not send operation');
+            }
+        );
     }
 
     render() {
@@ -53,7 +55,8 @@ class OperationConfirm extends React.Component {
                         pathname: '/response',
                         state: {
                             res: this.state.response,
-                            status: this.state.status
+                            status: this.state.status,
+                            operation: this.props.operation
                         }
                     }} />
                     : false}

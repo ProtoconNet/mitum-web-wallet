@@ -9,15 +9,6 @@ import { Redirect } from 'react-router-dom';
 import SmallButton from './buttons/SmallButton';
 import OperationConfirm from './modals/OperationConfirm';
 
-const balance = (amount) => {
-    return (
-        <li key={amount.currency}>
-            <p className="currency">{amount.currency}</p>
-            <p className="amount">{amount.amount}</p>
-        </li>
-    );
-}
-
 const key = (k) => {
     return (
         <li key={k}>
@@ -79,30 +70,36 @@ class UpdateKey extends React.Component {
     }
 
     onClick() {
-        const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
+        try {
+            const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
 
-        const account = this.props.account;
-        const keys = generator.createKeys(
-            this.state.keys.map(x =>
-                generator.formatKey(x.key, parseInt(x.weight))),
-            parseInt(this.state.threshold)
-        );
+            const account = this.props.account;
+            const keys = generator.createKeys(
+                this.state.keys.map(x =>
+                    generator.formatKey(x.key, parseInt(x.weight))),
+                parseInt(this.state.threshold)
+            );
 
-        const keyUpdaterFact = generator.createKeyUpdaterFact(
-            account.address, this.state.currency, keys
-        );
+            const keyUpdaterFact = generator.createKeyUpdaterFact(
+                account.address, this.state.currency, keys
+            );
 
-        const keyUpdater = generator.createOperation(keyUpdaterFact, "");
-        keyUpdater.addSign(account.privateKey);
+            const keyUpdater = generator.createOperation(keyUpdaterFact, "");
+            keyUpdater.addSign(account.privateKey);
 
-        const created = keyUpdater.dict();
+            const created = keyUpdater.dict();
 
-        this.setState({
-            created: created,
-            isModalOpen: true,
-            download: download(created),
-            filename: created.hash
-        });
+            this.setState({
+                created: created,
+                isModalOpen: true,
+                download: download(created),
+                filename: created.hash
+            });
+        }
+        catch (e) {
+            console.log(e);
+            alert('Could not create operation! :(\nPlease check your input~');
+        }
     }
 
     onChangePub(e) {
@@ -149,10 +146,10 @@ class UpdateKey extends React.Component {
     }
 
     scrollToInput = () => {
-        if (this.createdRef.current && !this.state.created && this.state.keys.length > 0) {
+        if (this.createdRef.current && this.state.keys.length > 0) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        else if (this.titleRef.current && !this.state.created) {
+        else if (this.titleRef.current) {
             this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }
@@ -165,74 +162,30 @@ class UpdateKey extends React.Component {
                 <div ref={this.titleRef}></div>
                 <h1>UPDATE KEY</h1>
                 <div className="uk-info-wrap">
-                    <div id="address">
-                        <p id="head">ADDRESS</p>
-                        <p id="body">{account.address}</p>
-                    </div>
                     <div id="pub">
-                        <p>CURRENT PUBLIC KEYS</p>
-                        <ul>
-                            {account.publicKeys ? account.publicKeys.map(x => key(x)) : false}
-                        </ul>
-                    </div>
-                    <div id="balance">
-                        <p>CURRENT BALANCES</p>
-                        <ul>
-                            {account.balances ? account.balances.map(x => balance(x)) : false}
-                        </ul>
-                    </div>
-                </div>
-                <div className="uk-input-wrap">
-                    <p>Fill the below section with new keys. Additionally, You must give currency ID for paying fees. This page is for updating keys of the account.</p>
-                    <div ref={this.createdRef} />
-                    <div className="uk-keys">
-                        <p id="head">NEW KEYS</p>
-                        <p id="exp">
-                            You need at least one pair of mitum-style public key and weight value. The total weight of all weights must be equal to or more than threshold.
-                            Old keys will be replaced with new keys but there isn't any change with your account address.
-                        </p>
+                        <p id="head">CURRENT KEY LIST</p>
                         <div id="label">
                             <p className='key'>KEY</p>
                             <p className='weight'>WEIGHT</p>
                         </div>
                         <ul>
-                            {this.state.keys.length < 1
-                                ? (
-                                    <li key="empty" >
-                                        <p className='key'>-</p>
-                                        <p className='weight'>-</p>
-                                    </li>
-                                ) : false}
+                            {account.publicKeys ? account.publicKeys.map(x => key(x)) : false}
+                        </ul>
+                    </div>
+                </div>
+                <div className="uk-input-wrap">
+                    <div ref={this.createdRef} />
+                    <div className="uk-keys">
+                        <p id="head">NEW KEY LIST</p>
+                        <div id="label">
+                            <p className='key'>KEY</p>
+                            <p className='weight'>WEIGHT</p>
+                        </div>
+                        <ul>
                             {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
                         </ul>
-                        <div id="thres">
-                            <p id="head">THRESHOLD</p>
-                            <p id="body">{this.state.threshold ? this.state.threshold : "-"}</p>
-                        </div>
-                        <div id="currency">
-                            <p id="head">CURRENCY ID</p>
-                            <p id="body">{this.state.currency ? this.state.currency : "-"}</p>
-                        </div>
-                    </div>
-                    <p id='uk-input-exp'>Put your input here. :)</p>
-                    <div className="uk-adder">
-                        <span className="uk-currency-adder">
-                            <p>CURRENCY ID:</p>
-                            <InputBox
-                                size="small" useCopy={false} disabled={false} placeholder='currency'
-                                value={this.state.currency}
-                                onChange={(e) => this.onChangeCurrency(e)} />
-                        </span>
-                        <span className="uk-thres-adder">
-                            <p>THRESHOLD  :</p>
-                            <InputBox
-                                size="small" useCopy={false} disabled={false} placeholder='threshold'
-                                value={this.state.threshold}
-                                onChange={(e) => this.onChangeThres(e)} />
-                        </span>
-                        <span className="uk-key-adder">
-                            <p>ADD KEY</p>
-                            <div id="adder">
+                        <section>
+                            <div className="uk-key-adder">
                                 <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
                                     value={this.state.publicKey}
                                     onChange={(e) => this.onChangePub(e)} />
@@ -244,7 +197,24 @@ class UpdateKey extends React.Component {
                                     disabled={!(this.state.publicKey && this.state.weight) ? true : false}
                                     onClick={() => this.addKey()}>ADD</SmallButton>
                             </div>
-                        </span>
+                            <div className="uk-extra-adder">
+                                <div className="uk-thres-adder">
+                                    <p>THRESHOLD  :</p>
+                                    <InputBox
+                                        size="small" useCopy={false} disabled={false} placeholder='threshold'
+                                        value={this.state.threshold}
+                                        onChange={(e) => this.onChangeThres(e)} />
+                                </div>
+                                <div className="uk-currency-adder">
+                                    <p>CURRENCY ID:</p>
+                                    <InputBox
+                                        size="small" useCopy={false} disabled={false} placeholder='currency'
+                                        value={this.state.currency}
+                                        onChange={(e) => this.onChangeCurrency(e)} />
+                                </div>
+                            </div>
+                        </section>
+
                     </div>
                 </div>
                 <ConfirmButton
@@ -254,7 +224,8 @@ class UpdateKey extends React.Component {
                     title="Are you sure?"
                     json={this.state.created}
                     filename={this.state.filename}
-                    download={this.state.download} />
+                    download={this.state.download}
+                    operation='UPDATE-KEY' />
             </div>
         );
     }

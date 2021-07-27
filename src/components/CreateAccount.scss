@@ -30,12 +30,12 @@
 
         letter-spacing: 1px;
 
-        p {
+        #head {
             width: 100%;
-            text-align: center;
+            text-align: start;
+            font-size: 1.3em;
+            text-decoration: underline;
             font-weight: 500;
-            border-top: 1px solid white;
-            border-bottom: 1px solid white;
             margin: 0 0 0.2em 0;
             padding: 0.2em 0 0.2em 0;
             color: white;
@@ -54,7 +54,7 @@
                 flex-direction: row;
                 align-items: center;
 
-                padding: 0.2em 0 0.2em 0;
+                padding: 1px 0 1px 0;
 
                 .currency,
                 .amount {
@@ -63,18 +63,18 @@
                     word-break: break-all;
 
                     padding: 0.2em;
-                    margin-top: 0.2em;
-                    margin-bottom: 0.2em;
+                    margin-top: 1px;
+                    margin-bottom: 0;
                     margin-left: 0;
                     font-weight: 400;
                 }
 
                 .currency {
                     width: 20%;
-                    margin-right: 0.5em;
+                    margin-right: 1px;
 
-                    color: white;
-                    background-color: transparent;
+                    color: black;
+                    background-color: white;
                     border-top: 1px solid white;
                     border-bottom: 1px solid white;
                 }
@@ -101,16 +101,7 @@
         justify-content: center;
 
         margin: 1em 0 2em 0;
-        padding: 1em 0 1em 0;
-
-        p {
-            text-align: center;
-            padding: 1em;
-            color: white;
-            font-weight: 500;
-            width: 100%;
-            margin: 0;
-        }
+        padding: 0;
 
         .ca-keys {
             margin: 3em 0 0 0;
@@ -122,61 +113,18 @@
             align-items: center;
             justify-content: center;
 
-            #exp {
-                text-align: start;
-                padding: 1em;
-                color: white;
-                font-weight: 300;
-                width: 100%;
-                margin: 0;
-            }
-
             #head {
                 width: 100%;
-                text-align: center;
+                text-align: start;
+                text-decoration: underline;
+                font-size: 1.3em;
                 font-weight: 500;
-                border-top: 1px solid white;
-                border-bottom: 1px solid white;
-                background-color: white;
+                background-color: transparent;
+
                 margin: 0 0 0.2em 0;
                 padding: 0.2em 0 0.2em 0;
-                color: black;
-            }
 
-            #thres {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-
-                margin: 1em 0 1em 0;
-
-                p {
-                    margin-top: 0;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding: 0.2em;
-
-                    text-align: center;
-                }
-
-                #head {
-                    width: 30%;
-                    margin-right: 0.5em;
-                    border-top: 1px solid white;
-                    border-bottom: 1px solid white;
-                    background-color: white;
-                    color: black;
-                }
-
-                #body {
-                    width: 70%;
-                    margin-right: 0;
-                    background-color: transparent;
-                    border-top: 1px solid white;
-                    border-bottom: 1px solid white;
-                    color: white;
-                }
+                color: white;
             }
 
             #label {
@@ -190,10 +138,10 @@
                 width: 100%;
 
                 p {
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    margin-left: 0;
-                    padding: 0.2em;
+                    margin: 0;
+                    padding-top: 0.2em;
+                    padding-bottom: 0.2em;
+                    padding-left: 0;
 
                     font-weight: 500;
                     text-align: center;
@@ -203,20 +151,30 @@
 
                 .key {
                     width: 70%;
-                    margin-right: 0.5em;
+                    border-right: 1px solid lightgray;
+                    padding-right: 0;
                 }
 
                 .weight {
                     width: 30%;
-                    margin-right: 0;
+                    padding-right: 1.2em;
                 }
             }
 
             ul {
                 width: 100%;
+                height: 200px;
+                overflow-y: scroll;
+
                 list-style-type: none;
                 padding: 0;
                 margin: 0;
+
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                background-color: beige;
 
                 li {
                     width: 100%;
@@ -233,33 +191,85 @@
                     .weight {
                         text-align: start;
                         display: inline-block;
-                        text-align: start;
 
                         padding: 0.2em;
                         margin-left: 0;
-                        margin-top: 0.2em;
+                        margin-top: 1px;
                         margin-bottom: 0;
+                        margin-right: 0;
 
                         overflow: visible;
                         white-space: pre-wrap;
                         word-break: break-all;
 
-                        background-color: beige;
-                        border-top: 1px solid beige;
-                        border-bottom: 1px solid beige;
+                        border-bottom: 1px solid lightgray;
 
                         color: black;
-
-                        text-align: center;
                     }
 
                     .key {
                         width: 70%;
-                        margin-right: 0.5em;
+                        text-align: start;
+                        border-right: 1px solid lightgray;
                     }
 
                     .weight {
                         width: 30%;
+                        align-self: stretch;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                }
+            }
+
+            section {
+                width: 100%;
+                margin: 0 0 3em 0;
+
+                .ca-key-adder {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    button {
+                        padding: 0.5em;
+                    }
+
+                    div {
+                        input {
+                            margin-right: 0.2em;
+                        }
+                    }
+                }
+
+                .ca-thres-adder {
+                    width: 100%;
+                    height: fit-content;
+                    padding: 1em 1em 1em 0;
+                    margin-left: 0;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+
+                    p {
+                        font-size: 1em;
+                        font-weight: 500;
+
+                        text-align: center;
+
+                        margin: 0 0.5em 0 0;
+                        padding: 0.2em;
+
+                        width: fit-content;
+
+                        vertical-align: middle;
+                    }
+
+                    div {
+                        margin: 0;
+                        text-align: start;
                     }
                 }
             }
@@ -275,25 +285,16 @@
             align-items: center;
             justify-content: center;
 
-            #exp {
-                text-align: start;
-                padding: 1em;
-                color: white;
-                font-weight: 300;
-                width: 100%;
-                margin: 0;
-            }
-
             #head {
                 width: 100%;
-                text-align: center;
+                text-align: start;
+                text-decoration: underline;
+                font-size: 1.3em;
                 font-weight: 500;
-                background-color: white;
-                border-top: 1px solid white;
-                border-bottom: 1px solid white;
+                background-color: transparent;
                 margin: 0 0 0.2em 0;
                 padding: 0.2em 0 0.2em 0;
-                color: black;
+                color: white;
             }
 
             #label {
@@ -307,11 +308,10 @@
                 width: 100%;
 
                 p {
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    margin-left: 0;
-                    padding: 0.2em;
-
+                    margin: 0;
+                    padding-top: 0.2em;
+                    padding-bottom: 0.2em;
+                    padding-left: 0.2em;
                     font-weight: 500;
                     text-align: center;
 
@@ -320,21 +320,31 @@
                 }
 
                 .currency {
-                    width: 20%;
-                    margin-right: 0.5em;
+                    width: 25%;
+                    padding-right: 0.2em;
+                    border-right: 1px solid lightgray;
                 }
 
                 .amount {
-                    width: 80%;
-                    margin-right: 0;
+                    width: 75%;
+                    padding-right: 1.2em;
                 }
             }
 
             ul {
                 width: 100%;
+                height: 200px;
+                overflow-y: scroll;
+
                 list-style-type: none;
                 padding: 0;
                 margin: 0;
+
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                background-color: beige;
 
                 li {
                     width: 100%;
@@ -351,123 +361,54 @@
                     .amount {
                         text-align: start;
                         display: inline-block;
-                        text-align: start;
+                        text-align: center;
 
                         padding: 0.2em;
                         margin-left: 0;
-                        margin-top: 0.2em;
+                        margin-top: 1px;
                         margin-bottom: 0;
+                        margin-right: 0;
 
                         overflow: visible;
                         white-space: pre-wrap;
                         word-break: break-all;
 
-                        background-color: beige;
-                        border-top: 1px solid beige;
-                        border-bottom: 1px solid beige;
-
-                        text-align: center;
+                        border-bottom: 1px solid lightgray;
 
                         color: black;
                     }
 
                     .currency {
-                        width: 20%;
-                        margin-right: 0.5em;
+                        width: 25%;
+                        border-right: 1px solid lightgray;
                     }
 
                     .amount {
-                        width: 80%;
+                        width: 75%;
+                        align-self: stretch;
+                        vertical-align: middle;
                     }
                 }
             }
-        }
 
-        #ca-input-exp {
-            margin: 5em 0 0.2em 0;
-            padding: 0;
-            width: 100%;
-            text-align: end;
-        }
-
-        .ca-adder {
-            width: 100%;
-            margin: 0 0 0 0;
-            padding: 0;
-
-            border-top: 5px solid white;
-            border-bottom: 5px solid white;
-
-            .ca-thres-adder {
+            section {
                 width: 100%;
+                margin: 0;
 
-                display: flex;
-                flex-direction: row;
-                align-items: flex-start;
-                justify-content: flex-start;
-
-                margin: 3em 0 3em 0;
-
-                p {
-                    font-size: 1em;
-                    font-weight: 500;
-
-                    text-align: center;
-
-                    margin: 0;
-                    padding: 0.2em;
-
-                    width: fit-content;
-
-                    vertical-align: middle;
-                }
-
-                div {
-                    margin: 0;
-                    text-align: start;
-                }
-            }
-
-            .ca-amount-adder,
-            .ca-key-adder {
-                width: 100%;
-                margin: 1em 0em 3em 0;
-
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                p {
-                    font-size: 1em;
-                    font-weight: 500;
-
-                    text-align: center;
-
-                    margin: 0.5em 0 0.5em 0;
-                    padding: 0.2em;
-
-                    width: 100%;
-                    align-self: start;
-
-                    color: black;
-                    background-color: white;
-                }
-
-                #adder {
-                    width: 100%;
-                    padding: 0;
+                .ca-amount-adder {
                     display: flex;
                     flex-direction: row;
                     align-items: center;
                     justify-content: space-between;
 
-                    div {
-                        margin-right: 1em;
-                    }
-
                     button {
                         padding: 0.5em;
-                        margin: 0;
+                    }
+
+                    div {
+                        input {
+                            margin-right: 0.2em;
+                        }
                     }
                 }
             }

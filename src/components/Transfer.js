@@ -137,10 +137,10 @@ class Transfer extends React.Component {
 
     scrollToInput = () => {
 
-        if (this.createdRef.current && !this.state.created && this.state.amounts.length > 0) {
+        if (this.createdRef.current && this.state.amounts.length > 0) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        else if (this.titleRef.current && !this.state.created) {
+        else if (this.titleRef.current) {
             this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }
@@ -153,48 +153,24 @@ class Transfer extends React.Component {
                 <div ref={this.titleRef}></div>
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
-                    <p>CURRENT BALANCES</p>
+                    <p id="head">CURRENT BALANCE LIST</p>
                     <ul>
                         {account.balances ? account.balances.map(x => balance(x)) : false}
                     </ul>
                 </div>
                 <div className="tf-input-wrap">
-                    <p>Fill the below section with pairs of currency ID and amount to transfer. This page is for transferring your currency to another account.</p>
                     <div ref={this.createdRef} />
-                    <div id="address">
-                        <p id="head">TRANSFER TO</p>
-                        <p id="body">{this.state.address ? this.state.address : "-"}</p>
-                    </div>
                     <div className="tf-amounts">
-                        <p id="head">AMOUNTS</p>
-                        <p id="exp">You need at least one pair of valid currency ID and amount value. Those amounts will be sent to receiver.</p>
+                        <p id="head">AMOUNT LIST</p>
                         <div id="label">
                             <p className='currency'>CURRENCY ID</p>
                             <p className='amount'>AMOUNT</p>
                         </div>
                         <ul>
-                            {this.state.amounts.length < 1
-                                ? (
-                                    <li key="empty">
-                                        <p className='currency'>-</p>
-                                        <p className='amount'>-</p>
-                                    </li>
-                                ) : false}
                             {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
                         </ul>
-                    </div>
-                    <p id='tf-input-exp'>Put your input here. :)</p>
-                    <div className="tf-adder">
-                        <span className="tf-address-adder">
-                            <p>RECEIVER'S ADDRESS:</p>
-                            <InputBox
-                                size="medium" useCopy={false} disabled={false} placeholder='target address'
-                                value={this.state.threshold}
-                                onChange={(e) => this.onChangeAddress(e)} />
-                        </span>
-                        <span className="tf-amount-adder">
-                            <p>ADD AMOUNT</p>
-                            <div id="adder">
+                        <section>
+                            <div className="tf-amount-adder">
                                 <InputBox
                                     size="small" useCopy={false} disabled={false} placeholder="currency"
                                     onChange={(e) => this.onChangeCurrency(e)}
@@ -208,7 +184,14 @@ class Transfer extends React.Component {
                                     disabled={!(this.state.currency && this.state.amount) ? true : false}
                                     onClick={() => this.addAmount()}>ADD</SmallButton>
                             </div>
-                        </span>
+                            <div className='tf-address-adder'>
+                                <p>RECEIVER'S ADDRESS:</p>
+                                <InputBox
+                                    size="medium" useCopy={false} disabled={false} placeholder='target address'
+                                    value={this.state.threshold}
+                                    onChange={(e) => this.onChangeAddress(e)} />
+                            </div>
+                        </section>
                     </div>
                 </div>
                 <ConfirmButton
@@ -219,7 +202,8 @@ class Transfer extends React.Component {
                     title="Are you sure?"
                     json={this.state.created}
                     filename={this.state.filename}
-                    download={this.state.download} />
+                    download={this.state.download}
+                    operation='TRANSFER' />
             </div>
         );
     }

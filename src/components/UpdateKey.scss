@@ -22,40 +22,6 @@
         margin: 1em 0 2em 0;
         padding: 0;
 
-        #address {
-            width: 100%;
-            margin: 0 0 1em 0;
-            padding: 0;
-
-            display: flex;
-            align-items: center;
-            flex-direction: row;
-            text-align: center;
-
-            letter-spacing: 1px;
-
-            p {
-                text-align: center;
-                font-weight: 500;
-                border-top: 1px solid white;
-                border-bottom: 1px solid white;
-                padding: 0.2em 0 0.2em 0;
-            }
-
-            #head {
-                width: 20%;
-                margin: 0 0.5em 0 0;
-                color: white;
-                background-color: transparent;
-            }
-
-            #body {
-                width: 80%;
-                background-color: white;
-                color: black;
-            }
-        }
-
         #pub {
             width: 100%;
             margin: 1em 0 1em 0;
@@ -68,25 +34,68 @@
 
             letter-spacing: 1px;
 
-            p {
+            #head {
                 width: 100%;
-                text-align: center;
+                font-size: 1.3em;
+                text-align: start;
+                text-decoration: underline;
                 font-weight: 500;
-                border-top: 1px solid white;
-                border-bottom: 1px solid white;
-                padding: 0.2em 0 0.2em 0;
+                padding: 0.2em;
                 margin: 0;
-                text-align: center;
-                color: black;
-                background-color: white;
+                color: white;
 
+            }
+
+
+
+            #label {
+                margin: 0;
+                padding: 0;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                width: 100%;
+
+                p {
+                    margin: 0;
+                    padding-top: 0.2em;
+                    padding-bottom: 0.2em;
+                    padding-left: 0;
+
+                    font-weight: 500;
+                    text-align: center;
+                    color: black;
+                    background-color: white;
+                }
+
+                .key {
+                    width: 70%;
+                    border-right: 1px solid lightgray;
+                    padding-right: 0;
+                }
+
+                .weight {
+                    width: 30%;
+                    padding-right: 1.2em;
+                }
             }
 
             ul {
                 width: 100%;
+                height: 200px;
+                overflow-y: scroll;
+
                 list-style-type: none;
                 padding: 0;
-                margin: 0.2em 0 0 0;
+                margin: 0;
+
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                background-color: beige;
 
                 li {
                     width: 100%;
@@ -103,116 +112,33 @@
                     .weight {
                         text-align: start;
                         display: inline-block;
-                        text-align: start;
 
                         padding: 0.2em;
                         margin-left: 0;
-                        margin-top: 0.2em;
+                        margin-top: 1px;
                         margin-bottom: 0;
+                        margin-right: 0;
 
                         overflow: visible;
                         white-space: pre-wrap;
                         word-break: break-all;
 
-                        background-color: transparent;
-                        border-top: 1px solid white;
-                        border-bottom: 1px solid white;
+                        border-bottom: 1px solid lightgray;
 
-                        color: white;
-
-                        text-align: center;
+                        color: black;
                     }
 
                     .key {
                         width: 70%;
-                        margin-right: 0.5em;
+                        text-align: start;
+                        border-right: 1px solid lightgray;
                     }
 
                     .weight {
                         width: 30%;
-                    }
-
-                    &:hover {
-                        background-size: 100% 100%;
-                    }
-                }
-            }
-        }
-
-        #balance {
-            width: 100%;
-            margin: 2em 0 1em 0;
-            padding: 0;
-
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-
-            letter-spacing: 1px;
-
-            p {
-                width: 100%;
-                text-align: center;
-                font-weight: 500;
-                border-top: 1px solid white;
-                border-bottom: 1px solid white;
-                padding: 0.2em 0 0.2em 0;
-                margin: 0;
-                text-align: center;
-                color: black;
-                background-color: white;
-
-            }
-
-            ul {
-                width: 100%;
-                list-style-type: none;
-                padding: 0;
-                margin: 0.2em 0 0 0;
-
-                li {
-                    width: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-
-                    padding: 0;
-                    margin: 0;
-                    font-weight: 300;
-                    letter-spacing: 1px;
-
-                    .currency,
-                    .amount {
-                        display: inline-block;
-
-                        padding: 0.2em;
-                        margin-left: 0;
-                        margin-top: 0.2em;
-                        margin-bottom: 0;
-
-                        overflow: visible;
-                        white-space: pre-wrap;
-                        word-break: break-all;
-
-                        background-color: transparent;
-                        border-top: 1px solid white;
-                        border-bottom: 1px solid white;
-
-                        color: white;
-                    }
-
-                    .currency {
-                        width: 20%;
-                        margin-right: 0.5em;
-                    }
-
-                    .amount {
-                        width: 80%;
-                    }
-
-                    &:hover {
-                        background-size: 100% 100%;
+                        align-self: stretch;
+                        text-align: center;
+                        vertical-align: middle;
                     }
                 }
             }
@@ -227,16 +153,7 @@
         justify-content: center;
 
         margin: 1em 0 2em 0;
-        padding: 1em 0 1em 0;
-
-        p {
-            text-align: center;
-            padding: 1em;
-            color: white;
-            font-weight: 500;
-            width: 100%;
-            margin: 0;
-        }
+        padding: 0;
 
         .uk-keys {
             margin: 3em 0 0 0;
@@ -248,97 +165,15 @@
             align-items: center;
             justify-content: center;
 
-            #exp {
-                text-align: start;
-                padding: 1em;
-                color: white;
-                font-weight: 300;
-                width: 100%;
-                margin: 0;
-            }
-
             #head {
                 width: 100%;
-                text-align: center;
+                font-size: 1.3em;
+                text-align: start;
+                text-decoration: underline;
                 font-weight: 500;
-                border-top: 1px solid white;
-                border-bottom: 1px solid white;
-                background-color: white;
-                margin: 0 0 0.2em 0;
-                padding: 0.2em 0 0.2em 0;
-                color: black;
-            }
-
-            #thres {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-
-                margin: 1em 0 0 0;
-
-                p {
-                    margin-top: 0;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding: 0.2em;
-
-                    text-align: center;
-                }
-
-                #head {
-                    width: 30%;
-                    margin-right: 0.5em;
-                    border-top: 1px solid white;
-                    border-bottom: 1px solid white;
-                    background-color: white;
-                    color: black;
-                }
-
-                #body {
-                    width: 70%;
-                    margin-right: 0;
-                    background-color: transparent;
-                    border-top: 1px solid white;
-                    border-bottom: 1px solid white;
-                    color: white;
-                }
-            }
-
-            #currency {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-
-                margin: 0.5em 0 0 0;
-
-                p {
-                    margin-top: 0;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding: 0.2em;
-
-                    text-align: center;
-                }
-
-                #head {
-                    width: 30%;
-                    margin-right: 0.5em;
-                    border-top: 1px solid white;
-                    border-bottom: 1px solid white;
-                    background-color: white;
-                    color: black;
-                }
-
-                #body {
-                    width: 70%;
-                    margin-right: 0;
-                    background-color: transparent;
-                    border-top: 1px solid white;
-                    border-bottom: 1px solid white;
-                    color: white;
-                }
+                padding: 0.2em;
+                margin: 0;
+                color: white;
             }
 
             #label {
@@ -352,10 +187,10 @@
                 width: 100%;
 
                 p {
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    margin-left: 0;
-                    padding: 0.2em;
+                    margin: 0;
+                    padding-top: 0.2em;
+                    padding-bottom: 0.2em;
+                    padding-left: 0;
 
                     font-weight: 500;
                     text-align: center;
@@ -365,20 +200,30 @@
 
                 .key {
                     width: 70%;
-                    margin-right: 0.5em;
+                    border-right: 1px solid lightgray;
+                    padding-right: 0;
                 }
 
                 .weight {
                     width: 30%;
-                    margin-right: 0;
+                    padding-right: 1.2em;
                 }
             }
 
             ul {
                 width: 100%;
+                height: 200px;
+                overflow-y: scroll;
+
                 list-style-type: none;
                 padding: 0;
                 margin: 0;
+
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                background-color: beige;
 
                 li {
                     width: 100%;
@@ -395,44 +240,99 @@
                     .weight {
                         text-align: start;
                         display: inline-block;
-                        text-align: start;
 
                         padding: 0.2em;
                         margin-left: 0;
-                        margin-top: 0.2em;
+                        margin-top: 1px;
                         margin-bottom: 0;
+                        margin-right: 0;
 
                         overflow: visible;
                         white-space: pre-wrap;
                         word-break: break-all;
 
-                        background-color: beige;
-                        border-top: 1px solid beige;
-                        border-bottom: 1px solid beige;
+                        border-bottom: 1px solid lightgray;
 
                         color: black;
-
-                        text-align: center;
                     }
 
                     .key {
                         width: 70%;
-                        margin-right: 0.5em;
+                        text-align: start;
+                        border-right: 1px solid lightgray;
                     }
 
                     .weight {
                         width: 30%;
+                        align-self: stretch;
+                        text-align: center;
+                        vertical-align: middle;
                     }
                 }
             }
+
+            section {
+                width: 100%;
+                margin: 0 0 3em 0;
+
+                .uk-key-adder {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    button {
+                        padding: 0.5em;
+                    }
+
+                    div {
+                        input {
+                            margin-right: 0.2em;
+                        }
+                    }
+                }
+
+                .uk-extra-adder {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+
+                    .uk-currency-adder,
+                    .uk-thres-adder {
+                        width: 100%;
+                        height: fit-content;
+                        padding: 1em 1em 1em 0;
+                        margin-left: 0;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+
+                        p {
+                            font-size: 1em;
+                            font-weight: 500;
+
+                            text-align: center;
+
+                            margin: 0 0.5em 0 0;
+                            padding: 0.2em;
+
+                            width: fit-content;
+                            vertical-align: middle;
+                        }
+
+                        div {
+                            margin: 0;
+                            text-align: start;
+                        }
+                    }
+                }
+            }
+
         }
 
-        #uk-input-exp {
-            margin: 5em 0 0.2em 0;
-            padding: 0;
-            width: 100%;
-            text-align: end;
-        }
 
         .uk-adder {
             width: 100%;

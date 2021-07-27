@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { logout } from '../store/actions';
 import copy from 'copy-to-clipboard';
 
 import './Response.scss';
@@ -29,8 +31,12 @@ class Response extends React.Component {
             && Object.prototype.hasOwnProperty.call(this.props.location.state, 'res') && this.props.location.state.res
             && Object.prototype.hasOwnProperty.call(this.props.location.state, 'status') && this.props.location.state.status;
 
+        if(this.props.location.state.operation === 'UPDATE-KEY'){
+            this.props.signOut();
+        }
         this.state = {
-            isRedirect: !isRedirect
+            isRedirect: !isRedirect,
+            isSignOut: this.props.location.state.operation === 'UPDATE-KEY'
         }
     }
 
@@ -85,9 +91,17 @@ class Response extends React.Component {
             <div className="res-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 {this.renderResponse()}
+                {this.state.isSignOut ? <p>This wallet has been closed automatically.</p> : false}
             </div>
         )
     }
 }
 
-export default Response;
+const mapDispatchToProps = dispatch => ({
+    signOut: () => dispatch(logout()),
+});
+
+export default connect(
+    null,
+    mapDispatchToProps,
+)(Response);

@@ -80,38 +80,44 @@ class CreateAccount extends React.Component {
     }
 
     onClick() {
-        const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
-        const account = this.props.account;
+        try {
+            const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
+            const account = this.props.account;
 
-        const keys = generator.createKeys(
-            this.state.keys.map(x =>
-                generator.formatKey(x.key, parseInt(x.weight))),
-            parseInt(this.state.threshold)
-        );
+            const keys = generator.createKeys(
+                this.state.keys.map(x =>
+                    generator.formatKey(x.key, parseInt(x.weight))),
+                parseInt(this.state.threshold)
+            );
 
-        const amounts = generator.createAmounts(
-            this.state.amounts.map(x =>
-                generator.formatAmount(parseInt(x.amount), x.currency))
-        );
+            const amounts = generator.createAmounts(
+                this.state.amounts.map(x =>
+                    generator.formatAmount(parseInt(x.amount), x.currency))
+            );
 
-        const createAccountsFact = generator.createCreateAccountsFact(
-            account.address,
-            [generator.createCreateAccountsItem(
-                keys, amounts
-            )]
-        );
+            const createAccountsFact = generator.createCreateAccountsFact(
+                account.address,
+                [generator.createCreateAccountsItem(
+                    keys, amounts
+                )]
+            );
 
-        const createAccounts = generator.createOperation(createAccountsFact, "");
-        createAccounts.addSign(account.privateKey);
+            const createAccounts = generator.createOperation(createAccountsFact, "");
+            createAccounts.addSign(account.privateKey);
 
-        const created = createAccounts.dict();
+            const created = createAccounts.dict();
 
-        this.setState({
-            created: created,
-            isModalOpen: true,
-            download: download(created),
-            filename: created.hash
-        });
+            this.setState({
+                created: created,
+                isModalOpen: true,
+                download: download(created),
+                filename: created.hash
+            });
+        }
+        catch (e) {
+            console.log(e);
+            alert('Could not create operation! :(\nPlease check your input~');
+        }
     }
 
     onChangePub(e) {
@@ -176,10 +182,10 @@ class CreateAccount extends React.Component {
 
     scrollToInput = () => {
 
-        if (this.createdRef.current && !this.state.created && (this.state.keys.length > 0 || this.state.amount.length > 0)) {
+        if (this.createdRef.current && (this.state.keys.length > 0 || this.state.amounts.length > 0)) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        else if (this.titleRef.current && !this.state.created) {
+        else if (this.titleRef.current) {
             this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }
@@ -192,71 +198,27 @@ class CreateAccount extends React.Component {
                 <div ref={this.titleRef}></div>
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">
-                    <p>CURRENT BALANCES</p>
+                    <p id="head">CURRENT BALANCE LIST</p>
                     <ul>
                         {account.balances ? account.balances.map(x => balance(x)) : false}
                     </ul>
                 </div>
                 <div className="ca-input-wrap">
-                    <p>For each section, fill it with at least one item. This page is for creating account.</p>
                     <div ref={this.createdRef}></div>
                     <div className="ca-keys">
-                        <p id="head">KEYS</p>
-                        <p id="exp">You need at least one pair of mitum-style public key and weight value. The total weight of all weights must be equal to or more than threshold.</p>
+                        <p id="head">KEY LIST</p>
                         <div id="label">
                             <p className='key'>KEY</p>
                             <p className='weight'>WEIGHT</p>
                         </div>
                         <ul>
-                            {this.state.keys.length < 1
-                                ? (
-                                    <li key="empty" >
-                                        <p className='key'>-</p>
-                                        <p className='weight'>-</p>
-                                    </li>
-                                ) : false}
                             {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
                         </ul>
-                        <div id="thres">
-                            <p id="head">THRESHOLD</p>
-                            <p id="body">{this.state.threshold ? this.state.threshold : "-"}</p>
-                        </div>
-                    </div>
-
-                    <div className="ca-amounts">
-                        <p id="head">AMOUNTS</p>
-                        <p id="exp">You need at least one pair of valid currency ID and amount value. They will be initial balance of new account.</p>
-                        <div id="label">
-                            <p className='currency'>CURRENCY ID</p>
-                            <p className='amount'>AMOUNT</p>
-                        </div>
-                        <ul>
-                            {this.state.amounts.length < 1
-                                ? (
-                                    <li key="empty">
-                                        <p className='currency'>-</p>
-                                        <p className='amount'>-</p>
-                                    </li>
-                                ) : false}
-                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
-                        </ul>
-                    </div>
-
-                    <p id='ca-input-exp'>Put your input here. :)</p>
-                    <div className="ca-adder">
-                        <span className="ca-thres-adder">
-                            <p>THRESHOLD:</p>
-                            <InputBox className="ca-thres-input"
-                                size="small" useCopy={false} disabled={false} placeholder='threshold'
-                                value={this.state.threshold}
-                                onChange={(e) => this.onChangeThres(e)} />
-                        </span>
-
-                        <span className="ca-key-adder">
-                            <p>ADD KEY</p>
-                            <div id="adder">
+                        <section>
+                            <div className="ca-key-adder">
                                 <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
                                     value={this.state.publicKey}
+                                    style={{ marginRight: "0.5em" }}
                                     onChange={(e) => this.onChangePub(e)} />
                                 <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
                                     value={this.state.weight}
@@ -266,16 +228,32 @@ class CreateAccount extends React.Component {
                                     disabled={!(this.state.publicKey && this.state.weight) ? true : false}
                                     onClick={() => this.addKey()}>ADD</SmallButton>
                             </div>
-                        </span>
+                            <div className="ca-thres-adder">
+                                <p>THRESHOLD:</p>
+                                <InputBox
+                                    size="small" useCopy={false} disabled={false} placeholder='threshold'
+                                    value={this.state.threshold}
+                                    onChange={(e) => this.onChangeThres(e)} />
+                            </div>
+                        </section>
+                    </div>
 
-                        <span className="ca-amount-adder">
-                            <p>ADD AMOUNT</p>
-                            <div id="adder">
-                                <InputBox className="ca-currency-input"
+                    <div className="ca-amounts">
+                        <p id="head">AMOUNT LIST</p>
+                        <div id="label">
+                            <p className='currency'>CURRENCY ID</p>
+                            <p className='amount'>AMOUNT</p>
+                        </div>
+                        <ul>
+                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
+                        </ul>
+                        <section>
+                            <div className="ca-amount-adder">
+                                <InputBox
                                     size="small" useCopy={false} disabled={false} placeholder="currency"
                                     onChange={(e) => this.onChangeCurrency(e)}
                                     value={this.state.currency} />
-                                <InputBox className="ca-amount-input"
+                                <InputBox
                                     size="medium" useCopy={false} disabled={false} placeholder="amount"
                                     value={this.state.amount}
                                     onChange={(e) => this.onChangeAmount(e)} />
@@ -284,7 +262,7 @@ class CreateAccount extends React.Component {
                                     disabled={!(this.state.currency && this.state.amount) ? true : false}
                                     onClick={() => this.addAmount()}>ADD</SmallButton>
                             </div>
-                        </span>
+                        </section>
                     </div>
                 </div>
                 <ConfirmButton
@@ -295,7 +273,8 @@ class CreateAccount extends React.Component {
                     title="Are you sure?"
                     json={this.state.created}
                     filename={this.state.filename}
-                    download={this.state.download} />
+                    download={this.state.download}
+                    operation='CREATE-ACCOUNT'/>
             </div>
         );
     }

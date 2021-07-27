@@ -15,7 +15,9 @@ function SmallButton(props) {
 }
 
 SmallButton.propTypes = {
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    visible: PropTypes.bool,
+    disabled: PropTypes.bool
 }
 
 export default SmallButton;

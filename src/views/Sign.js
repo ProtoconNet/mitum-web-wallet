@@ -45,6 +45,10 @@ const sig = (x) => {
     );
 }
 
+const TYPE_CREATE_ACCOUNT = "mitum-currency-create-accounts-operation-" + process.env.REACT_APP_VERSION;
+const TYPE_UPDATE_KEY = "mitum-currency-keyupdater-operation-" + process.env.REACT_APP_VERSION;
+const TYPE_TRANSFER = "mitum-currency-transfers-operation-" + process.env.REACT_APP_VERSION;
+
 class Sign extends React.Component {
 
     constructor(props) {
@@ -69,6 +73,7 @@ class Sign extends React.Component {
             download: undefined,
             filename: "",
             type: "",
+            operation: undefined,
 
             isModalOpen: false,
             isJsonOpen: false
@@ -92,7 +97,7 @@ class Sign extends React.Component {
             this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
         }
         else if (this.infoRef.current && this.state.json && !this.state.isJsonOpen) {
-            this.infoRef.current.scrollIntoView({behavior : 'smooth'});
+            this.infoRef.current.scrollIntoView({ behavior: 'smooth' });
         }
         else if (this.createdRef.current) {
             this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -127,9 +132,26 @@ class Sign extends React.Component {
                     alert('Invalid format!\nOnly operation json file can be imported');
                 }
                 else {
+                    let operation = '';
+                    switch (parsed._hint) {
+                        case TYPE_CREATE_ACCOUNT:
+                            operation = 'CREATE-ACCOUNT';
+                            break;
+                        case TYPE_UPDATE_KEY:
+                            operation = "UPDATE-KEY";
+                            break;
+                        case TYPE_TRANSFER:
+                            operation = "TRANSFER";
+                            break;
+                        default:
+                            alert('WARN: This operation is not create-accounts, key-updater, or transfers');
+                            operation = "DEFAULT";
+                    }
+
                     this.setState({
                         json: parsed,
                         type: parsed._hint,
+                        operation: operation,
                         download: download(parsed),
                         filename: parsed.hash,
                         sigs: parsed.fact_signs.map(x => x.signature)
@@ -138,9 +160,26 @@ class Sign extends React.Component {
             };
             reader.readAsText(file, "utf-8");
         } catch (e) {
+            let operation = '';
+
+            switch (json._hint) {
+                case TYPE_CREATE_ACCOUNT:
+                    operation = 'CREATE-ACCOUNT';
+                    break;
+                case TYPE_UPDATE_KEY:
+                    operation = "UPDATE-KEY";
+                    break;
+                case TYPE_TRANSFER:
+                    operation = "TRANSFER";
+                    break;
+                default:
+                    operation = "DEFAULT";
+            }
+
             this.setState({
                 json: json,
                 type: json._hint,
+                operation: operation,
                 download: download(json),
                 filename: Object.prototype.hasOwnProperty.call(json, 'hash') ? json.hash : "",
                 sigs: Object.prototype.hasOwnProperty.call(json, 'fact_signs') ? json.fact_signs.map(x => x.signature) : []
@@ -212,9 +251,6 @@ class Sign extends React.Component {
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.createdRef} />
                 <h1>SIGN / SEND OPERATION</h1>
-                <div className="sign-account">
-                    <p>{this.props.account.address}</p>
-                </div>
                 <div ref={this.infoRef} />
                 <div className="sign-operation">
                     <div className="sign-info">
@@ -238,20 +274,20 @@ class Sign extends React.Component {
                                 {this.state.sigs.length > 0
                                     ? this.state.sigs.map(x => sig(x))
                                     : (
-                                        <li style={{textAlign: "center"}}>-</li>
+                                        <li style={{ textAlign: "center" }}>-</li>
                                     )
                                 }
                             </ul>
                         </span>
                     </div>
                     <div ref={this.jsonRef} />
-                    {this.state.json 
+                    {this.state.json
                         ? (
                             <div className='sign-view-json'
                                 onClick={() => this.openJSON()}>
                                 <p>{this.state.isJsonOpen ? "CLOSE" : "VIEW JSON"}</p>
                             </div>
-                         ) : false}
+                        ) : false}
                     {this.state.isJsonOpen ? this.jsonView() : false}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
@@ -265,7 +301,8 @@ class Sign extends React.Component {
                     title="Are you sure?"
                     json={this.state.json}
                     filename={this.state.filename}
-                    download={this.state.download} />
+                    download={this.state.download}
+                    operation={this.state.operation} />
             </div>
         );
     }

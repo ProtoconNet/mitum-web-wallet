@@ -30,7 +30,7 @@ class InputBox extends React.Component {
                     disabled={this.props.disabled}
                     onChange={this.props.onChange ? this.props.onChange : () => this.onChange()}
                     placeholder={this.props.placeholder ? this.props.placeholder : ""} />
-                <SmallButton className="input-copy-button"
+                <SmallButton
                     visible={this.props.useCopy}
                     onClick={() => {
                         copy(this.props.value);

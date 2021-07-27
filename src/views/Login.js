@@ -33,7 +33,7 @@ class Login extends React.Component {
         this.state = {
             mode: MODE_PRIV_KEY,
             isPriv: true,
-            isActive: false
+            isActive: false,
         }
     }
 
@@ -113,7 +113,7 @@ class Login extends React.Component {
             <div className="login-container">
                 <h1>OPEN WALLET</h1>
                 {this.props.isLogin ? <Redirect to={`/wallet/${this.props.account.address}`} /> : false}
-                <div className="login-radio" style={this.props.account && this.props.account.restoreKey ? {} : { display: "none" }}>
+                <div className="login-radio" style={this.state.isActive ? {} : { display: "none" }}>
                     <label className="rad-label">
                         <input type="radio" className="rad-input" value={MODE_PRIV_KEY} name="rad"
                             onChange={() => this.onChange()} onClick={() => this.onClick()} checked={this.state.isPriv} />

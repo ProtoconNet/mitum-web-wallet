@@ -269,9 +269,16 @@
             }
         }
 
+        #tf-input-exp {
+            margin: 5em 0 0.2em 0;
+            padding: 0;
+            width: 100%;
+            text-align: end;
+        }
+
         .tf-adder {
             width: 100%;
-            margin: 5em 0 0 0;
+            margin: 0 0 0 0;
             padding: 0;
 
             border-top: 5px solid white;

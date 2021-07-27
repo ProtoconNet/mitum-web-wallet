@@ -159,7 +159,7 @@ class Transfer extends React.Component {
                     </ul>
                 </div>
                 <div className="tf-input-wrap">
-                    <p>Fill the below section with pairs of currency ID and amount to transfer.</p>
+                    <p>Fill the below section with pairs of currency ID and amount to transfer. This page is for transferring your currency to another account.</p>
                     <div ref={this.createdRef} />
                     <div id="address">
                         <p id="head">TRANSFER TO</p>
@@ -183,6 +183,7 @@ class Transfer extends React.Component {
                             {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
                         </ul>
                     </div>
+                    <p id='tf-input-exp'>Put your input here. :)</p>
                     <div className="tf-adder">
                         <span className="tf-address-adder">
                             <p>RECEIVER'S ADDRESS:</p>

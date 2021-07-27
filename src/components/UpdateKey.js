@@ -214,7 +214,7 @@ class UpdateKey extends React.Component {
                             <p id="body">{this.state.currency ? this.state.currency : "-"}</p>
                         </div>
                     </div>
-
+                    <p id='uk-input-exp'>Put your input here. :)</p>
                     <div className="uk-adder">
                         <span className="uk-currency-adder">
                             <p>CURRENCY ID:</p>

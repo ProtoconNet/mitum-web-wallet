@@ -242,6 +242,7 @@ class CreateAccount extends React.Component {
                         </ul>
                     </div>
 
+                    <p id='ca-input-exp'>Put your input here. :)</p>
                     <div className="ca-adder">
                         <span className="ca-thres-adder">
                             <p>THRESHOLD:</p>

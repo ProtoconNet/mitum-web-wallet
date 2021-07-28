@@ -15,6 +15,7 @@ import Navigation from './components/Navigation';
 import Logout from './views/Logout';
 import Footer from './components/Footer';
 import Response from './views/Response';
+import UpdateKeyLoad from './views/UpdateKeyLoad';
 
 class App extends React.Component {
   render() {
@@ -33,6 +34,7 @@ class App extends React.Component {
           <Route path="/sign" component={Sign} />
           <Route path="/logout" component={Logout} />
           <Route path="/response" component={Response} />
+          <Route path='/loading' component={UpdateKeyLoad} />
           <Footer />
         </HashRouter>
       </div>

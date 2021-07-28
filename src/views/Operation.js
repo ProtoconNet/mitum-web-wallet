@@ -3,9 +3,9 @@ import { Redirect } from 'react-router-dom';
 
 import './Operation.scss';
 
-import CreateAccount from '../components/CreateAccount';
-import UpdateKey from '../components/UpdateKey';
-import Transfer from '../components/Transfer';
+import CreateAccount from '../components/operations/CreateAccount';
+import UpdateKey from '../components/operations/UpdateKey';
+import Transfer from '../components/operations/Transfer';
 import { connect } from 'react-redux';
 
 const OPER_CREATE_ACCOUNT = 'oper-create-account';

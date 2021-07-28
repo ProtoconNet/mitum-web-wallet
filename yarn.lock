@@ -8014,8 +8014,8 @@
     "stream-each" "^1.1.0"
     "through2" "^2.0.0"
 
-"mitumc@file:../mitum-js-util":
-  "resolved" "file:../mitum-js-util"
+"mitumc@file:../../wyuinche/mitum-js-util":
+  "resolved" "file:../../wyuinche/mitum-js-util"
   "version" "0.0.1"
   dependencies:
     "bs58" "^4.0.1"

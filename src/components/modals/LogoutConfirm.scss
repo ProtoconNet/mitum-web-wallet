@@ -1,0 +1,124 @@
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.6);
+
+    color: black;
+
+    button {
+        outline: none;
+        cursor: pointer;
+        border: 0;
+    }
+
+    section {
+        width: 90%;
+        max-width: 450px;
+        margin: 0 auto;
+        border-radius: .3rem;
+        background-color: white;
+
+        animation: modal-show .3s;
+        overflow: hidden;
+
+        header {
+            position: relative;
+            padding: 16px 64px 16px 16px;
+            background-color: white;
+            font-weight: 700;
+
+            button {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 30px;
+                font-size: 21px;
+                font-weight: 700;
+                text-align: center;
+                color: lightgray;
+                background-color: transparent;
+            }
+        }
+
+        main {
+            padding: 16px;
+            border-bottom: 1px solid white;
+            border-top: 1px solid white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            span {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .modal-button {
+                    text-decoration: underline;
+                    text-align: center;
+
+                    margin: 0.2em;
+                    padding: 0.2em;
+                }
+
+                #confirm {
+                    color: darkred;
+                    &:hover {
+                        color: gray;
+                    }
+
+                    &:active {
+                        color: lightseagreen;
+                    }
+                }
+            }
+        }
+
+        footer {
+            padding: 12px 16px;
+            text-align: right;
+
+            button {
+                padding: 6px 12px;
+                color: white;
+                background-color: gray;
+                border-radius: 5px;
+                font-size: 13px;
+            }
+        }
+    }
+}
+
+.openModal {
+    display: flex;
+    align-items: center;
+    animation: modal-bg-show .3s;
+}
+
+@keyframes modal-show {
+    from {
+        opacity: 0;
+        margin-top: -50px;
+    }
+
+    to {
+        opacity: 1;
+        margin-top: 0;
+    }
+}
+
+@keyframes modal-bg-show {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

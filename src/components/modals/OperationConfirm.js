@@ -41,40 +41,62 @@ class OperationConfirm extends React.Component {
                     status: e.response.data.status,
                     response: e.response.data
                 })
-                alert('Could not send operation');
+                alert('작업을 전송할 수 없습니다.\n네트워크를 확인해주세요.');
             }
         );
     }
 
+    renderRedirect() {
+        const { operation, json } = this.props;
+        switch (this.props.operation) {
+            case 'CREATE-ACCOUNT':
+            case 'TRANSFER':
+                return <Redirect to={{
+                    pathname: '/response',
+                    state: {
+                        res: this.state.response,
+                        status: this.state.status,
+                        operation: operation,
+                        data: operation === 'CREATE-ACCOUNT'
+                            ? json.fact.items.map(x => x.keys.hash + ':mca-' + process.env.REACT_APP_VERSION)
+                            : []
+                    }
+                }} />;
+            case 'UPDATE-KEY':
+                return <Redirect to={{
+                    pathname: '/loading',
+                    state: {
+                        res: this.state.response,
+                        status: this.state.status,
+                        data: json.fact.hash
+                    }
+                }} />;
+            default:
+                alert('잘못된 작업입니다!\n지갑 페이지로 이동합니다.');
+                return <Redirect to='/login'/>;
+        }
+    }
+
     render() {
-        const { isOpen, onClose, title, json, filename, download } = this.props;
+        const { isOpen, onClose, json, filename, download } = this.props;
         return (
             <div className={isOpen ? 'openModal modal' : 'modal'}>
-                {this.state.isRedirect
-                    ? <Redirect to={{
-                        pathname: '/response',
-                        state: {
-                            res: this.state.response,
-                            status: this.state.status,
-                            operation: this.props.operation
-                        }
-                    }} />
-                    : false}
+                {this.state.isRedirect ? this.renderRedirect() : false}
                 {isOpen ? (
                     <section>
                         <header>
-                            {title}
+                            이 작업을 전송하겠습니까?
                             <button className="close" onClick={onClose}> &times; </button>
                         </header>
                         <main>
-                            <p>You can't rollback the request after the confirmation.</p>
+                            <p>전송 버튼을 누른 후에는 작업을 되돌릴 수 없습니다. 작업 내용이 정확한가요?</p>
                             <span>
-                                <p className="modal-button" id="no" onClick={onClose}>{"no! :("}</p>
+                                <p className="modal-button" id="no" onClick={onClose}>{"취소!:("}</p>
                                 <a className="modal-button" id="no" target="_blank" download={`${filename}.json`}
                                     href={download} rel="noreferrer">
-                                    {"no! Just download the json file. :["}
+                                    {"JSON 파일 다운로드!:["}
                                 </a>
-                                <p className="modal-button" id="yes" onClick={() => this.onSend(json)}>{"yes! :)"}</p>
+                                <p className="modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
                             </span>
                         </main>
                     </section>

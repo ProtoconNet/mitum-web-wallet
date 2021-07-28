@@ -15,13 +15,8 @@ const MODE_PRIV_KEY = 'MODE_PRIV_KEY';
 const MODE_RES_KEY = 'MODE_RES_KEY';
 
 const getAccountInformation = async (account) => {
-    try {
-        return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
-    } catch (e) {
-        alert(`Could not sign in\n${account}`);
-    }
+    return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
 }
-
 
 class Login extends React.Component {
     constructor(props) {
@@ -43,7 +38,7 @@ class Login extends React.Component {
         try {
             pubKey = toKeypair(priv, '').getPublicKey();
         } catch (e) {
-            alert('Invalid private key');
+            alert('지갑 열기 실패! :(\n유효하지 않은 비밀키입니다.');
             return;
         }
 
@@ -57,13 +52,13 @@ class Login extends React.Component {
                             return;
                         }
                     }
-                    alert(`Could not sign in\naccount: ${addr}`);
+                    alert(`지갑 열기 실패! :(\n계정 [${addr}]의 멤버에 해당 키가 존재하지 않습니다.`);
                 }
             )
             .catch(
                 e => {
                     console.log(e);
-                    alert(`Could not sign in\naccount: ${addr}`);
+                    alert(`지갑 열기 실패! :(\n계정 조회에 실패하였습니다. 잠시 후 다시 시도해보세요.`);
                 }
             );
     }

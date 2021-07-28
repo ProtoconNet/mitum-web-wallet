@@ -225,7 +225,7 @@ class Sign extends React.Component {
                 filename: json.hash,
                 sigs: json.fact_signs.map(x => x.signature)
             });
-            alert('Success!');
+            alert('성공! :D');
         }
         catch (e) {
             this.setState({
@@ -235,7 +235,7 @@ class Sign extends React.Component {
                 filename: target.hash,
                 sigs: target.fact_signs.map(x => x.signature)
             })
-            alert('Could not add sign to operation');
+            alert('작업에 서명을 추가할 수 없습니다. :(');
         }
     }
 
@@ -298,7 +298,7 @@ class Sign extends React.Component {
                     <ConfirmButton onClick={() => this.onClickSign()}>SIGN</ConfirmButton>
                 </div>
                 <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
-                    title="Are you sure?"
+                    title="이 작업을 전송하겠습니까?"
                     json={this.state.json}
                     filename={this.state.filename}
                     download={this.state.download}

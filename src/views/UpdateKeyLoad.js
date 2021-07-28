@@ -100,6 +100,15 @@ class UpdateKeyLoad extends React.Component {
 
             return () => this.getResponse();
         }
+        else {
+            this.setState({
+                isRedirect: true,
+                status: 400,
+                res: {
+                    title: "Too long time to stay response. Maybe mitum failed to process your operation. :("
+                }
+            });
+        }
     }
 
     componentDidMount() {

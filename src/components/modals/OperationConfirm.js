@@ -1,12 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { setResponse } from '../../store/actions';
 import axios from 'axios';
+import { Redirect, withRouter } from 'react-router-dom';
+
 import "./OperationConfirm.scss";
-import { Redirect } from 'react-router-dom';
+import { isOperation } from '../../lib/Validation';
+
+import { OPER_CREATE_ACCOUNT, OPER_UPDATE_KEY, OPER_TRANSFER } from '../../text/mode';
+import hint from '../../text/hint.json';
 
 const broadcast = async (operation) => {
-    if (!operation || !Object.prototype.hasOwnProperty.call(operation, 'hash') || !Object.prototype.hasOwnProperty.call(operation, 'memo')
-        || !Object.prototype.hasOwnProperty.call(operation, 'fact') || !Object.prototype.hasOwnProperty.call(operation, 'fact_signs')
-        || !operation.hash || !operation.fact || !operation.fact_signs) {
+    if (!isOperation(operation)) {
         return undefined;
     }
 
@@ -20,60 +25,52 @@ class OperationConfirm extends React.Component {
 
         this.state = {
             isRedirect: false,
-            status: undefined,
-            response: undefined
         }
     }
 
     onSend(json) {
         broadcast(json).then(
             res => {
-                this.setState({
-                    isRedirect: true,
-                    status: res.request.status,
-                    response: res.data
-                });
+                if (res.request.status === 200) {
+                    let data = undefined;
+                    switch (this.props.operation) {
+                        case OPER_CREATE_ACCOUNT:
+                            data = json.fact.items.map(x => x.keys.hash + ':' + hint.address + '-' + process.env.REACT_APP_VERSION);
+                            break;
+                        case OPER_UPDATE_KEY:
+                            data = json.fact.hash;
+                            break;
+                        case OPER_TRANSFER:
+                        default:
+                            data = undefined;
+                    }
+                    this.props.setResult(true, false, res.data, 200, data);
+                }
+                else {
+                    this.props.setResult(false, false, res.data, res.request.status, undefined);
+                }
+                this.setState({ isRedirect: true });
             }
         ).catch(
             e => {
-                this.setState({
-                    isRedirect: true,
-                    status: e.response.data.status,
-                    response: e.response.data
-                })
+                this.props.setResult(false, false, e.response.data, e.response.data.status, undefined);
+                this.setState({ isRedirect: true });
                 alert('작업을 전송할 수 없습니다.\n네트워크를 확인해주세요.');
             }
         );
     }
 
     renderRedirect() {
-        const { operation, json } = this.props;
-        switch (this.props.operation) {
-            case 'CREATE-ACCOUNT':
-            case 'TRANSFER':
-                return <Redirect to={{
-                    pathname: '/response',
-                    state: {
-                        res: this.state.response,
-                        status: this.state.status,
-                        operation: operation,
-                        data: operation === 'CREATE-ACCOUNT'
-                            ? json.fact.items.map(x => x.keys.hash + ':mca-' + process.env.REACT_APP_VERSION)
-                            : []
-                    }
-                }} />;
-            case 'UPDATE-KEY':
-                return <Redirect to={{
-                    pathname: '/loading',
-                    state: {
-                        res: this.state.response,
-                        status: this.state.status,
-                        data: json.fact.hash
-                    }
-                }} />;
+        const { operation } = this.props;
+        switch (operation) {
+            case OPER_CREATE_ACCOUNT:
+            case OPER_TRANSFER:
+                return <Redirect to='/response'/>;
+            case OPER_UPDATE_KEY:
+                return <Redirect to='/loading'/>;
             default:
                 alert('잘못된 작업입니다!\n지갑 페이지로 이동합니다.');
-                return <Redirect to='/login'/>;
+                return <Redirect to='/login' />;
         }
     }
 
@@ -106,4 +103,21 @@ class OperationConfirm extends React.Component {
     }
 }
 
-export default OperationConfirm;
+const mapStateToProps = state => ({
+    operation: state.operation.operation,
+    json: state.operation.json,
+    download: state.operation.download,
+    filename: state.operation.filename,
+    data: state.operation.data,
+    res: state.operation.res,
+    status: state.operation.status,
+});
+
+const mapDispatchToProps = dispatch => ({
+    setResult: (isBroadcast, isStateIn, res, status, data) => dispatch(setResponse(isBroadcast, isStateIn, res, status, data)),
+});
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(OperationConfirm));

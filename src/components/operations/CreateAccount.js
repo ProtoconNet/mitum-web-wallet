@@ -1,33 +1,23 @@
 import React, { createRef } from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setOperation } from '../../store/actions';
+
 import './CreateAccount.scss';
 
 import ConfirmButton from '../buttons/ConfirmButton';
-import InputBox from '../InputBox';
 
-import { Generator } from 'mitumc';
-import { Redirect } from 'react-router-dom';
-import SmallButton from '../buttons/SmallButton';
 import OperationConfirm from '../modals/OperationConfirm';
 
-import download from '../../lib/Url';
+import Keys from '../infos/Keys';
+import Balances from '../infos/Balances';
 
-const balance = (amount) => {
-    return (
-        <li key={amount.currency}>
-            <p className="currency">{amount.currency}</p>
-            <p className="amount">{amount.amount}</p>
-        </li>
-    );
-}
+import KeyAdder from '../adders/KeyAdder';
+import AmountAdder from '../adders/AmountAdder';
 
-const key = (k) => {
-    return (
-        <li key={k}>
-            <p className="key">{k.key}</p>
-            <p className="weight">{k.weight}</p>
-        </li>
-    );
-}
+import { Generator } from 'mitumc';
+
+import { OPER_CREATE_ACCOUNT } from '../../text/mode';
 
 class CreateAccount extends React.Component {
     constructor(props) {
@@ -53,12 +43,7 @@ class CreateAccount extends React.Component {
             currency: "",
             amount: "",
 
-            created: undefined,
-            newAddress: "",
             isModalOpen: false,
-
-            download: undefined,
-            filename: ""
         }
     }
 
@@ -94,12 +79,8 @@ class CreateAccount extends React.Component {
 
             const created = createAccounts.dict();
 
-            this.setState({
-                created: created,
-                isModalOpen: true,
-                download: download(created),
-                filename: created.hash
-            });
+            this.props.setJson(created);
+            this.setState({ isModalOpen: true });
         }
         catch (e) {
             console.log(e);
@@ -185,84 +166,48 @@ class CreateAccount extends React.Component {
                 <div ref={this.titleRef}></div>
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">
-                    <p id="head">CURRENT BALANCE LIST</p>
-                    <ul>
-                        {account.balances ? account.balances.map(x => balance(x)) : false}
-                    </ul>
+                    <Balances title="CURRENT BALANCE LIST" labeled={false} balances={account.balances} />
                 </div>
                 <div className="ca-input-wrap">
                     <div ref={this.createdRef}></div>
                     <div className="ca-keys">
-                        <p id="head">KEY LIST</p>
-                        <div id="label">
-                            <p className='key'>KEY</p>
-                            <p className='weight'>WEIGHT</p>
-                        </div>
-                        <ul>
-                            {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
-                        </ul>
-                        <section>
-                            <div className="ca-key-adder">
-                                <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
-                                    value={this.state.publicKey}
-                                    style={{ marginRight: "0.5em" }}
-                                    onChange={(e) => this.onChangePub(e)} />
-                                <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
-                                    value={this.state.weight}
-                                    onChange={(e) => this.onChangeWeight(e)} />
-                                <SmallButton
-                                    visible={true}
-                                    disabled={!(this.state.publicKey && this.state.weight) ? true : false}
-                                    onClick={() => this.addKey()}>ADD</SmallButton>
-                            </div>
-                            <div className="ca-thres-adder">
-                                <p>THRESHOLD:</p>
-                                <InputBox
-                                    size="small" useCopy={false} disabled={false} placeholder='threshold'
-                                    value={this.state.threshold}
-                                    onChange={(e) => this.onChangeThres(e)} />
-                            </div>
-                        </section>
+                        <Keys title='KEY LIST' keys={this.state.keys} labeled={true} />
+                        <KeyAdder
+                            onKeyChange={(e) => this.onChangePub(e)}
+                            onWeightChange={(e) => this.onChangeWeight(e)}
+                            onThresChange={(e) => this.onChangeThres(e)}
+                            onAdd={() => this.addKey()}
+                            isAddDisabled={!(this.state.publicKey && this.state.weight)}
+                            pub={this.state.publicKey} weight={this.state.weight} thres={this.state.threshold}
+                            useThres={true} />
                     </div>
 
                     <div className="ca-amounts">
-                        <p id="head">AMOUNT LIST</p>
-                        <div id="label">
-                            <p className='currency'>CURRENCY ID</p>
-                            <p className='amount'>AMOUNT</p>
-                        </div>
-                        <ul>
-                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
-                        </ul>
-                        <section>
-                            <div className="ca-amount-adder">
-                                <InputBox
-                                    size="small" useCopy={false} disabled={false} placeholder="currency"
-                                    onChange={(e) => this.onChangeCurrency(e)}
-                                    value={this.state.currency} />
-                                <InputBox
-                                    size="medium" useCopy={false} disabled={false} placeholder="amount"
-                                    value={this.state.amount}
-                                    onChange={(e) => this.onChangeAmount(e)} />
-                                <SmallButton
-                                    visible={true}
-                                    disabled={!(this.state.currency && this.state.amount) ? true : false}
-                                    onClick={() => this.addAmount()}>ADD</SmallButton>
-                            </div>
-                        </section>
+                        <Balances title="AMOUNT LIST" balances={this.state.amounts} labeled={true} />
+                        <AmountAdder
+                            onCurrencyChange={(e) => this.onChangeCurrency(e)}
+                            onAmountChange={(e) => this.onChangeAmount(e)}
+                            currency={this.state.currency}
+                            amount={this.state.amount}
+                            isAddDisabled={!(this.state.currency && this.state.amount)}
+                            onAdd={() => this.addAmount()} />
                     </div>
                 </div>
                 <ConfirmButton
                     disabled={this.state.amounts.length < 1 || this.state.keys.length < 1 || this.state.threshold === "" ? true : false}
                     onClick={() => this.onClick()}>CREATE</ConfirmButton>
 
-                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
-                    json={this.state.created}
-                    filename={this.state.filename}
-                    download={this.state.download}
-                    operation='CREATE-ACCOUNT' />
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
             </div>
         );
     }
 }
-export default CreateAccount;
+
+const mapDispatchToProps = dispatch => ({
+    setJson: (json) => dispatch(setOperation(OPER_CREATE_ACCOUNT, json)),
+});
+
+export default withRouter(connect(
+    null,
+    mapDispatchToProps
+)(CreateAccount));

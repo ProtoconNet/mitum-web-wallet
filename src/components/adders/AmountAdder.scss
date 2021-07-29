@@ -1,0 +1,22 @@
+.amount-adder-container {
+    width: 100%;
+    margin: 0;
+
+    .amount-adder {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        button {
+            padding: 0.5em;
+        }
+
+        div {
+            input {
+                margin-right: 0.2em;
+            }
+        }
+    }
+}

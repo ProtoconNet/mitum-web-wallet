@@ -10,9 +10,7 @@ import { login } from '../store/actions';
 import { connect } from 'react-redux';
 
 import { toKeypair } from 'mitumc';
-
-const MODE_PRIV_KEY = 'MODE_PRIV_KEY';
-const MODE_RES_KEY = 'MODE_RES_KEY';
+import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
 
 const getAccountInformation = async (account) => {
     return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
@@ -26,7 +24,7 @@ class Login extends React.Component {
         this.reloadAccount = this.reloadAccount.bind(this);
 
         this.state = {
-            mode: MODE_PRIV_KEY,
+            mode: SHOW_PRIVATE,
             isPriv: true,
             isActive: false,
         }
@@ -77,9 +75,9 @@ class Login extends React.Component {
     renderForm() {
         const { mode } = this.state;
         switch (mode) {
-            case MODE_PRIV_KEY:
+            case SHOW_PRIVATE:
                 return <PrivateKeyLoginBox onLogin={(addr, priv) => this.onLogin(addr, priv)} />
-            case MODE_RES_KEY:
+            case SHOW_RESTORE:
                 return <RestoreKeyLoginBox />;
             default:
                 return <PrivateKeyLoginBox onLogin={(addr, priv) => this.onLogin(addr, priv)} />;
@@ -110,14 +108,14 @@ class Login extends React.Component {
                 {this.props.isLogin ? <Redirect to={`/wallet/${this.props.account.address}`} /> : false}
                 <div className="login-radio" style={this.state.isActive ? {} : { display: "none" }}>
                     <label className="rad-label">
-                        <input type="radio" className="rad-input" value={MODE_PRIV_KEY} name="rad"
+                        <input type="radio" className="rad-input" value={SHOW_PRIVATE} name="rad"
                             onChange={() => this.onChange()} onClick={() => this.onClick()} checked={this.state.isPriv} />
                         <div className="rad-design"></div>
                         <div className="rad-text">Private Key</div>
                     </label>
 
                     <label className="rad-label">
-                        <input type="radio" className="rad-input" value={MODE_RES_KEY} name="rad"
+                        <input type="radio" className="rad-input" value={SHOW_RESTORE} name="rad"
                             onChange={() => this.onChange()} onClick={() => this.onClick()} checked={!this.state.isPriv} />
                         <div className="rad-design"></div>
                         <div className="rad-text">Restore Key</div>

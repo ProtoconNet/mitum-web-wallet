@@ -8,24 +8,22 @@ import UpdateKey from '../components/operations/UpdateKey';
 import Transfer from '../components/operations/Transfer';
 import { connect } from 'react-redux';
 
-const OPER_CREATE_ACCOUNT = 'oper-create-account';
-const OPER_UPDATE_KEY = 'oper-update-key';
-const OPER_TRANSFER = 'oper-transfer';
-
+import * as mode from '../text/mode';
+import { isStateValid } from '../lib/Validation';
 
 class Operation extends React.Component {
     constructor(props) {
         super(props);
 
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !this.props.location
-            || !Object.prototype.hasOwnProperty.call(this.props.location, 'state') || !this.props.location.state
+        if (!isStateValid(this.props)
             || !Object.prototype.hasOwnProperty.call(this.props.location.state, 'operation') || !this.props.location.state.operation
             || !this.props.isLogin) {
+
             this.state = {
                 isRedirect: true,
                 account: undefined,
                 operation: undefined
-            }
+            };
             return;
         }
 
@@ -48,11 +46,11 @@ class Operation extends React.Component {
         return (
             <div className="oper-container">
                 {this.state.isRedirect ? <Redirect to={redirect} /> : false}
-                {this.state.operation === OPER_CREATE_ACCOUNT ?
+                {this.state.operation === mode.OPER_CREATE_ACCOUNT ?
                     <CreateAccount account={this.state.account} /> : (
-                        this.state.operation === OPER_UPDATE_KEY ?
+                        this.state.operation === mode.OPER_UPDATE_KEY ?
                             <UpdateKey account={this.state.account} /> : (
-                                this.state.operation === OPER_TRANSFER ?
+                                this.state.operation === mode.OPER_TRANSFER ?
                                     <Transfer account={this.state.account} /> : <Redirect to={redirect} />
                             ))}
             </div>

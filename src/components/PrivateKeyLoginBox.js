@@ -41,7 +41,7 @@ class PrivateKeyLoginBox extends React.Component {
                     <InputBox disabled={false} useCopy={false} size="big"
                         onChange={(e) => this.onChangePrivate(e)}
                         value={this.state.privateKey}
-                        placeholder="priavate key"
+                        placeholder="private key"
                         label="Private Key"/>
                 </div>
                 <ConfirmButton

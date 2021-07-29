@@ -13,6 +13,11 @@
             "priv": "stellar-priv",
             "pub": "stellar-pub"
         }
-    }
-
+    },
+    "operation": {
+        "create_account": "mitum-currency-create-accounts-operation",
+        "update_key": "mitum-currency-keyupdater-operation",
+        "transfer": "mitum-currency-transfers-operation"
+    },
+    "address": "mca"
 }

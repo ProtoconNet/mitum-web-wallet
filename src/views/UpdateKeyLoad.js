@@ -1,76 +1,51 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import './UpdateKeyLoad.scss';
+import { connect } from 'react-redux';
+import { setResponse } from '../store/actions';
 
 class UpdateKeyLoad extends React.Component {
 
     constructor(props) {
         super(props);
 
-        try {
-            const { res, status } = this.props.location.state;
-            if (status !== 200) {
-                this.state = {
-                    isRedirect: true,
-                    status: 400,
-                    res: res,
-                    data: [],
-                }
-                return;
-            }
-            this.state = {
-                isRedirect: false,
-                broadcastFail: false,
-                counter: 0,
-            }
-        }
-        catch (e) {
-            console.log(e);
-            alert('Fact Hash를 조회할 수 없습니다!\n');
+        this.state = {
+            isRedirect: false,
+            counter: 0,
         }
     }
 
     renderRedirect() {
         if (this.state.isRedirect) {
             return (
-                <Redirect to={{
-                    pathname: '/response',
-                    state: {
-                        status: this.state.status,
-                        res: this.state.res,
-                        data: [],
-                        operation: 'UPDATE-KEY'
-                    }
-                }} />
+                <Redirect to='/response' />
             )
         }
     }
 
     getResponse() {
-        if (this.state.counter < 100) {
-            const { data, res } = this.props.location.state;
+        if (this.state.counter < 50) {
+            const { data, res, isBroadcast } = this.props;
 
-            const getResult = async (hash, res) => {
-                return await axios.get(process.env.REACT_APP_API_SEARCH_FACT + hash)
+            const getResult = async (_hash, _res, isBroadcast) => {
+                return await axios.get(process.env.REACT_APP_API_SEARCH_FACT + _hash)
                     .then(
                         response => {
                             if (response.data._embedded.in_state) {
+                                this.props.setResult(true, true, _res, 200, _hash);
                                 this.setState({
                                     isRedirect: true,
-                                    status: 200,
-                                    res: res,
                                 });
                             }
                             else {
+                                this.props.setResult(true, false, {
+                                    title: response.data._embedded.reason.msg
+                                }, 400, _hash);
                                 this.setState({
                                     isRedirect: true,
-                                    status: 400,
-                                    res: {
-                                        title: response.data._embedded.reason.msg
-                                    }
-                                });
+                                })
                             }
                         }
                     )
@@ -82,31 +57,27 @@ class UpdateKeyLoad extends React.Component {
                                 })
                             }
                             else {
+                                this.props.setResult(true, false, e.response.data, 400, _hash);
                                 this.setState({
                                     isRedirect: true,
-                                    status: 400,
-                                    res: {
-                                        title: "Network Error"
-                                    }
                                 });
                             }
                         }
                     )
             }
 
-            setTimeout((hs, rs) => {
-                getResult(hs, rs);
-            }, 5000, data, res);
+            setTimeout((hs, rs, broad) => {
+                getResult(hs, rs, broad);
+            }, 5000, data, res, isBroadcast);
 
             return () => this.getResponse();
         }
         else {
+            this.props.setResult(true, false, {
+                title: "Too long time to stay response. Maybe mitum failed to process your operation. :("
+            }, 400, this.props.data);
             this.setState({
                 isRedirect: true,
-                status: 400,
-                res: {
-                    title: "Too long time to stay response. Maybe mitum failed to process your operation. :("
-                }
             });
         }
     }
@@ -129,4 +100,17 @@ class UpdateKeyLoad extends React.Component {
     }
 }
 
-export default UpdateKeyLoad;
+const mapStateToProps = state => ({
+    data: state.operation.data,
+    res: state.operation.res,
+    status: state.operation.status,
+});
+
+const mapDispatchToProps = dispatch => ({
+    setResult: (isBroadcast, isStateIn, res, status, data) => dispatch(setResponse(isBroadcast, isStateIn, res, status, data)),
+});
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UpdateKeyLoad));

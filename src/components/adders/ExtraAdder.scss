@@ -1,0 +1,40 @@
+.extra-adder-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    margin: 0;
+    padding: 0;
+
+    .currency-adder,
+    .thres-adder {
+        width: 100%;
+        height: fit-content;
+        padding: 0;
+        margin: 0.2em;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        p {
+            font-size: 1em;
+            font-weight: 500;
+
+            text-align: center;
+
+            margin: 0;
+            padding: 0.2em;
+
+            width: fit-content;
+            vertical-align: middle;
+        }
+
+        div {
+            margin: 0;
+            text-align: start;
+        }
+    }
+}

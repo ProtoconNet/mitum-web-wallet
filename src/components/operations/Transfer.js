@@ -1,24 +1,21 @@
 import React, { createRef } from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import './Transfer.scss';
 
 import InputBox from '../InputBox';
+import AmountAdder from '../adders/AmountAdder';
+import Balances from '../infos/Balances';
 import ConfirmButton from '../buttons/ConfirmButton';
 
-import { Generator } from 'mitumc';
-import { Redirect } from 'react-router-dom';
-import SmallButton from '../buttons/SmallButton';
 import OperationConfirm from '../modals/OperationConfirm';
 
-import download from '../../lib/Url';
+import { Generator } from 'mitumc';
 
-const balance = (amount) => {
-    return (
-        <li key={amount.currency}>
-            <span className="currency">{amount.currency}</span>
-            <span className="amount">{amount.amount}</span>
-        </li>
-    );
-}
+import { OPER_TRANSFER } from '../../text/mode';
+import { setOperation } from '../../store/actions';
+
 
 class Transfer extends React.Component {
 
@@ -76,12 +73,8 @@ class Transfer extends React.Component {
 
             const created = transfers.dict();
 
-            this.setState({
-                created: created,
-                isModalOpen: true,
-                download: download(created),
-                filename: created.hash
-            });
+            this.props.setJson(created);
+            this.setState({ isModalOpen: true });
         }
         catch (e) {
             console.log(e);
@@ -145,58 +138,43 @@ class Transfer extends React.Component {
                 <div ref={this.titleRef}></div>
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
-                    <p id="head">CURRENT BALANCE LIST</p>
-                    <ul>
-                        {account.balances ? account.balances.map(x => balance(x)) : false}
-                    </ul>
+                    <Balances title='CURRENT BALANCE LIST' labeled={false} balances={account.balances} />
                 </div>
                 <div className="tf-input-wrap">
                     <div ref={this.createdRef} />
                     <div className="tf-amounts">
-                        <p id="head">AMOUNT LIST</p>
-                        <div id="label">
-                            <p className='currency'>CURRENCY ID</p>
-                            <p className='amount'>AMOUNT</p>
+                        <Balances title='AMOUNT LIST' labeled={true} balances={this.state.amounts} />
+                        <AmountAdder
+                            onCurrencyChange={(e) => this.onChangeCurrency(e)}
+                            onAmountChange={(e) => this.onChangeAmount(e)}
+                            currency={this.state.currency}
+                            amount={this.state.amount}
+                            isAddDisabled={!(this.state.currency && this.state.amount)}
+                            onAdd={() => this.addAmount()} />
+                        <div className='tf-address-adder'>
+                            <p>RECEIVER'S ADDRESS:</p>
+                            <InputBox
+                                size="medium" useCopy={false} disabled={false} placeholder='target address'
+                                value={this.state.threshold}
+                                onChange={(e) => this.onChangeAddress(e)} />
                         </div>
-                        <ul>
-                            {this.state.amounts.length > 0 ? this.state.amounts.map(x => balance(x)) : false}
-                        </ul>
-                        <section>
-                            <div className="tf-amount-adder">
-                                <InputBox
-                                    size="small" useCopy={false} disabled={false} placeholder="currency"
-                                    onChange={(e) => this.onChangeCurrency(e)}
-                                    value={this.state.currency} />
-                                <InputBox
-                                    size="medium" useCopy={false} disabled={false} placeholder="amount"
-                                    value={this.state.amount}
-                                    onChange={(e) => this.onChangeAmount(e)} />
-                                <SmallButton
-                                    visible={true}
-                                    disabled={!(this.state.currency && this.state.amount) ? true : false}
-                                    onClick={() => this.addAmount()}>ADD</SmallButton>
-                            </div>
-                            <div className='tf-address-adder'>
-                                <p>RECEIVER'S ADDRESS:</p>
-                                <InputBox
-                                    size="medium" useCopy={false} disabled={false} placeholder='target address'
-                                    value={this.state.threshold}
-                                    onChange={(e) => this.onChangeAddress(e)} />
-                            </div>
-                        </section>
                     </div>
                 </div>
                 <ConfirmButton
                     disabled={this.state.amounts.length < 1 || this.state.address === "" ? true : false}
                     onClick={() => this.onClick()}>TRANSFER</ConfirmButton>
 
-                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
-                    json={this.state.created}
-                    filename={this.state.filename}
-                    download={this.state.download}
-                    operation='TRANSFER' />
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
             </div>
         );
     }
 }
-export default Transfer;
+
+const mapDispatchToProps = dispatch => ({
+    setJson: (json) => dispatch(setOperation(OPER_TRANSFER, json)),
+});
+
+export default withRouter(connect(
+    null,
+    mapDispatchToProps
+)(Transfer));

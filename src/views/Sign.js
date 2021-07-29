@@ -1,5 +1,7 @@
 import React, { createRef } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setOperation } from '../store/actions';
 import copy from 'copy-to-clipboard';
 
 import './Sign.scss';
@@ -7,28 +9,16 @@ import './Sign.scss';
 import ConfirmButton from '../components/buttons/ConfirmButton';
 
 import { Signer } from 'mitumc';
-import { connect } from 'react-redux';
+
 import OperationConfirm from '../components/modals/OperationConfirm';
+
+import { operation } from '../text/hint.json';
+import { isOperation, isStateValid } from '../lib/Validation';
+import { OPER_CREATE_ACCOUNT, OPER_DEFAULT, OPER_TRANSFER, OPER_UPDATE_KEY } from '../text/mode';
 
 const onCopy = (msg) => {
     copy(msg);
     alert('copied!');
-}
-
-const download = (json) => {
-    if (!json || !Object.prototype.hasOwnProperty.call(json, 'hash')) {
-        return undefined;
-    }
-
-    let file;
-    try {
-        file = new File([JSON.stringify(json, null, 4)], `${json.hash}`, { type: 'application/json' });
-    } catch (e) {
-        alert('Could not get url');
-        return undefined;
-    }
-
-    return URL.createObjectURL(file);
 }
 
 const preStyle = {
@@ -45,9 +35,22 @@ const sig = (x) => {
     );
 }
 
-const TYPE_CREATE_ACCOUNT = "mitum-currency-create-accounts-operation-" + process.env.REACT_APP_VERSION;
-const TYPE_UPDATE_KEY = "mitum-currency-keyupdater-operation-" + process.env.REACT_APP_VERSION;
-const TYPE_TRANSFER = "mitum-currency-transfers-operation-" + process.env.REACT_APP_VERSION;
+const TYPE_CREATE_ACCOUNT = operation.create_account + '-' + process.env.REACT_APP_VERSION;
+const TYPE_UPDATE_KEY = operation.update_key + '-' + process.env.REACT_APP_VERSION;
+const TYPE_TRANSFER = operation.transfer + '-' + process.env.REACT_APP_VERSION;
+
+const getOperationFromType = (type) => {
+    switch (type) {
+        case TYPE_CREATE_ACCOUNT:
+            return OPER_CREATE_ACCOUNT;
+        case TYPE_UPDATE_KEY:
+            return OPER_UPDATE_KEY;
+        case TYPE_TRANSFER:
+            return OPER_TRANSFER;
+        default:
+            return OPER_DEFAULT;
+    }
+}
 
 class Sign extends React.Component {
 
@@ -58,22 +61,19 @@ class Sign extends React.Component {
         this.infoRef = createRef();
         this.jsonRef = createRef();
 
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'location') || !Object.prototype.hasOwnProperty.call(this.props.location, 'state')
-            || !this.props.location || !this.props.location.state || !this.props.isLogin) {
+        if (!isStateValid(this.props) || !this.props.isLogin) {
             this.state = {
                 isRedirect: true
             }
             return;
         }
 
+        this.props.setJson(OPER_DEFAULT, {});
+
         this.state = {
             isRedirect: false,
-            json: Object.prototype.hasOwnProperty.call(this.props.location.state, 'json') ? this.props.location.state.json : {},
-            sigs: [],
-            download: undefined,
-            filename: "",
             type: "",
-            operation: undefined,
+            sigs: [],
 
             isModalOpen: false,
             isJsonOpen: false
@@ -107,11 +107,11 @@ class Sign extends React.Component {
     jsonView() {
         return (
             <div className="sign-json">
-                {this.state.json
+                {!(this.props.operation === OPER_DEFAULT)
                     ? (
                         <pre style={preStyle}
-                            onClick={() => onCopy(JSON.stringify(this.state.json, null, 4))}>
-                            {JSON.stringify(this.state.json, null, 4)}
+                            onClick={() => onCopy(JSON.stringify(this.props.json, null, 4))}>
+                            {JSON.stringify(this.props.json, null, 4)}
                         </pre>
                     ) : false}
             </div>
@@ -121,96 +121,46 @@ class Sign extends React.Component {
     importJSON(e) {
         const file = e.target.files[0];
         const reader = new FileReader();
-        const json = this.state.json;
+        const json = this.props.json;
 
         try {
             reader.onload = () => {
                 const parsed = JSON.parse(reader.result);
-                if (!Object.prototype.hasOwnProperty.call(parsed, 'hash') || !Object.prototype.hasOwnProperty.call(parsed, 'fact')
-                    || !Object.prototype.hasOwnProperty.call(parsed, 'fact_signs') || !Object.prototype.hasOwnProperty.call(parsed, 'memo')
-                    || !parsed.hash || !parsed.fact || !parsed.fact_signs) {
-                    alert('Invalid format!\nOnly operation json file can be imported');
+                if (!isOperation(parsed)) {
+                    alert('유효하지 않은 작업 파일입니다.');
                 }
                 else {
-                    let operation = '';
-                    switch (parsed._hint) {
-                        case TYPE_CREATE_ACCOUNT:
-                            operation = 'CREATE-ACCOUNT';
-                            break;
-                        case TYPE_UPDATE_KEY:
-                            operation = "UPDATE-KEY";
-                            break;
-                        case TYPE_TRANSFER:
-                            operation = "TRANSFER";
-                            break;
-                        default:
-                            alert('WARN: This operation is not create-accounts, key-updater, or transfers');
-                            operation = "DEFAULT";
-                    }
-
+                    const operation = getOperationFromType(parsed._hint);
+                    this.props.setJson(operation, parsed);
                     this.setState({
-                        json: parsed,
                         type: parsed._hint,
-                        operation: operation,
-                        download: download(parsed),
-                        filename: parsed.hash,
-                        sigs: parsed.fact_signs.map(x => x.signature)
-                    });
+                        sigs: parsed.fact_signs.map(x => x.signature),
+                    })
                 }
             };
             reader.readAsText(file, "utf-8");
         } catch (e) {
-            let operation = '';
+            const operation = getOperationFromType(json._hint);
 
-            switch (json._hint) {
-                case TYPE_CREATE_ACCOUNT:
-                    operation = 'CREATE-ACCOUNT';
-                    break;
-                case TYPE_UPDATE_KEY:
-                    operation = "UPDATE-KEY";
-                    break;
-                case TYPE_TRANSFER:
-                    operation = "TRANSFER";
-                    break;
-                default:
-                    operation = "DEFAULT";
-            }
-
+            this.props.setJson(operation, json);
             this.setState({
-                json: json,
-                type: json._hint,
-                operation: operation,
-                download: download(json),
-                filename: Object.prototype.hasOwnProperty.call(json, 'hash') ? json.hash : "",
-                sigs: Object.prototype.hasOwnProperty.call(json, 'fact_signs') ? json.fact_signs.map(x => x.signature) : []
+                type: json ? json._hint : "",
+                sigs: json && Object.prototype.hasOwnProperty.call(json, 'fact_signs') ? json.fact_signs.map(x => x.signature) : []
             });
-            alert('Invalid format!\nOnly operation json file can be imported');
+            alert('유효하지 않은 작업파일 입니다.');
         }
     }
 
     onClickSend() {
-        const target = this.state.json;
-        if (!Object.prototype.hasOwnProperty.call(target, 'hash') || !Object.prototype.hasOwnProperty.call(target, 'fact')
-            || !Object.prototype.hasOwnProperty.call(target, 'fact_signs') || !Object.prototype.hasOwnProperty.call(target, 'memo')) {
-            alert('Invalid operation!')
-            return;
-        }
-
-        if (!this.state.download) {
-            return;
-        }
-
         this.setState({
             isModalOpen: true
         })
     }
 
     onClickSign() {
+        let target = this.props.json;
 
-        let target = this.state.json;
-
-        if (!Object.prototype.hasOwnProperty.call(target, 'hash') || !Object.prototype.hasOwnProperty.call(target, 'fact_signs')
-            || !Object.prototype.hasOwnProperty.call(target, 'fact') || !Object.prototype.hasOwnProperty.call(target, 'memo')) {
+        if (!isOperation(target)) {
             return;
         }
 
@@ -218,21 +168,21 @@ class Sign extends React.Component {
 
         try {
             const json = signer.signOperation(target);
+            const operation = getOperationFromType(json._hint);
+
+            this.props.setJson(operation, json);
             this.setState({
-                json: json,
                 type: json._hint,
-                download: download(json),
-                filename: json.hash,
                 sigs: json.fact_signs.map(x => x.signature)
             });
             alert('성공! :D');
         }
         catch (e) {
+            const operation = getOperationFromType(target._hint);
+            this.props.setJson(operation, target);
+
             this.setState({
-                json: target,
                 type: Object.prototype.hasOwnProperty.call(target, '_hint') ? target._hint : "",
-                download: download(target),
-                filename: target.hash,
                 sigs: target.fact_signs.map(x => x.signature)
             })
             alert('작업에 서명을 추가할 수 없습니다. :(');
@@ -258,8 +208,8 @@ class Sign extends React.Component {
                             <p id="head">FACT HASH</p>
                             <p id="body">
                                 {
-                                    this.state.json && Object.prototype.hasOwnProperty.call(this.state.json, 'fact')
-                                        ? this.state.json.fact.hash
+                                    this.props.json && Object.prototype.hasOwnProperty.call(this.props.json, 'fact')
+                                        ? this.props.json.fact.hash
                                         : "NONE"
                                 }
                             </p>
@@ -281,7 +231,7 @@ class Sign extends React.Component {
                         </span>
                     </div>
                     <div ref={this.jsonRef} />
-                    {this.state.json
+                    {this.props.json
                         ? (
                             <div className='sign-view-json'
                                 onClick={() => this.openJSON()}>
@@ -294,15 +244,10 @@ class Sign extends React.Component {
                     </div>
                 </div>
                 <div className="sign-buttons">
-                    <ConfirmButton onClick={() => this.onClickSend()}>SEND</ConfirmButton>
-                    <ConfirmButton onClick={() => this.onClickSign()}>SIGN</ConfirmButton>
+                    <ConfirmButton disabled={this.props.operation === OPER_DEFAULT} onClick={() => this.onClickSend()}>SEND</ConfirmButton>
+                    <ConfirmButton disabled={this.props.operation === OPER_DEFAULT} onClick={() => this.onClickSign()}>SIGN</ConfirmButton>
                 </div>
-                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
-                    title="이 작업을 전송하겠습니까?"
-                    json={this.state.json}
-                    filename={this.state.filename}
-                    download={this.state.download}
-                    operation={this.state.operation} />
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
             </div>
         );
     }
@@ -310,9 +255,17 @@ class Sign extends React.Component {
 
 const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
-    account: state.login.account
+    account: state.login.account,
+
+    operation: state.operation.operation,
+    json: state.operation.json,
 });
 
-export default connect(
+const mapDispatchToProps = dispatch => ({
+    setJson: (operation, json) => dispatch(setOperation(operation, json)),
+});
+
+export default withRouter(connect(
     mapStateToProps,
-)(Sign);
+    mapDispatchToProps
+)(Sign));

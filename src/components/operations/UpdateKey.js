@@ -1,24 +1,22 @@
 import React, { createRef } from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import './UpdateKey.scss';
 
-import InputBox from '../InputBox';
 import ConfirmButton from '../buttons/ConfirmButton';
+import Keys from '../infos/Keys';
 
-import { Generator } from 'mitumc';
-import { Redirect } from 'react-router-dom';
-import SmallButton from '../buttons/SmallButton';
+import KeyAdder from '../adders/KeyAdder';
+import ExtraAdder from '../adders/ExtraAdder';
+
 import OperationConfirm from '../modals/OperationConfirm';
 
-import download from '../../lib/Url';
+import { Generator } from 'mitumc';
 
-const key = (k) => {
-    return (
-        <li key={k}>
-            <p className="key">{k.key}</p>
-            <p className="weight">{k.weight}</p>
-        </li>
-    );
-}
+import { setOperation } from '../../store/actions';
+
+import { OPER_UPDATE_KEY } from '../../text/mode';
 
 class UpdateKey extends React.Component {
 
@@ -74,13 +72,9 @@ class UpdateKey extends React.Component {
             keyUpdater.addSign(account.privateKey);
 
             const created = keyUpdater.dict();
-
-            this.setState({
-                created: created,
-                isModalOpen: true,
-                download: download(created),
-                filename: created.hash
-            });
+            
+            this.props.setJson(created);
+            this.setState({ isModalOpen: true });
         }
         catch (e) {
             console.log(e);
@@ -148,71 +142,41 @@ class UpdateKey extends React.Component {
                 <div ref={this.titleRef}></div>
                 <h1>UPDATE KEY</h1>
                 <div className="uk-info-wrap">
-                    <div id="pub">
-                        <p id="head">CURRENT KEY LIST</p>
-                        <div id="label">
-                            <p className='key'>KEY</p>
-                            <p className='weight'>WEIGHT</p>
-                        </div>
-                        <ul>
-                            {account.publicKeys ? account.publicKeys.map(x => key(x)) : false}
-                        </ul>
-                    </div>
+                    <Keys title='CURRENT KEY LIST' keys={account.publicKeys} />
                 </div>
                 <div className="uk-input-wrap">
                     <div ref={this.createdRef} />
                     <div className="uk-keys">
-                        <p id="head">NEW KEY LIST</p>
-                        <div id="label">
-                            <p className='key'>KEY</p>
-                            <p className='weight'>WEIGHT</p>
-                        </div>
-                        <ul>
-                            {this.state.keys.length > 0 ? this.state.keys.map(x => key(x)) : false}
-                        </ul>
-                        <section>
-                            <div className="uk-key-adder">
-                                <InputBox size="medium" useCopy={false} disabled={false} placeholder="public key"
-                                    value={this.state.publicKey}
-                                    onChange={(e) => this.onChangePub(e)} />
-                                <InputBox size="small" useCopy={false} disabled={false} placeholder="weight"
-                                    value={this.state.weight}
-                                    onChange={(e) => this.onChangeWeight(e)} />
-                                <SmallButton
-                                    visible={true}
-                                    disabled={!(this.state.publicKey && this.state.weight) ? true : false}
-                                    onClick={() => this.addKey()}>ADD</SmallButton>
-                            </div>
-                            <div className="uk-extra-adder">
-                                <div className="uk-thres-adder">
-                                    <p>THRESHOLD  :</p>
-                                    <InputBox
-                                        size="small" useCopy={false} disabled={false} placeholder='threshold'
-                                        value={this.state.threshold}
-                                        onChange={(e) => this.onChangeThres(e)} />
-                                </div>
-                                <div className="uk-currency-adder">
-                                    <p>CURRENCY ID:</p>
-                                    <InputBox
-                                        size="small" useCopy={false} disabled={false} placeholder='currency'
-                                        value={this.state.currency}
-                                        onChange={(e) => this.onChangeCurrency(e)} />
-                                </div>
-                            </div>
+                        <Keys title='NEW KEY LIST' keys={this.state.keys} />
+                        <section className='uk-keys-adder'>
+                            <KeyAdder
+                                onKeyChange={(e) => this.onChangePub(e)}
+                                onWeightChange={(e) => this.onChangeWeight(e)}
+                                onAdd={() => this.addKey()}
+                                isAddDisabled={!(this.state.publicKey && this.state.weight)}
+                                pub={this.state.publicKey} weight={this.state.weight}
+                                useThres={false} />
+                            <ExtraAdder
+                                onThresChange={(e) => this.onChangeThres(e)}
+                                onCurrencyChange={(e) => this.onChangeCurrency(e)}
+                                thres={this.state.threshold} currency={this.state.currency} />
                         </section>
-
                     </div>
                 </div>
                 <ConfirmButton
                     disabled={this.state.keys.length < 1 || this.state.threshold === "" || this.state.currency === "" ? true : false}
                     onClick={() => this.onClick()}>UPDATE</ConfirmButton>
-                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}
-                    json={this.state.created}
-                    filename={this.state.filename}
-                    download={this.state.download}
-                    operation='UPDATE-KEY' />
+                <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
             </div>
         );
     }
 }
-export default UpdateKey;
+
+const mapDispatchToProps = dispatch => ({
+    setJson: (json) => dispatch(setOperation(OPER_UPDATE_KEY, json)),
+});
+
+export default withRouter(connect(
+    null,
+    mapDispatchToProps
+)(UpdateKey));

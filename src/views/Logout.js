@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { logout } from '../store/actions';
+import { logout, clearHistory } from '../store/actions';
 
 import './Logout.scss';
 
@@ -9,6 +9,7 @@ class Logout extends React.Component {
     constructor(props) {
         super(props);
         this.props.signOut();
+        this.props.clearHistory();
     }
     
     render() {
@@ -25,6 +26,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     signOut: () => dispatch(logout()),
+    clearHistory: () => dispatch(clearHistory())
 });
 
 export default connect(

@@ -12,7 +12,7 @@ import { Signer } from 'mitumc';
 
 import OperationConfirm from '../components/modals/OperationConfirm';
 
-import { operation } from '../text/hint.json';
+import { TYPE_CREATE_ACCOUNT, TYPE_UPDATE_KEY, TYPE_TRANSFER } from '../text/mode';
 import { isOperation, isStateValid } from '../lib/Validation';
 import { OPER_CREATE_ACCOUNT, OPER_DEFAULT, OPER_TRANSFER, OPER_UPDATE_KEY } from '../text/mode';
 
@@ -34,10 +34,6 @@ const sig = (x) => {
         <li key={x}>{x}</li>
     );
 }
-
-const TYPE_CREATE_ACCOUNT = operation.create_account + '-' + process.env.REACT_APP_VERSION;
-const TYPE_UPDATE_KEY = operation.update_key + '-' + process.env.REACT_APP_VERSION;
-const TYPE_TRANSFER = operation.transfer + '-' + process.env.REACT_APP_VERSION;
 
 const getOperationFromType = (type) => {
     switch (type) {

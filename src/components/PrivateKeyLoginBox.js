@@ -46,7 +46,9 @@ class PrivateKeyLoginBox extends React.Component {
                 </div>
                 <ConfirmButton
                     disabled={!(this.state.privateKey && this.state.account) ? true : false}
-                    onClick={() => this.props.onLogin(this.state.account, this.state.privateKey)}>Open</ConfirmButton>
+                    onClick={() => {
+                        this.props.onLogin(this.state.account.trim(), this.state.privateKey.trim());
+                    }}>Open</ConfirmButton>
             </div>
         )
     }

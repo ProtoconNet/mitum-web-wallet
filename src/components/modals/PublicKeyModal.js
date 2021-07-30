@@ -1,12 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import copy from 'copy-to-clipboard';
 
 import "./PublicKeyModal.scss";
 
 const key = (k) => {
     return (
-        <li key={k}>{k}</li>
+        <li key={k}
+            onClick={() => {
+                copy(k);
+                alert('copied');
+            }}>{k}</li>
     );
 }
 

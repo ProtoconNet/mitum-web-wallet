@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { login } from '../store/actions';
 import './Wallet.scss';
 
+import copy from 'copy-to-clipboard';
+
 import SelectButton from '../components/buttons/SelectButton';
 import PublicKeyModal from '../components/modals/PublicKeyModal';
 
@@ -15,6 +17,22 @@ const balance = (bal) => {
         <li key={bal.currency}>
             <p className="currency">{bal.currency}</p>
             <p className="amount">{bal.amount}</p>
+        </li>
+    );
+}
+
+const history = (hist) => {
+    return (
+        <li key={hist.hash + hist.target} onClick={() => {
+            copy(hist.hash);
+            alert('fact hash copied');
+        }}>
+            <p id={hist.confirmation}>{hist.confirmation}</p>
+            <p id={hist.direction}>{hist.direction}</p>
+            <p id='confirmed-at'>{hist.confirmedAt}</p>
+            <p id='target'>{hist.target}</p>
+            <p id='currency'>{hist.currency}</p>
+            <p id='amount'>{hist.amount}</p>
         </li>
     );
 }
@@ -177,6 +195,12 @@ class Wallet extends React.Component {
                     <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_UPDATE_KEY)}>UPDATE KEY</SelectButton>
                     <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_TRANSFER)}>TRANSFER</SelectButton>
                 </div>
+                <div className="wallet-history">
+                    {title('HISTORY')}
+                    <ul>
+                        {this.props.history.map(x => history(x))}
+                    </ul>
+                </div>
                 <PublicKeyModal onClose={() => this.closeModal()} isOpen={this.state.isModalOpen} />
             </div>
         );
@@ -185,7 +209,8 @@ class Wallet extends React.Component {
 
 const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
-    account: state.login.account
+    account: state.login.account,
+    history: state.login.history
 });
 
 const mapDispatchToProps = dispatch => ({

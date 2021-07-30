@@ -6,38 +6,48 @@
     align-items: flex-start;
     justify-content: center;
 
-    width: 320px;
+    width: 250px;
     z-index: 1;
     position: fixed;
     top: 50px;
     left: 20px;
 
     .nav-title {
-        &:before {
-            background: darkslategray;
-        }
+        border: 2px solid white;
+        border-radius: 20px;
+        display: inline-block;
+        text-align: center;
     }
 
     .nav-title p {
         font-size: 1.4em;
     }
 
+    .nav-login,
+    .nav-sign,
+    .main {
+        p {
+            text-align: start;
+        }
+    }
+
     .on {
         &:before {
-            background: darkolivegreen;
+            background: gray;
         }
+
         margin-bottom: 0;
     }
 
     .off {
         &:before {
-            background: darkslateblue;
+            background: white;
         }
     }
 
     .nav-sign {
         &:before {
-            background: darkolivegreen;
+            background: gray;
         }
     }
 
@@ -47,7 +57,7 @@
         text-decoration: underline;
 
         &:hover {
-            color: lightgreen;
+            color: lightblue;
         }
 
         &:active {
@@ -57,13 +67,14 @@
 
     .main {
         &:before {
-            background: darkslateblue;
+            background: white;
         }
     }
 
     a {
         position: relative;
         margin: 0.5em;
+        width: 100%;
 
         &:before {
             content: "";
@@ -81,7 +92,7 @@
 
         &:active {
             p {
-                color: darkred;
+                color: cyan;
             }
         }
 

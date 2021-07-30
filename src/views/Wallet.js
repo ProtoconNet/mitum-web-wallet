@@ -1,48 +1,53 @@
 import React, { createRef } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
-import './Wallet.scss';
-
-import copy from 'copy-to-clipboard';
-
-import SelectButton from '../components/buttons/SelectButton';
 import { connect } from 'react-redux';
 import { login } from '../store/actions';
+import './Wallet.scss';
+
+import SelectButton from '../components/buttons/SelectButton';
+import PublicKeyModal from '../components/modals/PublicKeyModal';
 
 import * as mode from '../text/mode';
 import { isAccountValid } from '../lib/Validation';
 
-const onCopy = (msg) => {
-    copy(msg);
-    alert("copied!");
-}
-
 const balance = (bal) => {
     return (
         <li key={bal.currency}>
-            <span className="currency">{bal.currency}</span>
-            <span className="amount">{bal.amount}</span>
+            <p className="currency">{bal.currency}</p>
+            <p className="amount">{bal.amount}</p>
         </li>
     );
 }
 
-const publicKey = (key) => {
+const titleStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    margin: '0',
+    padding: '0'
+}
+const lineStyle = {
+    width: '100%',
+    border: '2px solid white',
+    verticalAlign: 'middle',
+}
+
+const title = (content) => {
     return (
-        <li key={key.key}
-            onClick={() => onCopy(key.key)}>
-            {key.key}
-        </li>
+        <div style={titleStyle}>
+            <div style={lineStyle}></div>
+            <p style={{
+                width: '100%',
+                textAlign: 'center',
+                verticalAlign: 'middle',
+                fontWeight: '400',
+                fontSize: '1.5em'
+            }}>{content}</p>
+            <div style={lineStyle}></div>
+        </div>
     )
-}
-
-const key = (key) => {
-    if (!key) {
-        return false;
-    }
-    return (
-        <p onClick={() => onCopy(key)}>
-            {key}
-        </p>
-    );
 }
 
 class Wallet extends React.Component {
@@ -55,9 +60,7 @@ class Wallet extends React.Component {
         this.state = {
             restoreKey: undefined,
 
-            isDetailVisible: false,
-            isPrivVisible: false,
-            isResVisible: false,
+            isModalOpen: false,
 
             isRedirect: this.props.isLogin ? false : true,
             redirect: this.props.isLogin ? undefined : mode.PAGE_LOGIN,
@@ -88,9 +91,9 @@ class Wallet extends React.Component {
     }
 
     onSelect(oper) {
-        if (oper === mode.OPER_CREATE_ACCOUNT 
-                || oper === mode.OPER_UPDATE_KEY
-                || oper === mode.OPER_TRANSFER) {
+        if (oper === mode.OPER_CREATE_ACCOUNT
+            || oper === mode.OPER_UPDATE_KEY
+            || oper === mode.OPER_TRANSFER) {
             this.setState({
                 isRedirect: true,
                 redirect: mode.PAGE_OPER,
@@ -143,86 +146,41 @@ class Wallet extends React.Component {
         })
     }
 
+    closeModal() {
+        this.setState({ isModalOpen: false });
+    }
+
+    openModal() {
+        this.setState({ isModalOpen: true });
+    }
+
     render() {
         return (
             <div className="wallet-container">
                 {this.renderRedirect()}
                 <span className="wallet-refresh" >
-                    <p onClick={() => this.refresh()}>
-                        ⟳
-                    </p>
+                    <p onClick={() => this.refresh()}>⟳</p>
                 </span>
                 <div className="wallet-ref" ref={this.walletRef}></div>
-                <h1>ACCOUNT INFO</h1>
                 <div className="wallet-info">
-                    {this.state.isDetailVisible
-                        ? false
-                        : (
-                            <span className="wallet-info-account">
-                                <h2>{"ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE")}</h2>
-                                <p onClick={() => onCopy(this.props.account.address)}>{this.props.account.address}</p>
-                            </span>
-                        )
-                    }
-                    <span className="wallet-info-detail">
-                        {this.state.isDetailVisible
-                            ? (
-                                <span className="wallet-more-detail"
-                                    style={{ display: this.state.isDetailVisible ? "inherit" : "none" }}>
-                                    <div>
-                                        <div className="wallet-pub-key">
-                                            <h2>PUBLIC KEY</h2>
-                                            <ul>
-                                                {this.props.account.publicKeys ? this.props.account.publicKeys.map(x => publicKey(x)) : false}
-                                            </ul>
-                                        </div>
-                                        <div className="wallet-priv-key">
-                                            <h2>PRIVATE KEY</h2>
-                                            {this.state.isPrivVisible ? key(this.props.account.privateKey) : false}
-                                            <label onClick={() => this.onShowClick(mode.SHOW_PRIVATE)}>
-                                                {this.state.isPrivVisible ? "- HIDE -" : "! SHOW !"}
-                                            </label>
-                                        </div>
-                                        {this.props.account && this.props.account.restoreKey
-                                            ? (
-                                                <div className="wallet-res-key">
-                                                    <h2>RESTORE KEY</h2>
-                                                    {this.state.isResVisible ? key(this.props.account.restoreKey) : false}
-                                                    <label onClick={() => this.onShowClick(mode.SHOW_RESTORE)}>
-                                                        {this.state.isResVisible ? "- HIDE -" : "! SHOW !"}
-                                                    </label>
-                                                </div>
-                                            )
-                                            : false
-                                        }
-                                    </div>
-                                </span>
-                            )
-                            : (
-                                <span className="wallet-amount">
-                                    <h2>BALANCE</h2>
-                                    <ul>
-                                        {this.props.account.balances ? this.props.account.balances.map(x => balance(x)) : false}
-                                    </ul>
-                                </span>
-                            )
-                        }
-                        <span className="wallet-more"
-                            onClick={() => this.onMoreClick()}>
-                            <section>
-                                <p>{this.state.isDetailVisible ? "BACK" : "MORE"}</p>
-                            </section>
-                        </span>
-                    </span>
+                    {title("ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE"))}
+                    <p id='address' onClick={() => this.openModal()}>{this.props.account.address}</p>
+                    <section className="wallet-amount">
+                        {title('BALANCE')}
+                        <ul>
+                            {this.props.account.balances ? this.props.account.balances.map(x => balance(x)) : false}
+                        </ul>
+                    </section>
                 </div>
                 <div className="wallet-operation">
                     <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_CREATE_ACCOUNT)}>CREATE ACCOUNT</SelectButton>
                     <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_UPDATE_KEY)}>UPDATE KEY</SelectButton>
                     <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_TRANSFER)}>TRANSFER</SelectButton>
                 </div>
+                <PublicKeyModal onClose={() => this.closeModal()} isOpen={this.state.isModalOpen} />
             </div>
         );
-    } s
+    }
 }
 
 const mapStateToProps = state => ({

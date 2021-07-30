@@ -12,7 +12,7 @@
 
     h1 {
         font-size: 3em;
-        font-weight: 800;
+        font-weight: 400;
         margin: 1em;
         letter-spacing: 5px;
     }
@@ -45,153 +45,8 @@
 
             .uk-keys-adder {
                 width: 100%;
-                margin: 0 0 3em 0;
-
-                .uk-key-adder {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    button {
-                        padding: 0.5em;
-                    }
-
-                    div {
-                        input {
-                            margin-right: 0.2em;
-                        }
-                    }
-                }
-
-                .uk-extra-adder {
-                    width: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: flex-start;
-                    justify-content: flex-start;
-
-                    .uk-currency-adder,
-                    .uk-thres-adder {
-                        width: 100%;
-                        height: fit-content;
-                        padding: 1em 1em 1em 0;
-                        margin-left: 0;
-                        display: flex;
-                        flex-direction: row;
-                        align-items: flex-start;
-                        justify-content: flex-start;
-
-                        p {
-                            font-size: 1em;
-                            font-weight: 500;
-
-                            text-align: center;
-
-                            margin: 0 0.5em 0 0;
-                            padding: 0.2em;
-
-                            width: fit-content;
-                            vertical-align: middle;
-                        }
-
-                        div {
-                            margin: 0;
-                            text-align: start;
-                        }
-                    }
-                }
-            }
-
-        }
-
-
-        .uk-adder {
-            width: 100%;
-            margin: 0 0 0 0;
-            padding: 0;
-
-            border-top: 5px solid white;
-            border-bottom: 5px solid white;
-
-            .uk-currency-adder {
-                margin: 3em 0 1em 0;
-            }
-
-            .uk-thres-adder {
-                margin: 0 0 3em 0;
-            }
-
-            .uk-currency-adder,
-            .uk-thres-adder {
-                width: 100%;
-
-                display: flex;
-                flex-direction: row;
-                align-items: flex-start;
-                justify-content: flex-start;
-
-                p {
-                    font-size: 1em;
-                    font-weight: 500;
-
-                    text-align: center;
-
-                    margin: 0;
-                    padding: 0.2em;
-
-                    width: fit-content;
-
-                    vertical-align: middle;
-                }
-
-                div {
-                    margin: 0;
-                    text-align: start;
-                }
-            }
-
-            .uk-key-adder {
-                width: 100%;
-                margin: 1em 0em 3em 0;
-
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                p {
-                    font-size: 1em;
-                    font-weight: 500;
-
-                    text-align: center;
-
-                    margin: 0.5em 0 0.5em 0;
-                    padding: 0.2em;
-
-                    width: 100%;
-                    align-self: start;
-
-                    color: black;
-                    background-color: white;
-                }
-
-                #adder {
-                    width: 100%;
-                    padding: 0;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    div {
-                        margin-right: 1em;
-                    }
-
-                    button {
-                        padding: 0.5em;
-                        margin: 0;
-                    }
-                }
+                margin: 0;
+                padding: 0;
             }
         }
     }

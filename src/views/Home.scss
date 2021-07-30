@@ -21,6 +21,7 @@
 
                 .home-title h1 {
                     background-size: 100% 100%;
+                    opacity: 1.0;
                 }
             }
 
@@ -55,7 +56,9 @@
                     font-weight: 600;
                     letter-spacing: 5px;
 
-                    color: lightgoldenrodyellow;
+                    color: white;
+
+                    opacity: 0.5;
 
                     width: 100%;
                     background-image: linear-gradient(to right,
@@ -66,20 +69,22 @@
                         );
                     background-size: 0 100%;
                     background-repeat: no-repeat;
-                    transition: 350ms linear;
+                    transition: 150ms linear;
                 }
             }
         }
 
         .home-open {
             letter-spacing: 5px;
-            font-size: 2em;
-            font-weight: 900;
+            font-size: 1.5em;
+            font-weight: 400;
 
             opacity: 0;
             color: black;
 
             padding: 0.2em 0.5em 0.2em 0.5em;
+            border-radius: 20px;
+            text-align: center;
         }
     }
 }

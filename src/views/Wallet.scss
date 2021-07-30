@@ -8,17 +8,11 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    align-self: center;
 
     .wallet-ref {
         margin: 0;
         padding: 0;
-    }
-
-    h1 {
-        font-size: 3em;
-        font-weight: 800;
-        margin: 0 1em 1em 1em;
-        letter-spacing: 5px;
     }
 
     .wallet-refresh {
@@ -40,7 +34,7 @@
 
             padding: 0.2em 0.5em 0.2em 0.5em;
             margin: 0;
-          
+
             text-align: center;
             border-radius: 10%;
             border: 2px solid white;
@@ -60,325 +54,101 @@
     .wallet-info {
         width: 60%;
 
-        border-top: 7px solid white;
-        border-bottom: 7px solid white;
-
         display: flex;
         align-items: center;
         flex-direction: column;
         justify-content: center;
 
         font-weight: 500;
-        padding: 2em 2em 0.5em 2em;
+        padding: 0;
         margin: 0;
 
-        .wallet-info-account {
+        #address {
+            font-size: 1.3em;
+            padding: 0.2em;
+            margin-top: 0;
+            margin-bottom: 3em;
+            font-weight: 300;
+            letter-spacing: 3px;
 
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-
-            width: 100%;
-            padding: 1em 1em 1em 0;
-            margin: 0;
-
-            h2,
-            p {
-                font-size: 1.4em;
-
-                width: 100%;
-                margin: 0.2em 0 0.2em 0;
-                padding: 0.2em 0.5em 0.2em 0.5em;
-
-                color: black;
-                background-color: white;
-
-                opacity: 0.7;
-            }
-
-            h2 {
+            &:hover {
                 text-decoration: underline;
-                font-weight: 700;
-                letter-spacing: 3px;
+                color: lightgray;
             }
 
-            p {
-                font-weight: 500;
-                letter-spacing: 2px;
-
-                &:hover {
-                    color: gray;
-                    text-decoration: underline;
-                }
+            &:active {
+                color: cyan;
             }
         }
 
-        .wallet-info-detail {
-            width: 100%;
-            padding: 1em 1em 1em 0;
-            margin: 0;
+        .wallet-amount {
 
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            align-items: center;
+            width: 100%;
 
-            .wallet-amount {
-
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-
-                h2,
-                ul {
-                    font-size: 1.4em;
-
-                    width: 100%;
-                    margin: 0.2em 0 0.2em 0;
-
-                    color: black;
-                }
-
-                h2 {
-                    background-color: white;
-                    padding: 0.2em 0.5em 0.2em 0.5em;
-                    text-decoration: underline;
-                    letter-spacing: 3px;
-
-                    opacity: 0.7;
-                }
-
-                ul {
-
-                    padding: 0;
-
-                    li {
-                        width: 100%;
-                        margin: 0;
-                        padding: 0.2em 0.5em 0.2em 0.5em;
-
-                        display: flex;
-                        flex-direction: row;
-                        align-items: flex-start;
-
-                        background-color: white;
-
-                        opacity: 0.7;
-
-                        .currency,
-                        .amount {
-                            display: inline-block;
-                            text-align: start;
-                            letter-spacing: 2px;
-                        }
-
-                        .currency {
-                            width: 70%;
-                        }
-
-                        .amount {
-                            width: 30%;
-                        }
-
-                    }
-                }
-
-            }
-
-            .wallet-more {
+            ul {
                 width: 100%;
-                font-size: 1.4em;
-                font-weight: 800;
-                letter-spacing: 15px;
-                padding: 0 0 0 1em;
-                margin: 0 0 0 0;
+                height: 150px;
+                overflow-y: auto;
+                overflow-x: hidden;
 
-                section {
-                    color: white;
+                margin: 0;
+                padding: 0;
+                border: 1px solid white;
+
+                li {
                     width: 100%;
-
+                    margin: 0;
+                    padding: 0;
 
                     display: flex;
                     flex-direction: row;
                     align-items: center;
-                    text-align: center;
-                    justify-content: center;
 
-                    text-decoration: none;
-                    background-image: linear-gradient(to right, lightslategray, lightslategray 100%);
-                    background-size: 0 50%;
-                    background-repeat: no-repeat;
-                    transition: background .5s;
-                    background-position: 0;
-                    line-height: 1.5;
+                    font-weight: 300;
 
-                    &:hover {
+                    opacity: 0.8;
+
+                    .currency,
+                    .amount {
+                        display: inline-block;
+                        letter-spacing: 2px;
+
+                        overflow: visible;
+                        white-space: pre-wrap;
+                        word-break: break-all;
+                        
+                        margin: 1px;
+                        padding: 0.5em;
+
                         color: black;
-                        background-size: 100% 50%;
                     }
 
-                    &:active {
-                        color: red;
-                        background-size: 100% 50%;
+                    .currency {
+                        width: 35%;
+                        text-align: center;
+                        background-color: white;
                     }
 
-                    .more-up {
-                        display: none;
+                    .amount {
+                        width: 70%;
+                        text-align: end;
+                        background-color: beige;
                     }
 
-                    .more-down {
-                        display: inherit;
-                    }
                 }
             }
 
-            .wallet-more-detail {
-                display: none;
-                width: 100%;
-                padding: 0;
-                margin: 0;
-
-                div {
-                    display: flex;
-                    width: 100%;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: left;
-                    padding: 0;
-                    margin: 0;
-
-                    .wallet-priv-key,
-                    .wallet-res-key {
-                        width: 100%;
-                        padding: 1em 0 1em 0;
-                        margin: 0.5em 0 0.5em 0;
-
-                        h2,
-                        p {
-                            font-size: 1.4em;
-
-                            width: 100%;
-                            margin: 0.2em 0 0.2em 0;
-                            padding: 0.2em 0.5em 0.2em 0.5em;
-
-                            color: black;
-                            background-color: white;
-
-                            opacity: 0.7;
-                        }
-
-                        h2 {
-                            text-decoration: underline;
-                            font-weight: 700;
-                            letter-spacing: 3px;
-                        }
-
-                        p {
-                            font-weight: 500;
-                            letter-spacing: 2px;
-
-                            &:hover {
-                                color: gray;
-                                text-decoration: underline;
-                            }
-                        }
-
-                        label {
-                            width: 100%;
-
-                            color: white;
-                            font-size: 1.2em;
-                            letter-spacing: 3px;
-                            padding: 0.5em 0.5em 0.5em 0.5em;
-                            margin: 0.5em 0 0 0;
-
-                            display: inline-block;
-                            text-align: center;
-
-                            text-decoration: none;
-                            background-image: linear-gradient(to right, lightslategray, lightslategray 100%);
-                            background-size: 0 50%;
-                            background-repeat: no-repeat;
-                            transition: background .5s;
-                            background-position: 0;
-                            line-height: 1.5;
-
-
-                            &:hover {
-                                color: black;
-                                background-size: 100% 50%;
-                            }
-
-                            &:active {
-                                color: red;
-                                background-size: 100% 50%;
-                            }
-
-                            .more-up {
-                                display: none;
-                            }
-
-                            .more-down {
-                                display: inherit;
-                            }
-                        }
-                    }
-
-                    .wallet-pub-key {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-start;
-                        margin: 0.5em 0 0.5em 0;
-
-                        h2,
-                        ul {
-                            font-size: 1.4em;
-
-                            width: 100%;
-                            margin: 0.2em 0 0.2em 0;
-
-                            color: black;
-                        }
-
-                        h2 {
-                            background-color: white;
-                            padding: 0.2em 0.5em 0.2em 0.5em;
-                            text-decoration: underline;
-                            letter-spacing: 3px;
-
-                            opacity: 0.7;
-                        }
-
-                        ul {
-
-                            padding: 0;
-
-                            li {
-                                width: 100%;
-                                margin: 0;
-                                padding: 0.2em 0.5em 0.2em 0.5em;
-
-
-                                text-align: start;
-                                background-color: white;
-
-                                opacity: 0.7;
-
-                                letter-spacing: 2px;
-
-                                &:hover {
-                                    color: gray;
-                                    text-decoration: underline;
-                                }
-
-                            }
-                        }
-
-                    }
-                }
+            .wallet-operation {
+                width: 60%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
             }
+
         }
-
-        
     }
 }

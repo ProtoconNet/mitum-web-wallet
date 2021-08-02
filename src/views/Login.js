@@ -49,8 +49,7 @@ class Login extends React.Component {
             )
             .catch(
                 e => {
-                    alert('트랜잭션 이력 조회 실패! :(\n잠시 후 다시 시도해보세요.')
-                    console.log(e);
+                    this.props.setHistory(null, addr);
                 }
             )
 
@@ -117,7 +116,7 @@ class Login extends React.Component {
         return (
             <div className="login-container">
                 <h1>OPEN WALLET</h1>
-                {this.props.history && this.props.isLogin ? <Redirect to={`/wallet/${this.props.account.address}`} /> : false}
+                {this.props.isLoadHistory && this.props.isLogin ? <Redirect to={`/wallet/${this.props.account.address}`} /> : false}
                 <div className="login-radio" style={this.state.isActive ? {} : { display: "none" }}>
                     <label className="rad-label">
                         <input type="radio" className="rad-input" value={SHOW_PRIVATE} name="rad"
@@ -142,7 +141,8 @@ class Login extends React.Component {
 const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
-    history: state.login.history
+    history: state.login.history,
+    isLoadHistory: state.login.isLoadHistory
 });
 
 const mapDispatchToProps = dispatch => ({

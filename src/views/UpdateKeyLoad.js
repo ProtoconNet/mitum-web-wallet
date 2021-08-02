@@ -68,7 +68,7 @@ class UpdateKeyLoad extends React.Component {
 
             setTimeout((hs, rs, broad) => {
                 getResult(hs, rs, broad);
-            }, 5000, data, res, isBroadcast);
+            }, 2000, data, res, isBroadcast);
 
             return () => this.getResponse();
         }

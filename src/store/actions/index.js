@@ -9,6 +9,9 @@ export const CLEAR_HISTORY = 'CLEAR_HISTORY';
 export const SET_OPERATION = 'SET_OPERATION';
 export const SET_RESPONSE = 'SET_RESPONSE';
 
+export const ENQUEUE_OPERATION = 'ENQUEUE_OPERATION';
+export const DEQUEUE_OPERATION = 'DEQUEUE_OPERATION';
+
 export function login(address, privateKey, data) {
     const account = new Account(address, privateKey, data);
     return {
@@ -31,6 +34,13 @@ export function logout() {
 }
 
 export function setHistory(data, me) {
+    if(!data) {
+        return {
+            type: SET_HISTORY,
+            history: [],
+        }
+    }
+
     const histories = data._embedded.map(x => new History(x._embedded, me));
     const splitHistories = [];
 
@@ -58,7 +68,7 @@ export function setHistory(data, me) {
 
     return {
         type: SET_HISTORY,
-        history: splitHistories
+        history: splitHistories,
     }
 }
 
@@ -84,5 +94,18 @@ export function setResponse(isBroadcast, isStateIn, res, status, data) {
         res,
         status,
         data,
+    }
+}
+
+export function enqueueOperation(hash) {
+    return {
+        type: ENQUEUE_OPERATION,
+        hash,
+    }
+}
+
+export function dequeueOperation() {
+    return {
+        type: DEQUEUE_OPERATION
     }
 }

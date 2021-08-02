@@ -3,7 +3,8 @@ import * as actions from '../actions';
 const initialState = {
     isLogin: false,
     account: undefined,
-    history: undefined
+    history: undefined,
+    isLoadHistory: false
 }
 
 export const reducer = (state = initialState, action) => {
@@ -23,12 +24,14 @@ export const reducer = (state = initialState, action) => {
         case actions.SET_HISTORY:
             return {
                 ...state,
-                history: action.history
+                history: action.history,
+                isLoadHistory: true
             }
         case actions.CLEAR_HISTORY:
             return {
                 ...state,
-                history: undefined
+                history: undefined,
+                isLoadHistory: false
             }
         default:
             return state;

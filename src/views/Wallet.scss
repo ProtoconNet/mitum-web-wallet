@@ -169,7 +169,7 @@
 
         ul {
             width: 100%;
-            height: 150px;
+            height: 200px;
             overflow-y: auto;
             overflow-x: hidden;
 
@@ -271,6 +271,21 @@
                 #amount {
                     color: black;
                 }
+            }
+        }
+
+        #pend {
+            width: 100%;
+            text-align: end;
+
+            text-decoration: underline;
+
+            &:hover {
+                color: blue;
+            }
+
+            &:active {
+                color: cyan;
             }
         }
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router-dom';
-import { setOperation, setResponse } from '../store/actions';
+import { enqueueOperation, setOperation, setResponse } from '../store/actions';
 import copy from 'copy-to-clipboard';
 
 import './Response.scss';
@@ -27,6 +27,11 @@ class Response extends React.Component {
         super(props);
 
         const isSignOut = this.props.operation === OPER_UPDATE_KEY;
+
+        if(!isSignOut && this.props.isBroadcast) {
+            this.props.addJob(this.props.json.fact.hash);
+        }
+
         this.state = {
             isRedirect: false,
             isModalOpen: isSignOut,
@@ -74,9 +79,10 @@ class Response extends React.Component {
                     </section>
                 )
             case 400:
+            case 404:
                 return (
                     <section className={"res-detail fail"}>
-                        <h1>{"400 FAIL... :("}</h1>
+                        <h1>{"FAIL... :("}</h1>
                         <p>{res.title}</p>
                     </section>
                 )
@@ -111,6 +117,7 @@ class Response extends React.Component {
 
 const mapStateToProps = state => ({
     operation: state.operation.operation,
+    json: state.operation.json,
     data: state.operation.data,
     res: state.operation.res,
     status: state.operation.status,
@@ -121,6 +128,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearJson: () => dispatch(setOperation(OPER_DEFAULT, {})),
     setResult: (isBroadcast, isStateIn, res, status, data) => dispatch(setResponse(isBroadcast, isStateIn, res, status, data)),
+    addJob: (hash) => dispatch(enqueueOperation(hash))
 });
 
 export default withRouter(connect(

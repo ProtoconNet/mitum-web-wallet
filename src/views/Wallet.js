@@ -1,16 +1,22 @@
 import React, { createRef } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { login } from '../store/actions';
+import { dequeueOperation, login } from '../store/actions';
 import './Wallet.scss';
 
 import copy from 'copy-to-clipboard';
 
 import SelectButton from '../components/buttons/SelectButton';
 import PublicKeyModal from '../components/modals/PublicKeyModal';
+import PendingModal from '../components/modals/PendingModal';
+import axios from 'axios';
 
 import * as mode from '../text/mode';
 import { isAccountValid } from '../lib/Validation';
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const balance = (bal) => {
     return (
@@ -68,6 +74,10 @@ const title = (content) => {
     )
 }
 
+const getFactInState = async (hash) => {
+    return await axios.get(process.env.REACT_APP_API_SEARCH_FACT + hash);
+}
+
 class Wallet extends React.Component {
 
     constructor(props) {
@@ -78,11 +88,47 @@ class Wallet extends React.Component {
         this.state = {
             restoreKey: undefined,
 
-            isModalOpen: false,
+            isPubModalOpen: false,
+            isPendModalOpen: false,
+            isQueueUpdate: 1,
 
             isRedirect: this.props.isLogin ? false : true,
             redirect: this.props.isLogin ? undefined : mode.PAGE_LOGIN,
             operation: undefined
+        }
+    }
+
+    async checkInState() {
+        console.log(this.props.queue);
+        while (!this.props.queue.isEmpty()) {
+            const target = this.props.queue.target;
+
+            if (!target) {
+                break;
+            }
+
+            var isResult = false;
+            getFactInState(target)
+                .then(
+                    res => {
+                        if (res.request.status === 200) {
+                            this.props.deleteJob();
+                            this.setState({ isQueueUpdate: this.state.isQueueUpdate + 1 });
+                        }
+                    }
+                )
+                .catch(
+                    e => {
+                        console.log(e);
+                    }
+                )
+                .finally(() => {
+                    isResult = true;
+                });
+
+            while (!isResult) {
+                await sleep(500);
+            }
         }
     }
 
@@ -145,6 +191,14 @@ class Wallet extends React.Component {
 
     componentDidMount() {
         this.scrollToAccount();
+        this.checkInState();
+
+        setTimeout(() => {
+            this.setState({
+                isRedirect: true,
+                redirect: mode.PAGE_LOGIN
+            })
+        }, 5000);
     }
 
     componentDidUpdate() {
@@ -157,28 +211,26 @@ class Wallet extends React.Component {
         }
     }
 
-    refresh() {
-        this.setState({
-            isRedirect: true,
-            redirect: mode.PAGE_LOGIN
-        })
+    closePubModal() {
+        this.setState({ isPubModalOpen: false });
     }
 
-    closeModal() {
-        this.setState({ isModalOpen: false });
+    openPubModal() {
+        this.setState({ isPubModalOpen: true });
     }
 
-    openModal() {
-        this.setState({ isModalOpen: true });
+    closePendModal() {
+        this.setState({ isPendModalOpen: false });
+    }
+
+    openPendModal() {
+        this.setState({ isPendModalOpen: true });
     }
 
     render() {
         return (
             <div className="wallet-container">
                 {this.renderRedirect()}
-                <span className="wallet-refresh" >
-                    <p onClick={() => this.refresh()}>⟳</p>
-                </span>
                 <div className="wallet-ref" ref={this.walletRef}></div>
                 <div className="wallet-info">
                     {title("ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE"))}
@@ -198,10 +250,14 @@ class Wallet extends React.Component {
                 <div className="wallet-history">
                     {title('HISTORY')}
                     <ul>
-                        {this.props.history.map(x => history(x))}
+                        {this.props.history.length > 0 ? this.props.history.map(x => history(x)) : false}
                     </ul>
+                    <p id='pend' onClick={() => this.openPendModal()}>
+                        {this.state.isQueueUpdate ? `${this.props.queue.length} 개의 작업을 처리 중입니다.` : false}
+                    </p>
                 </div>
-                <PublicKeyModal onClose={() => this.closeModal()} isOpen={this.state.isModalOpen} />
+                <PublicKeyModal onClose={() => this.closePubModal()} isOpen={this.state.isPubModalOpen} />
+                <PendingModal onClose={() => this.closePendModal()} isOpen={this.state.isPendModalOpen} />
             </div>
         );
     }
@@ -210,11 +266,13 @@ class Wallet extends React.Component {
 const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
-    history: state.login.history
+    history: state.login.history,
+    queue: state.queue.queue
 });
 
 const mapDispatchToProps = dispatch => ({
     signIn: (address, privateKey, data) => dispatch(login(address, privateKey, data)),
+    deleteJob: () => dispatch(dequeueOperation())
 });
 
 export default withRouter(connect(

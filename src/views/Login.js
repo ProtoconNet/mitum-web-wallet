@@ -17,7 +17,7 @@ const getAccountInformation = async (account) => {
 }
 
 const getAccountHistory = async (account) => {
-    return await axios.get(`${process.env.REACT_APP_API_ACCOUNT}${account}/operations`);
+    return await axios.get(`${process.env.REACT_APP_API_ACCOUNT}${account}/operations?reverse=1`);
 }
 
 class Login extends React.Component {

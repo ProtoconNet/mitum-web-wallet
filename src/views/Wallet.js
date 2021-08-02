@@ -193,10 +193,7 @@ class Wallet extends React.Component {
         this.checkInState();
 
         setTimeout(() => {
-            this.setState({
-                isRedirect: true,
-                redirect: mode.PAGE_LOGIN
-            })
+            this.refresh();
         }, 5000);
     }
 
@@ -226,11 +223,19 @@ class Wallet extends React.Component {
         this.setState({ isPendModalOpen: true });
     }
 
+    refresh() {
+        this.setState({
+            isRedirect: true,
+            redirect: mode.PAGE_LOGIN
+        });
+    }
+
     render() {
         return (
             <div className="wallet-container">
                 {this.renderRedirect()}
                 <div className="wallet-ref" ref={this.walletRef}></div>
+                <div id='wallet-refresh'><p onClick={() => this.refresh()}>↻</p></div>
                 <div className="wallet-info">
                     {title("ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE"))}
                     <p id='address' onClick={() => this.openPubModal()}>{this.props.account.address}</p>

@@ -77,7 +77,7 @@ class OperationConfirm extends React.Component {
     render() {
         const { isOpen, onClose, json, filename, download } = this.props;
         return (
-            <div className={isOpen ? 'openModal modal' : 'modal'}>
+            <div className={isOpen ? 'oper-openModal oper-modal' : 'oper-modal'}>
                 {this.state.isRedirect ? this.renderRedirect() : false}
                 {isOpen ? (
                     <section>
@@ -86,14 +86,15 @@ class OperationConfirm extends React.Component {
                             <button className="close" onClick={onClose}> &times; </button>
                         </header>
                         <main>
-                            <p>전송 버튼을 누른 후에는 작업을 되돌릴 수 없습니다. 작업 내용이 정확한가요?</p>
+                            <p id='oper-exp'>전송 버튼을 누른 후에는 작업을 되돌릴 수 없습니다.</p>
+                            <p id='oper-exp'>작업 내용이 정확한가요?</p>
                             <span>
-                                <p className="modal-button" id="no" onClick={onClose}>{"취소!:("}</p>
-                                <a className="modal-button" id="no" target="_blank" download={`${filename}.json`}
+                                <p className="oper-modal-button" id="no" onClick={onClose}>{"취소!:("}</p>
+                                <a className="oper-modal-button" id="no" target="_blank" download={`${filename}.json`}
                                     href={download} rel="noreferrer">
                                     {"JSON 파일 다운로드!:["}
                                 </a>
-                                <p className="modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
+                                <p className="oper-modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
                             </span>
                         </main>
                     </section>

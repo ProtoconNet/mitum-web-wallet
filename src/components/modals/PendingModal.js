@@ -29,7 +29,7 @@ class PendingModal extends React.Component {
     render() {
         const { isOpen, onClose, queue } = this.props;
         return (
-            <div className={isOpen ? 'openModal modal' : 'modal'}>
+            <div className={isOpen ? 'pend-openModal pend-modal' : 'pend-modal'}>
                 {isOpen ? (
                     <section>
                         <header>

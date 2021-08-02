@@ -1,4 +1,4 @@
-.modal {
+.oper-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -17,7 +17,7 @@
     }
 
     section {
-        width: 90%;
+        width: 35%;
         max-width: 450px;
         margin: 0 auto;
         border-radius: .3rem;
@@ -87,6 +87,11 @@
                     color: darkslategray;
                 }
             }
+
+            #oper-exp {
+                padding: 3px;
+                margin: 0;
+            }
         }
 
         footer {
@@ -104,7 +109,7 @@
     }
 }
 
-.openModal {
+.oper-openModal {
     display: flex;
     align-items: center;
     animation: modal-bg-show .3s;

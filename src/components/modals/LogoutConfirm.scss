@@ -1,4 +1,4 @@
-.modal {
+.logout-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -17,7 +17,7 @@
     }
 
     section {
-        width: 90%;
+        width: 60%;
         max-width: 450px;
         margin: 0 auto;
         border-radius: .3rem;
@@ -59,7 +59,7 @@
                 flex-direction: row;
                 align-items: center;
 
-                .modal-button {
+                .logout-modal-button {
                     text-decoration: underline;
                     text-align: center;
 
@@ -78,6 +78,12 @@
                     }
                 }
             }
+
+            #logout-exp {
+                width: 100%;
+                padding: 3px;
+                margin: 0;
+            }
         }
 
         footer {
@@ -95,7 +101,7 @@
     }
 }
 
-.openModal {
+.logout-openModal {
     display: flex;
     align-items: center;
     animation: modal-bg-show .3s;

@@ -30,6 +30,14 @@ class UpdateKeyLoad extends React.Component {
             const { data, res, isBroadcast } = this.props;
 
             const getResult = async (_hash, _res, isBroadcast) => {
+                if(!isBroadcast) {
+                    this.setState({
+                        isRedirect: true
+                    })
+
+                    return;
+                }
+
                 return await axios.get(process.env.REACT_APP_API_SEARCH_FACT + _hash)
                     .then(
                         response => {
@@ -51,7 +59,7 @@ class UpdateKeyLoad extends React.Component {
                     )
                     .catch(
                         e => {
-                            if (e.response.data.status === 404) {
+                            if (e.response.data.status === 404 || e.response.data.status === 400) {
                                 this.setState({
                                     counter: this.state.counter + 1
                                 })
@@ -92,7 +100,7 @@ class UpdateKeyLoad extends React.Component {
                 {this.renderRedirect()}
                 <section className="load-detail">
                     <h1>Loading...</h1>
-                    <p>{"키 업데이트 성공 여부를 조회 중입니다. 잠시만 기다려주세요! >~<"}</p>
+                    <p>{"키 업데이트 성공 여부를 조회 중입니다. 잠시만 기다려주세요."}</p>
                     <p>{`REQUEST COUNT: ${this.state.counter}`}</p>
                 </section>
             </div>

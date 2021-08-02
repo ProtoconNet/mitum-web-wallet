@@ -13,7 +13,7 @@ class LogoutConfirm extends React.Component {
     render() {
         const { isOpen } = this.props;
         return (
-            <div className={isOpen ? 'openModal modal' : 'modal'}>
+            <div className={isOpen ? 'logout-openModal logout-modal' : 'logout-modal'}>
                 {isOpen ? (
                     <section>
                         <header>
@@ -21,9 +21,10 @@ class LogoutConfirm extends React.Component {
                             <button className="close" onClick={() => this.onLogout()}> &times; </button>
                         </header>
                         <main>
-                            <p>{"지갑이 닫힙니다. 변경된 비밀키로 지갑을 다시 열어주세요.\n* 작업 실패 시에는 기존 비밀키를 사용해야 합니다."}</p>
+                            <p id='logout-exp'>지갑이 닫힙니다. 변경된 비밀키로 지갑을 다시 열어주세요.</p>
+                            <p id='logout-exp'>* 작업 실패 시에는 기존 비밀키를 사용해야 합니다.</p>
                             <span>
-                                <p className="modal-button" id="confirm" onClick={() => this.onLogout()}>확인</p>
+                                <p className="logout-modal-button" id="confirm" onClick={() => this.onLogout()}>확인</p>
                             </span>
                         </main>
                     </section>

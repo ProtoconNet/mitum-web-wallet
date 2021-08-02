@@ -233,7 +233,7 @@ class Wallet extends React.Component {
                 <div className="wallet-ref" ref={this.walletRef}></div>
                 <div className="wallet-info">
                     {title("ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE"))}
-                    <p id='address' onClick={() => this.openModal()}>{this.props.account.address}</p>
+                    <p id='address' onClick={() => this.openPubModal()}>{this.props.account.address}</p>
                     <section className="wallet-amount">
                         {title('BALANCE')}
                         <ul>

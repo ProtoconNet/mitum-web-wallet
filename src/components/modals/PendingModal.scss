@@ -1,4 +1,4 @@
-.modal {
+.pend-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -11,9 +11,9 @@
     color: black;
 
     section {
-        width: 100%;
-        max-width: 670px;
-        min-width: 650px;
+        width: 90%;
+        max-width: 780px;
+        min-width: 750px;
         margin: 0 auto;
         border-radius: .3rem;
         background-color: white;
@@ -85,7 +85,7 @@
     }
 }
 
-.openModal {
+.pend-openModal {
     display: flex;
     align-items: center;
     animation: modal-bg-show .3s;

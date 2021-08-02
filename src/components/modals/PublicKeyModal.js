@@ -20,7 +20,7 @@ class PublicKeyModal extends React.Component {
     render() {
         const { isOpen, onClose, account } = this.props;
         return (
-            <div className={isOpen ? 'openModal modal' : 'modal'}>
+            <div className={isOpen ? 'pub-openModal pub-modal' : 'pub-modal'}>
                 {isOpen ? (
                     <section>
                         <header>

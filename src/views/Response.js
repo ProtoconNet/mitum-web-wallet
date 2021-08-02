@@ -28,8 +28,12 @@ class Response extends React.Component {
 
         const isSignOut = this.props.operation === OPER_UPDATE_KEY;
 
-        if(!isSignOut && this.props.isBroadcast) {
-            this.props.addJob(this.props.json.fact.hash);
+        if (!isSignOut && this.props.isBroadcast) {
+            this.props.addJob({
+                operation: this.props.operation,
+                hash: this.props.json.fact.hash,
+                broadcastedAt: new Date().toISOString(),
+            });
         }
 
         this.state = {
@@ -52,8 +56,8 @@ class Response extends React.Component {
                     <section className={"res-detail success"}>
                         {
                             operation === OPER_UPDATE_KEY
-                            ? <h1>KEY UPDATE SUCCESS~ :D</h1>
-                            : <h1>BROADCAST SUCCESS~ :D</h1>
+                                ? <h1>KEY UPDATE SUCCESS~ :D</h1>
+                                : <h1>BROADCAST SUCCESS~ :D</h1>
                         }
                         <div>
                             {operation === OPER_CREATE_ACCOUNT
@@ -80,24 +84,18 @@ class Response extends React.Component {
                 )
             case 400:
             case 404:
-                return (
-                    <section className={"res-detail fail"}>
-                        <h1>{"FAIL... :("}</h1>
-                        <p>{res.title}</p>
-                    </section>
-                )
             default:
                 return (
                     <section className={"res-detail fail"}>
                         <h1>{"FAIL... :("}</h1>
-                        <p>응답을 받지 못했습니다.</p>
+                        <p>{Object.prototype.hasOwnProperty.call(res, 'title') ? res.title : "응답을 받지 못했습니다."}</p>
                     </section>
-                )
+                );
         }
     }
 
     renderRedirect() {
-        if(this.state.isRedirect) {
+        if (this.state.isRedirect) {
             this.props.clearJson();
             return <Redirect to='/login' />;
         }
@@ -109,7 +107,7 @@ class Response extends React.Component {
             <div className="res-container">
                 {this.renderRedirect()}
                 {this.renderResponse()}
-                <LogoutConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}/>
+                <LogoutConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
             </div>
         )
     }

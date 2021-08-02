@@ -8,7 +8,7 @@ class Queue {
     }
 
     deque() {
-        return this.queue.shift();
+        this.queue.shift();
     }
 
     isEmpty() {

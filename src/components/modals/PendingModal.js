@@ -3,15 +3,24 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import copy from 'copy-to-clipboard';
 
-import "./PublicKeyModal.scss";
+import "./PendingModal.scss";
+import { OPER_CREATE_ACCOUNT, OPER_TRANSFER } from '../../text/mode';
 
-const job = (hs) => {
+const job = (x) => {
     return (
-        <li key={hs}
-            onClick={() => {
-                copy(hs);
-                alert('copied');
-            }}>{hs}</li>
+        <li key={x.hash}
+            onClick={() => { copy(x.hash); alert('copied'); }}>
+            <p>{x.broadcastedAt}</p>
+            <p>{x.operation === OPER_CREATE_ACCOUNT
+                ? 'CREATE-ACCOUNT'
+                : (
+                    x.operation === OPER_TRANSFER
+                        ? 'TRANSFER'
+                        : 'UPDATE-KEY'
+                )
+            }</p>
+            <p>{x.hash}</p>
+        </li>
     );
 }
 

@@ -11,6 +11,7 @@ export const SET_RESPONSE = 'SET_RESPONSE';
 
 export const ENQUEUE_OPERATION = 'ENQUEUE_OPERATION';
 export const DEQUEUE_OPERATION = 'DEQUEUE_OPERATION';
+export const CLEAR_QUEUE = 'CLEAR_QUEUE';
 
 export function login(address, privateKey, data) {
     const account = new Account(address, privateKey, data);
@@ -97,15 +98,21 @@ export function setResponse(isBroadcast, isStateIn, res, status, data) {
     }
 }
 
-export function enqueueOperation(hash) {
+export function enqueueOperation(item) {
     return {
         type: ENQUEUE_OPERATION,
-        hash,
+        item,
     }
 }
 
 export function dequeueOperation() {
     return {
         type: DEQUEUE_OPERATION
+    }
+}
+
+export function clearQueue() {
+    return {
+        type: CLEAR_QUEUE
     }
 }

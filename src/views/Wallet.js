@@ -99,7 +99,6 @@ class Wallet extends React.Component {
     }
 
     async checkInState() {
-        console.log(this.props.queue);
         while (!this.props.queue.isEmpty()) {
             const target = this.props.queue.target;
 
@@ -108,7 +107,7 @@ class Wallet extends React.Component {
             }
 
             var isResult = false;
-            getFactInState(target)
+            getFactInState(target.hash)
                 .then(
                     res => {
                         if (res.request.status === 200) {

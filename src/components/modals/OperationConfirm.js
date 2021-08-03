@@ -53,9 +53,16 @@ class OperationConfirm extends React.Component {
             }
         ).catch(
             e => {
-                this.props.setResult(false, false, e.response.data, e.response.data.status, undefined);
+
+                try {
+                    this.props.setResult(false, false, e.response.data, e.response.data.status, undefined);
+                }
+                catch(error) {
+                    this.props.setResult(false, false, {
+                        title: '404 Network Error'
+                    }, 404, undefined);
+                }
                 this.setState({ isRedirect: true });
-                alert('작업을 전송할 수 없습니다.\n네트워크를 확인해주세요.');
             }
         );
     }
@@ -69,7 +76,7 @@ class OperationConfirm extends React.Component {
             case OPER_UPDATE_KEY:
                 return <Redirect to='/loading'/>;
             default:
-                alert('잘못된 작업입니다!\n지갑 페이지로 이동합니다.');
+                alert('처리할 수 없는 타입의 작업입니다 :(\n지갑 페이지로 이동합니다.');
                 return <Redirect to='/login' />;
         }
     }

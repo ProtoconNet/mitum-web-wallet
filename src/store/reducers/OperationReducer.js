@@ -4,7 +4,7 @@ import download from '../../lib/Url';
 
 const initialState = {
     operation: mode.OPER_DEFAULT,
-    json: {},
+    json: null,
     data: [],
     download: undefined,
     filename: "",
@@ -17,9 +17,10 @@ const initialState = {
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actions.SET_OPERATION:
-            if(action.operation === mode.OPER_DEFAULT){
+            if(action.operation === mode.OPER_DEFAULT) {
                 return initialState;
-            }
+            }            
+
             return {
                 ...state,
                 operation: action.operation,

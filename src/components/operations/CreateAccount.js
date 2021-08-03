@@ -18,6 +18,8 @@ import AmountAdder from '../adders/AmountAdder';
 import { Generator } from 'mitumc';
 
 import { OPER_CREATE_ACCOUNT } from '../../text/mode';
+import { isAmountValid, isCurrencyValid, isDuplicate, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
+import AlertModal from '../modals/AlertModal';
 
 class CreateAccount extends React.Component {
     constructor(props) {
@@ -44,7 +46,24 @@ class CreateAccount extends React.Component {
             amount: "",
 
             isModalOpen: false,
+            isAlertOpen: false,
+            alertTitle: '',
+            alertMsg: ''
         }
+    }
+
+    openAlert(title, msg) {
+        this.setState({
+            isAlertOpen: true,
+            alertTitle: title,
+            alertMsg: msg
+        })
+    }
+
+    closeAlert() {
+        this.setState({
+            isAlertOpen: false
+        })
     }
 
     closeModal() {
@@ -52,6 +71,11 @@ class CreateAccount extends React.Component {
     }
 
     onClick() {
+        if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold)) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', '모든 weight들의 합은 threshold 이상이어야 합니다.');
+            return;
+        }
+
         try {
             const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
             const account = this.props.account;
@@ -84,7 +108,7 @@ class CreateAccount extends React.Component {
         }
         catch (e) {
             console.log(e);
-            alert('작업을 생성할 수 없습니다. :(\n입력하신 작업 내용을 확인해주세요~');
+            this.openAlert('작업을 생성할 수 없습니다 :(', '입력하신 작업 내용을 확인해 주세요.');
         }
     }
 
@@ -119,6 +143,26 @@ class CreateAccount extends React.Component {
     }
 
     addKey() {
+        if (!isThresholdValid(this.state.threshold)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 threshold입니다. threshold를 먼저 입력해주세요. (0 < threshold <=100)');
+            return;
+        }
+
+        if (!isPublicKeyValid(this.state.publicKey)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 public key입니다.');
+            return;
+        }
+
+        if (!isWeightValid(this.state.weight)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 weight입니다.');
+            return;
+        }
+
+        if (isDuplicate(this.state.publicKey, this.state.keys.map(x => x.key))) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '이미 리스트에 중복된 키가 존재합니다.');
+            return;
+        }
+
         this.setState({
             keys: [...this.state.keys, {
                 key: this.state.publicKey,
@@ -130,6 +174,21 @@ class CreateAccount extends React.Component {
     }
 
     addAmount() {
+        if (!isCurrencyValid(this.state.currency)) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency id입니다.');
+            return;
+        }
+
+        if (!isAmountValid(this.state.amount)) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
+            return;
+        }
+
+        if(isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
+            return;
+        }
+
         this.setState({
             amounts: [...this.state.amounts, {
                 currency: this.state.currency,
@@ -198,6 +257,8 @@ class CreateAccount extends React.Component {
                     onClick={() => this.onClick()}>CREATE</ConfirmButton>
 
                 <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
+                <AlertModal isOpen={this.state.isAlertOpen} onClose={() => this.closeAlert()}
+                    title={this.state.alertTitle} msg={this.state.alertMsg} />
             </div>
         );
     }

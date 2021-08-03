@@ -13,8 +13,9 @@ import { Signer } from 'mitumc';
 import OperationConfirm from '../components/modals/OperationConfirm';
 
 import { TYPE_CREATE_ACCOUNT, TYPE_UPDATE_KEY, TYPE_TRANSFER } from '../text/mode';
-import { isOperation, isStateValid } from '../lib/Validation';
+import { isDuplicate, isOperation, isStateValid } from '../lib/Validation';
 import { OPER_CREATE_ACCOUNT, OPER_DEFAULT, OPER_TRANSFER, OPER_UPDATE_KEY } from '../text/mode';
+import AlertModal from '../components/modals/AlertModal';
 
 const onCopy = (msg) => {
     copy(msg);
@@ -27,12 +28,6 @@ const preStyle = {
     margin: '0',
     overflow: 'visible',
     whiteSpace: "pre-wrap"
-}
-
-const sig = (x) => {
-    return (
-        <li key={x}>{x}</li>
-    );
 }
 
 const getOperationFromType = (type) => {
@@ -64,16 +59,32 @@ class Sign extends React.Component {
             return;
         }
 
-        this.props.setJson(OPER_DEFAULT, {});
+        this.props.setJson(OPER_DEFAULT, null);
 
         this.state = {
             isRedirect: false,
-            type: "",
-            sigs: [],
 
             isModalOpen: false,
-            isJsonOpen: false
+            isJsonOpen: false,
+
+            isAlertOpen: false,
+            alertTitle: '',
+            alertMsg: ''
         }
+    }
+
+    openAlert(title, msg) {
+        this.setState({
+            isAlertOpen: true,
+            alertTitle: title,
+            alertMsg: msg
+        })
+    }
+
+    closeAlert() {
+        this.setState({
+            isAlertOpen: false,
+        })
     }
 
     closeModal() {
@@ -117,34 +128,29 @@ class Sign extends React.Component {
     importJSON(e) {
         const file = e.target.files[0];
         const reader = new FileReader();
-        const json = this.props.json;
 
-        try {
-            reader.onload = () => {
+        reader.onload = () => {
+            const json = this.props.json;
+            try {
                 const parsed = JSON.parse(reader.result);
                 if (!isOperation(parsed)) {
-                    alert('유효하지 않은 작업 파일입니다.');
+                    this.openAlert('파일을 불러올 수 없습니다 :(', '[memo, hash, _hint, fact, fact_signs]를 포함한 JSON 파일을 사용해 주세요.');
                 }
                 else {
                     const operation = getOperationFromType(parsed._hint);
                     this.props.setJson(operation, parsed);
-                    this.setState({
-                        type: parsed._hint,
-                        sigs: parsed.fact_signs.map(x => x.signature),
-                    })
                 }
-            };
-            reader.readAsText(file, "utf-8");
-        } catch (e) {
-            const operation = getOperationFromType(json._hint);
+            }
+            catch (e) {
+                if (json) {
+                    const operation = getOperationFromType(json._hint);
+                    this.props.setJson(operation, json);
+                }
+                this.openAlert('파일을 불러올 수 없습니다 :(', 'JSON 형식의 파일을 사용해 주세요.');
+            }
+        };
+        reader.readAsText(file, "utf-8");
 
-            this.props.setJson(operation, json);
-            this.setState({
-                type: json ? json._hint : "",
-                sigs: json && Object.prototype.hasOwnProperty.call(json, 'fact_signs') ? json.fact_signs.map(x => x.signature) : []
-            });
-            alert('유효하지 않은 작업파일 입니다.');
-        }
     }
 
     onClickSend() {
@@ -160,6 +166,11 @@ class Sign extends React.Component {
             return;
         }
 
+        if(isDuplicate(this.props.account.publicKey, this.props.json.fact_signs.map(x => x.signer))){
+            this.openAlert('서명 추가 실패 :(', '이미 서명 된 작업입니다.');
+            return;
+        }
+
         const signer = new Signer(process.env.REACT_APP_NETWORK_ID, this.props.account.privateKey);
 
         try {
@@ -167,21 +178,12 @@ class Sign extends React.Component {
             const operation = getOperationFromType(json._hint);
 
             this.props.setJson(operation, json);
-            this.setState({
-                type: json._hint,
-                sigs: json.fact_signs.map(x => x.signature)
-            });
-            alert('성공! :D');
+            this.openAlert('서명 추가 완료 :D', '작업에 서명을 추가하였습니다.');
         }
         catch (e) {
             const operation = getOperationFromType(target._hint);
             this.props.setJson(operation, target);
-
-            this.setState({
-                type: Object.prototype.hasOwnProperty.call(target, '_hint') ? target._hint : "",
-                sigs: target.fact_signs.map(x => x.signature)
-            })
-            alert('작업에 서명을 추가할 수 없습니다. :(');
+            this.openAlert('서명 추가 실패 :(', '서명을 추가하는 도중 오류가 발생하였습니다.');
         }
     }
 
@@ -192,6 +194,7 @@ class Sign extends React.Component {
     }
 
     render() {
+
         return (
             <div className="sign-container">
                 {this.state.isRedirect ? <Redirect to='/login' /> : false}
@@ -212,18 +215,19 @@ class Sign extends React.Component {
                         </span>
                         <span id="other">
                             <p id="head">TYPE</p>
-                            <p id="body">{this.state.type ? this.state.type : "NONE"}</p>
+                            <p id="body">{this.props.json ? this.props.json._hint : 'NONE'}</p>
                         </span>
                         <span id="sig">
                             <p id="head">SIGNATURES</p>
-                            <ul>
-                                {this.state.sigs.length > 0
-                                    ? this.state.sigs.map(x => sig(x))
-                                    : (
-                                        <li style={{ textAlign: "center" }}>-</li>
+                            <p id='body'>{this.props.json ? (
+                                this.props.json.fact_signs.map(x => x).length !== 0
+                                    ? (
+                                        this.props.json.fact_signs.map(x => x).length === 1
+                                            ? `${this.props.json.fact_signs.map(x => x).length} signature`
+                                            : `${this.props.json.fact_signs.map(x => x).length} signatures`
                                     )
-                                }
-                            </ul>
+                                    : 'No signature'
+                            ) : 'No signature'}</p>
                         </span>
                     </div>
                     <div ref={this.jsonRef} />
@@ -244,6 +248,8 @@ class Sign extends React.Component {
                     <ConfirmButton disabled={this.props.operation === OPER_DEFAULT} onClick={() => this.onClickSign()}>SIGN</ConfirmButton>
                 </div>
                 <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
+                <AlertModal isOpen={this.state.isAlertOpen} onClose={() => this.closeAlert()}
+                    title={this.state.alertTitle} msg={this.state.alertMsg} />
             </div>
         );
     }

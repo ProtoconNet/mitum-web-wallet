@@ -15,6 +15,8 @@ import { Generator } from 'mitumc';
 
 import { OPER_TRANSFER } from '../../text/mode';
 import { setOperation } from '../../store/actions';
+import AlertModal from '../modals/AlertModal';
+import { isAddressValid, isAmountValid, isCurrencyValid, isDuplicate } from '../../lib/Validation';
 
 
 class Transfer extends React.Component {
@@ -42,9 +44,27 @@ class Transfer extends React.Component {
             created: undefined,
             isModalOpen: false,
 
+            isAlertOpen: false,
+            alertTitle: '',
+            alertMsg: '',
+
             download: undefined,
             filename: ""
         }
+    }
+
+    openAlert(title, msg) {
+        this.setState({
+            isAlertOpen: true,
+            alertTitle: title,
+            alertMsg: msg
+        });
+    }
+
+    closeAlert() {
+        this.setState({
+            isAlertOpen: false,
+        })
     }
 
     closeModal() {
@@ -52,6 +72,11 @@ class Transfer extends React.Component {
     }
 
     onClick() {
+        if(!isAddressValid(this.state.address)) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', 'receiver address 형식이 올바르지 않습니다.');
+            return;
+        }
+
         try {
             const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
 
@@ -78,7 +103,7 @@ class Transfer extends React.Component {
         }
         catch (e) {
             console.log(e);
-            alert('작업을 생성할 수 없습니다. :(\n입력하신 작업 내용을 확인해주세요~');
+            this.openAlert('작업을 생성할 수 없습니다 :(', '입력하신 작업 내용을 확인해 주세요.');
         }
     }
 
@@ -102,6 +127,21 @@ class Transfer extends React.Component {
     }
 
     addAmount() {
+        if(!isCurrencyValid(this.state.currency)) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency id입니다.');
+            return;
+        }
+
+        if(!isAmountValid(this.state.amount)) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
+            return;
+        }
+
+        if(isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
+            return;
+        }
+
         this.setState({
             amounts: [...this.state.amounts, {
                 currency: this.state.currency,
@@ -165,6 +205,8 @@ class Transfer extends React.Component {
                     onClick={() => this.onClick()}>TRANSFER</ConfirmButton>
 
                 <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
+                <AlertModal isOpen={this.state.isAlertOpen} onClose={() => this.closeAlert()}
+                    title={this.state.alertTitle} msg={this.state.alertMsg} />
             </div>
         );
     }

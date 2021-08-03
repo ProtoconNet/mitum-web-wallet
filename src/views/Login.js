@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 
 import { toKeypair } from 'mitumc';
 import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
+import { isAddressValid, isPrivateKeyValid } from '../lib/Validation';
+import AlertModal from '../components/modals/AlertModal';
 
 const getAccountInformation = async (account) => {
     return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
@@ -27,17 +29,39 @@ class Login extends React.Component {
         this.state = {
             mode: SHOW_PRIVATE,
             isPriv: true,
-            isActive: false
+            isActive: false,
+
+            isAlertShow: false,
+            alertTitle: '',
+            alertMsg: ''
         }
     }
 
-    onLogin(addr, priv) {
-        let pubKey;
+    openAlert(title, msg) {
+        this.setState({
+            isAlertShow: true,
+            alertTitle: title,
+            alertMsg: msg
+        });
+    }
 
+    closeAlert() {
+        this.setState({
+            isAlertShow: false
+        })
+    }
+
+    onLogin(addr, priv) {
+        if(!isAddressValid(addr) || !isPrivateKeyValid(priv)) {
+            this.openAlert('지갑 열기 실패 :(', '주소 혹은 키 형식이 올바르지 않습니다.');
+            return;
+        }
+
+        let pubKey;
         try {
             pubKey = toKeypair(priv, '').getPublicKey();
         } catch (e) {
-            alert('지갑 열기 실패! :(\n유효하지 않은 비밀키입니다.');
+            this.openAlert('지갑 열기 실패 :(', '유효하지 않은 개인키입니다.');
             return;
         }
 
@@ -59,17 +83,17 @@ class Login extends React.Component {
                     const pubKeys = res.data._embedded.keys.keys.map(x => x.key);
                     for (let i = 0; i < pubKeys.length; i++) {
                         if (pubKeys[i] === pubKey) {
-                            this.props.signIn(addr, priv, res.data);
+                            this.props.signIn(addr, priv, pubKey, res.data);
                             return;
                         }
                     }
-                    alert(`지갑 열기 실패! :(\n계정 [${addr}]의 멤버에 해당 키가 존재하지 않습니다.`);
+                    this.openAlert('지갑 열기 실패 :(', `계정 [${addr}]의 멤버에 해당 키가 존재하지 않습니다.`);
                 }
             )
             .catch(
                 e => {
                     console.log(e);
-                    alert(`지갑 열기 실패! :(\n계정 조회에 실패하였습니다. 잠시 후 다시 시도해보세요.`);
+                    this.openAlert('지갑 열기 실패 :(', '유효하지 않은 주소 혹은 네트워크 문제로 계정 조회에 실패하였습니다.');
                 }
             );
     }
@@ -132,6 +156,8 @@ class Login extends React.Component {
                         <div className="rad-text">Restore Key</div>
                     </label>
                 </div>
+                <AlertModal isOpen={this.state.isAlertShow} onClose={() => this.closeAlert()}
+                    title={this.state.alertTitle} msg={this.state.alertMsg} />
                 {this.renderForm()}
             </div>
         );
@@ -146,7 +172,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    signIn: (address, privateKey, data) => dispatch(login(address, privateKey, data)),
+    signIn: (address, privateKey, publicKey, data) => dispatch(login(address, privateKey, publicKey, data)),
     setHistory: (data, me) => dispatch(setHistory(data, me)),
     clearHistory: () => dispatch(clearHistory())
 });

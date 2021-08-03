@@ -17,6 +17,8 @@ import { Generator } from 'mitumc';
 import { setOperation } from '../../store/actions';
 
 import { OPER_UPDATE_KEY } from '../../text/mode';
+import AlertModal from '../modals/AlertModal';
+import { isCurrencyValid, isDuplicate, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
 
 class UpdateKey extends React.Component {
 
@@ -44,16 +46,44 @@ class UpdateKey extends React.Component {
             created: undefined,
             isModalOpen: false,
 
+            isAlertOpen: false,
+            alertTitle: '',
+            alertMsg: '',
+
             download: undefined,
             filename: ""
         }
     }
 
+    openAlert(title, msg) {
+        this.setState({
+            isAlertOpen: true,
+            alertTitle: title,
+            alertMsg: msg,
+        });
+    }
+
+    closeAlert() {
+        this.setState({
+            isAlertOpen: false,
+        })
+    }
+
     closeModal() {
-        this.setState({ isModalOpen: false })
+        this.setState({ isModalOpen: false });
     }
 
     onClick() {
+        if(!isCurrencyValid(this.state.currency)) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', '잘못된 currency id입니다.');
+            return;
+        }
+
+        if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold)) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', '모든 weight들의 합은 threshold 이상이어야 합니다.');
+            return;
+        }
+
         try {
             const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
 
@@ -78,7 +108,7 @@ class UpdateKey extends React.Component {
         }
         catch (e) {
             console.log(e);
-            alert('작업을 생성할 수 없습니다. :(\n입력하신 작업 내용을 확인해주세요~');
+            this.openAlert('작업을 생성할 수 없습니다 :(', '입력하신 작업 내용을 확인해 주세요.');
         }
     }
 
@@ -107,6 +137,26 @@ class UpdateKey extends React.Component {
     }
 
     addKey() {
+        if (!isThresholdValid(this.state.threshold)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 threshold입니다. threshold를 먼저 입력해주세요. (0 < threshold <=100)');
+            return;
+        }
+
+        if (!isPublicKeyValid(this.state.publicKey)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 public key입니다.');
+            return;
+        }
+
+        if (!isWeightValid(this.state.weight)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 weight입니다.');
+            return;
+        }
+
+        if (isDuplicate(this.state.publicKey, this.state.keys.map(x => x.key))) {
+            this.openAlert('키를 추가할 수 없습니다 :(', '이미 리스트에 중복된 키가 존재합니다.');
+            return;
+        }
+
         this.setState({
             keys: [...this.state.keys, {
                 key: this.state.publicKey,
@@ -167,6 +217,8 @@ class UpdateKey extends React.Component {
                     disabled={this.state.keys.length < 1 || this.state.threshold === "" || this.state.currency === "" ? true : false}
                     onClick={() => this.onClick()}>UPDATE</ConfirmButton>
                 <OperationConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
+                <AlertModal isOpen={this.state.isAlertOpen} onClose={() => this.closeAlert()}
+                    title={this.state.alertTitle} msg={this.state.alertMsg} />
             </div>
         );
     }

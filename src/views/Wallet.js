@@ -31,7 +31,7 @@ const history = (hist) => {
     return (
         <li key={hist.hash + hist.target} onClick={() => {
             copy(hist.hash);
-            alert('fact hash copied');
+            alert('fact hash copied!');
         }}>
             <p id={hist.confirmation}>{hist.confirmation}</p>
             <p id={hist.direction}>{hist.direction}</p>

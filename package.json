@@ -2,6 +2,7 @@
   "name": "mitum-web-wallet",
   "version": "0.1.0",
   "private": false,
+  "homepage": "https://ProtoconNet.github.io/mitum-web-wallet/",
   "dependencies": {
     "@babel/core": "^7.13.0",
     "@babel/eslint-parser": "^7.14.7",

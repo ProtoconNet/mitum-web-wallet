@@ -13,13 +13,14 @@ export const ENQUEUE_OPERATION = 'ENQUEUE_OPERATION';
 export const DEQUEUE_OPERATION = 'DEQUEUE_OPERATION';
 export const CLEAR_QUEUE = 'CLEAR_QUEUE';
 
-export function login(address, privateKey, data) {
-    const account = new Account(address, privateKey, data);
+export function login(address, privateKey, publicKey, data) {
+    const account = new Account(address, privateKey, publicKey, data);
     return {
         type: LOGIN,
         account: {
             address: account.address,
             accountType: account.accountType,
+            publicKey: account.publicKey,
             publicKeys: account.publicKeys,
             balances: account.balances,
             privateKey: account.privateKey,

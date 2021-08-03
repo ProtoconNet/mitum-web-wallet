@@ -12,7 +12,7 @@ class UpdateKeyLoad extends React.Component {
         super(props);
 
         this.state = {
-            isRedirect: false,
+            isRedirect: !this.props.isBroadcast,
             counter: 0,
         }
     }
@@ -112,6 +112,7 @@ const mapStateToProps = state => ({
     data: state.operation.data,
     res: state.operation.res,
     status: state.operation.status,
+    isBroadcast: state.operation.isBroadcast
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/mitum-web-wallet/static/css/main.d943205a.chunk.css",
-    "main.js": "/mitum-web-wallet/static/js/main.c0c81f40.chunk.js",
-    "main.js.map": "/mitum-web-wallet/static/js/main.c0c81f40.chunk.js.map",
-    "runtime-main.js": "/mitum-web-wallet/static/js/runtime-main.a0f09ce6.js",
-    "runtime-main.js.map": "/mitum-web-wallet/static/js/runtime-main.a0f09ce6.js.map",
-    "static/js/2.49a245a4.chunk.js": "/mitum-web-wallet/static/js/2.49a245a4.chunk.js",
-    "static/js/2.49a245a4.chunk.js.map": "/mitum-web-wallet/static/js/2.49a245a4.chunk.js.map",
-    "static/js/3.1bebbd1b.chunk.js": "/mitum-web-wallet/static/js/3.1bebbd1b.chunk.js",
-    "static/js/3.1bebbd1b.chunk.js.map": "/mitum-web-wallet/static/js/3.1bebbd1b.chunk.js.map",
-    "index.html": "/mitum-web-wallet/index.html",
-    "static/css/main.d943205a.chunk.css.map": "/mitum-web-wallet/static/css/main.d943205a.chunk.css.map",
-    "static/js/2.49a245a4.chunk.js.LICENSE.txt": "/mitum-web-wallet/static/js/2.49a245a4.chunk.js.LICENSE.txt",
-    "static/media/index.scss": "/mitum-web-wallet/static/media/background.eca262ee.jpg",
-    "static/media/logo_trans.39b47b2b.png": "/mitum-web-wallet/static/media/logo_trans.39b47b2b.png"
+    "main.css": "/static/css/main.116196c6.chunk.css",
+    "main.js": "/static/js/main.c0c81f40.chunk.js",
+    "main.js.map": "/static/js/main.c0c81f40.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.f87bd448.js",
+    "runtime-main.js.map": "/static/js/runtime-main.f87bd448.js.map",
+    "static/js/2.28f63001.chunk.js": "/static/js/2.28f63001.chunk.js",
+    "static/js/2.28f63001.chunk.js.map": "/static/js/2.28f63001.chunk.js.map",
+    "static/js/3.1bebbd1b.chunk.js": "/static/js/3.1bebbd1b.chunk.js",
+    "static/js/3.1bebbd1b.chunk.js.map": "/static/js/3.1bebbd1b.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.116196c6.chunk.css.map": "/static/css/main.116196c6.chunk.css.map",
+    "static/js/2.28f63001.chunk.js.LICENSE.txt": "/static/js/2.28f63001.chunk.js.LICENSE.txt",
+    "static/media/index.scss": "/static/media/background.eca262ee.jpg",
+    "static/media/logo_trans.39b47b2b.png": "/static/media/logo_trans.39b47b2b.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.a0f09ce6.js",
-    "static/js/2.49a245a4.chunk.js",
-    "static/css/main.d943205a.chunk.css",
+    "static/js/runtime-main.f87bd448.js",
+    "static/js/2.28f63001.chunk.js",
+    "static/css/main.116196c6.chunk.css",
     "static/js/main.c0c81f40.chunk.js"
   ]
 }

@@ -14,9 +14,7 @@ import axios from 'axios';
 import * as mode from '../text/mode';
 import { isAccountValid } from '../lib/Validation';
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+import Sleep from '../lib/Sleep';
 
 const balance = (bal) => {
     return (
@@ -126,7 +124,7 @@ class Wallet extends React.Component {
                 });
 
             while (!isResult) {
-                await sleep(500);
+                await Sleep(500);
             }
         }
     }

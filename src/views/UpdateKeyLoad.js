@@ -59,7 +59,8 @@ class UpdateKeyLoad extends React.Component {
                     )
                     .catch(
                         e => {
-                            if (e.response.data.status === 404 || e.response.data.status === 400) {
+                            console.log(e.response.status);
+                            if (e.response.status === 404 || e.response.status === 400) {
                                 this.setState({
                                     counter: this.state.counter + 1
                                 })

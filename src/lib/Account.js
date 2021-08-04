@@ -1,7 +1,12 @@
 import { key } from '../text/hint.json';
 
 class Account {
-    constructor(addr, priv, pub, data) {
+    constructor(addr=null, priv=null, pub=null, data=null) {
+        if(!addr || !priv || !pub || !data) {
+            throw new Error('Wrong parameter with Account constructor');
+        }
+
+
         this.address = addr;
         this.privateKey = priv;
         this.resKey = undefined;

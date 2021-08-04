@@ -13,6 +13,7 @@ import { toKeypair } from 'mitumc';
 import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
 import { isAddressValid, isPrivateKeyValid } from '../lib/Validation';
 import AlertModal from '../components/modals/AlertModal';
+import Sleep from '../lib/Sleep';
 
 const getAccountInformation = async (account) => {
     return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
@@ -26,6 +27,10 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
+        if (this.props.isLogin) {
+            this.onLogin(this.props.account.address, this.props.account.privateKey);
+        }
+
         this.state = {
             mode: SHOW_PRIVATE,
             isPriv: true,
@@ -33,7 +38,10 @@ class Login extends React.Component {
 
             isAlertShow: false,
             alertTitle: '',
-            alertMsg: ''
+            alertMsg: '',
+
+            isShowLoad: false,
+            isRedirect: false,
         }
     }
 
@@ -48,11 +56,11 @@ class Login extends React.Component {
     closeAlert() {
         this.setState({
             isAlertShow: false
-        })
+        });
     }
 
     onLogin(addr, priv) {
-        if(!isAddressValid(addr) || !isPrivateKeyValid(priv)) {
+        if (!isAddressValid(addr) || !isPrivateKeyValid(priv)) {
             this.openAlert('지갑 열기 실패 :(', '주소 혹은 키 형식이 올바르지 않습니다.');
             return;
         }
@@ -114,12 +122,12 @@ class Login extends React.Component {
         switch (mode) {
             case SHOW_PRIVATE:
                 return <PrivateKeyLoginBox
-                    onLogin={(addr, priv) => this.onLogin(addr, priv)} />;
+                    onLogin={(addr, priv) => this.onStartLogin(addr, priv)} />;
             case SHOW_RESTORE:
                 return <RestoreKeyLoginBox />;
             default:
                 return <PrivateKeyLoginBox
-                    onLogin={(addr, priv) => this.onLogin(addr, priv)} />;
+                    onLogin={(addr, priv) => this.onStartLogin(addr, priv)} />;
         }
     }
 
@@ -132,33 +140,58 @@ class Login extends React.Component {
         else return;
     }
 
+    async onStartLogin(addr, priv) {
+        this.setState({
+            isShowLoad: true
+        });
+
+        await Sleep(2000);
+
+        this.onLogin(addr, priv);
+        if (!(this.props.isLogin && this.props.isLoadHistory)) {
+            this.setState({
+                isShowLoad: false
+            });
+        }
+    }
+
     render() {
-        if (this.props.isLogin) {
-            this.onLogin(this.props.account.address, this.props.account.privateKey);
+        if(this.props.isLogin && this.props.isLoadHistory) {
+            return <Redirect to={`/wallet/${this.props.account.address}`} />
         }
 
         return (
             <div className="login-container">
-                <h1>OPEN WALLET</h1>
-                {this.props.isLoadHistory && this.props.isLogin ? <Redirect to={`/wallet/${this.props.account.address}`} /> : false}
-                <div className="login-radio" style={this.state.isActive ? {} : { display: "none" }}>
-                    <label className="rad-label">
-                        <input type="radio" className="rad-input" value={SHOW_PRIVATE} name="rad"
-                            onChange={() => this.onChange()} onClick={() => this.onClick()} checked={this.state.isPriv} />
-                        <div className="rad-design"></div>
-                        <div className="rad-text">Private Key</div>
-                    </label>
+                <div id='login-main'
+                    style={{
+                        display: this.state.isShowLoad ? 'none' : 'flex'
+                    }}>
+                    <h1>OPEN WALLET</h1>
+                    <div className="login-radio" style={this.state.isActive ? {} : { display: "none" }}>
+                        <label className="rad-label">
+                            <input type="radio" className="rad-input" value={SHOW_PRIVATE} name="rad"
+                                onChange={() => this.onChange()} onClick={() => this.onClick()} checked={this.state.isPriv} />
+                            <div className="rad-design"></div>
+                            <div className="rad-text">Private Key</div>
+                        </label>
 
-                    <label className="rad-label">
-                        <input type="radio" className="rad-input" value={SHOW_RESTORE} name="rad"
-                            onChange={() => this.onChange()} onClick={() => this.onClick()} checked={!this.state.isPriv} />
-                        <div className="rad-design"></div>
-                        <div className="rad-text">Restore Key</div>
-                    </label>
+                        <label className="rad-label">
+                            <input type="radio" className="rad-input" value={SHOW_RESTORE} name="rad"
+                                onChange={() => this.onChange()} onClick={() => this.onClick()} checked={!this.state.isPriv} />
+                            <div className="rad-design"></div>
+                            <div className="rad-text">Restore Key</div>
+                        </label>
+                    </div>
+                    <AlertModal isOpen={this.state.isAlertShow} onClose={() => this.closeAlert()}
+                        title={this.state.alertTitle} msg={this.state.alertMsg} />
+                    {this.renderForm()}
                 </div>
-                <AlertModal isOpen={this.state.isAlertShow} onClose={() => this.closeAlert()}
-                    title={this.state.alertTitle} msg={this.state.alertMsg} />
-                {this.renderForm()}
+                <div id='login-load'
+                    style={{
+                        display: this.state.isShowLoad ? 'flex' : 'none'
+                    }}>
+                    <h1>Wait...</h1>
+                </div>
             </div>
         );
     }

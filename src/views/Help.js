@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import Sleep from '../lib/Sleep';
 import './Help.scss';
 
-import pdfFile from '../manual.pdf';
+import pdfFile from '../mitum_wallet_manual.pdf';
 import { pdfjs, Document, Page } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -92,6 +92,7 @@ class Help extends React.Component {
                             &gt;
                         </span>
                     </p>
+                    <p>가이드의 내용이 잘 보이지 않는 경우 상단의 DOWNLOAD MANUAL을 통해 파일을 직접 다운로드 하여 주시기 바랍니다.</p>
                 </div>
             </div>
         );

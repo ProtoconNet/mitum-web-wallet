@@ -15,6 +15,9 @@ class Account {
         this.balances = data._embedded.balance.map(x => { return { currency: x.currency, amount: x.amount } });
         this.accountType = this.publicKeys.length > 1 ? 'multi' : 'single';
 
+        this.balances.sort((x, y) => x.currency.localeCompare(y.currency));
+        this.publicKeys.sort((x, y) => x.key.localeCompare(y.key));
+
         this.publicKey = pub;
 
         const idx = priv.indexOf(':');

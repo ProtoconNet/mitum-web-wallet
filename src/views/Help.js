@@ -33,7 +33,7 @@ class Help extends React.Component {
 
     async componentDidMount() {
 
-        await Sleep(2000);
+        await Sleep(1000);
         this.setState({
             isShowExp: true,
         });

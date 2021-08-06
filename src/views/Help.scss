@@ -26,10 +26,10 @@
         font-weight: 300;
         font-size: 50px;
 
-        -webkit-animation: flickerAnimation 2s infinite;
-        -moz-animation: flickerAnimation 2s infinite;
-        -o-animation: flickerAnimation 2s infinite;
-        animation: flickerAnimation 2s infinite;
+        -webkit-animation: flickerAnimation 1s infinite;
+        -moz-animation: flickerAnimation 1s infinite;
+        -o-animation: flickerAnimation 1s infinite;
+        animation: flickerAnimation 1s infinite;
     }
 
     #help-document {
@@ -71,7 +71,7 @@
                 .react-pdf__Page__canvas {
                     margin: 0 auto;
                     width: 900px !important;
-                    height: auto !important;
+                    height: fit-content !important;
                 }
             }
         }

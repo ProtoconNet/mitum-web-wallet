@@ -249,9 +249,9 @@ export const isWeightsValidToThres = (weights, thres) => {
     return true;
 }
 
-export const isCurrencyValid = (currency) => {
-    
-    if(!currency) {
+export const isCurrencyValid = (currency, currencies) => {
+
+    if(!currency || !currencies || currencies.length < 1) {
         return false;
     }
 
@@ -263,7 +263,7 @@ export const isCurrencyValid = (currency) => {
         return false;
     }
 
-    return true;
+    return isDuplicate(currency, currencies);
 }
 
 export const isAmountValid = (amount) => {

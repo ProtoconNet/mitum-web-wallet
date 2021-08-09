@@ -127,7 +127,7 @@ class Transfer extends React.Component {
     }
 
     addAmount() {
-        if(!isCurrencyValid(this.state.currency)) {
+        if(!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }

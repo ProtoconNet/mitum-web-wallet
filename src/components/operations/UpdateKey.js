@@ -74,7 +74,7 @@ class UpdateKey extends React.Component {
     }
 
     onClick() {
-        if(!isCurrencyValid(this.state.currency)) {
+        if(!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }

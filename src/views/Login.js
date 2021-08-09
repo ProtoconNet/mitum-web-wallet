@@ -13,7 +13,6 @@ import { toKeypair } from 'mitumc';
 import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
 import { isAddressValid, isPrivateKeyValid } from '../lib/Validation';
 import AlertModal from '../components/modals/AlertModal';
-import Sleep from '../lib/Sleep';
 
 const getAccountInformation = async (account) => {
     return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
@@ -145,9 +144,8 @@ class Login extends React.Component {
             isShowLoad: true
         });
 
-        await Sleep(2000);
-
         this.onLogin(addr, priv);
+
         if (!(this.props.isLogin && this.props.isLoadHistory)) {
             this.setState({
                 isShowLoad: false

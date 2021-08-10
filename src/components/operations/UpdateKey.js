@@ -74,7 +74,7 @@ class UpdateKey extends React.Component {
     }
 
     onClick() {
-        if(!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
+        if (!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }
@@ -102,7 +102,7 @@ class UpdateKey extends React.Component {
             keyUpdater.addSign(account.privateKey);
 
             const created = keyUpdater.dict();
-            
+
             this.props.setJson(created);
             this.setState({ isModalOpen: true });
         }
@@ -186,9 +186,13 @@ class UpdateKey extends React.Component {
 
     render() {
         const account = this.props.account;
+
+        if (this.state.isRedirect) {
+            return <Redirect to='/login' />
+        }
+
         return (
             <div className="uk-container">
-                {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.titleRef}></div>
                 <h1>UPDATE KEY</h1>
                 <div className="uk-info-wrap">

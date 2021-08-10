@@ -45,13 +45,7 @@ class Navigation extends React.Component {
                 {isLogin ? <p onClick={() => this.close()} id="nav-addr">{addr}</p> : false}
                 {isLogin
                     ? (
-                        <Link className="nav-sign" 
-                            to={{
-                                pathname: '/sign',
-                                state: {
-                                    json: undefined
-                                }
-                            }}>
+                        <Link className="nav-sign" to='/sign'>
                             <p>SIGN OPERATION</p>
                         </Link>
                     ) : false}

@@ -57,7 +57,7 @@ class OperationConfirm extends React.Component {
                 try {
                     this.props.setResult(false, false, e.response.data, e.response.data.status, undefined);
                 }
-                catch(error) {
+                catch (error) {
                     this.props.setResult(false, false, {
                         title: '404 Network Error'
                     }, 404, undefined);
@@ -67,25 +67,25 @@ class OperationConfirm extends React.Component {
         );
     }
 
-    renderRedirect() {
-        const { operation } = this.props;
-        switch (operation) {
-            case OPER_CREATE_ACCOUNT:
-            case OPER_TRANSFER:
-                return <Redirect to='/response'/>;
-            case OPER_UPDATE_KEY:
-                return <Redirect to='/loading'/>;
-            default:
-                alert('처리할 수 없는 타입의 작업입니다 :(\n지갑 페이지로 이동합니다.');
-                return <Redirect to='/login' />;
-        }
-    }
-
     render() {
         const { isOpen, onClose, json, filename, download } = this.props;
+
+        if (this.state.isRedirect) {
+            const { operation } = this.props;
+            switch (operation) {
+                case OPER_CREATE_ACCOUNT:
+                case OPER_TRANSFER:
+                    return <Redirect to='/response' />;
+                case OPER_UPDATE_KEY:
+                    return <Redirect to='/loading' />;
+                default:
+                    alert('처리할 수 없는 타입의 작업입니다 :(\n지갑 페이지로 이동합니다.');
+                    return <Redirect to='/login' />;
+            }
+        }
+
         return (
             <div className={isOpen ? 'oper-openModal oper-modal' : 'oper-modal'}>
-                {this.state.isRedirect ? this.renderRedirect() : false}
                 {isOpen ? (
                     <section>
                         <header>

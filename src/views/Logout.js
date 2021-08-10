@@ -14,9 +14,11 @@ class Logout extends React.Component {
     }
     
     render() {
-        return !this.props.isLogin
-            ? <Redirect to="/login" />
-            : <span>WAIT...</span>;
+        if(!this.props.isLogin) {
+            return <Redirect to="/login" />;
+        }
+
+        return <span>WAIT...</span>;
     }
 
 }

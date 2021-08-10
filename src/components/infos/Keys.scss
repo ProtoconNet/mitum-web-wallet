@@ -113,3 +113,105 @@
         }
     }
 }
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .key-container {
+        #head {
+            font-size: 1em;
+            font-weight: 400;
+            margin: 0 0 0.1em 0;
+            padding: 0.1em 0 0.1em 0;
+        }
+
+        .label {
+            
+            p {
+                padding-top: 0.1em;
+                padding-bottom: 0.1em;
+                padding-left: 0.1em;
+                font-weight: 400;
+                font-size: 0.8em;
+            }
+
+            #key,
+            #weight {
+                font-size: 0.8em;
+            }
+
+            #key {
+                width: 70%;
+                padding-right: 0.1em;
+                border-right: 1px solid lightgray;
+            }
+
+            #weight {
+                width: 30%;
+                padding-right: 1.1em;
+            }
+        }
+
+        ul {
+            height: 150px;
+
+            li {
+                font-weight: 400;
+                font-size: 0.8em;
+
+                p {
+                    padding: 0.1em;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .key-container {
+        #head {
+            font-size: 0.8em;
+            font-weight: 400;
+            margin: 0 0 0.1em 0;
+            padding: 0.1em 0 0.1em 0;
+        }
+
+        .label {
+            
+            p {
+                padding-top: 0.1em;
+                padding-bottom: 0.1em;
+                padding-left: 0.1em;
+                font-weight: 400;
+                font-size: 0.8em;
+            }
+
+            #key,
+            #weight {
+                font-size: 0.7em;
+            }
+
+            #key {
+                width: 70%;
+                padding-right: 0.1em;
+                border-right: 1px solid lightgray;
+            }
+
+            #weight {
+                width: 30%;
+                padding-right: 1.1em;
+            }
+        }
+
+        ul {
+            height: 150px;
+
+            li {
+                font-weight: 400;
+                font-size: 0.7em;
+
+                p {
+                    padding: 0.1em;
+                }
+            }
+        }
+    }
+}

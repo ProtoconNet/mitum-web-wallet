@@ -13,7 +13,7 @@ import { Signer } from 'mitumc';
 import OperationConfirm from '../components/modals/OperationConfirm';
 
 import { TYPE_CREATE_ACCOUNT, TYPE_UPDATE_KEY, TYPE_TRANSFER } from '../text/mode';
-import { isDuplicate, isOperation, isStateValid } from '../lib/Validation';
+import { isDuplicate, isOperation } from '../lib/Validation';
 import { OPER_CREATE_ACCOUNT, OPER_DEFAULT, OPER_TRANSFER, OPER_UPDATE_KEY } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
 
@@ -51,14 +51,7 @@ class Sign extends React.Component {
         this.createdRef = createRef();
         this.infoRef = createRef();
         this.jsonRef = createRef();
-
-        if (!isStateValid(this.props) || !this.props.isLogin) {
-            this.state = {
-                isRedirect: true
-            }
-            return;
-        }
-
+        
         this.props.setJson(OPER_DEFAULT, null);
 
         this.state = {
@@ -195,9 +188,12 @@ class Sign extends React.Component {
 
     render() {
 
+        if(this.state.isRedirect) {
+            return <Redirect to='/login' />;
+        }
+
         return (
             <div className="sign-container">
-                {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.createdRef} />
                 <h1>SIGN / SEND OPERATION</h1>
                 <div ref={this.infoRef} />

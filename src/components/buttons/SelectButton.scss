@@ -8,7 +8,7 @@
     display: inline-block;
     position: relative;
     text-align: center;
-    
+
     color: #00c7ec;
     border: 2px solid #00c7ec;
     background-color: transparent;
@@ -70,5 +70,77 @@
     to {
         opacity: 0;
         left: 100%;
+    }
+}
+
+@media screen and (max-width: 1620px) and (min-width: 1090px) {
+    .select-button {
+        font-weight: 300;
+        font-size: 1em;
+
+        border: 1px solid #00c7ec;
+
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        margin: 0.5em;
+
+        width: 30%;
+        height: 30px;
+
+        &:hover {
+            box-shadow: 0 0 7px 0 transparentize(#00c7ec, 0.5);
+        }
+
+        &:before {
+            box-shadow: 0 0 7px 1px white;
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .select-button {
+        font-weight: 300;
+        font-size: 0.8em;
+
+        border: 1px solid #00c7ec;
+
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        margin: 0.5em;
+
+        width: 30%;
+        height: 30px;
+
+        &:hover {
+            box-shadow: 0 0 5px 0 transparentize(#00c7ec, 0.5);
+        }
+
+        &:before {
+            box-shadow: 0 0 5px 1px white;
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .select-button {
+        font-weight: 300;
+        font-size: 0.7em;
+
+        border: 1px solid #00c7ec;
+
+        padding-left: 0.2em;
+        padding-right: 0.2em;
+        margin: 0.2em;
+
+        width: 30%;
+        height: 25px;
+
+        &:hover {
+            box-shadow: 0 0 4px 0 transparentize(#00c7ec, 0.5);
+        }
+
+        &:before {
+            box-shadow: 0 0 4px 1px white;
+        }
     }
 }

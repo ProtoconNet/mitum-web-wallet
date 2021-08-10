@@ -5,8 +5,8 @@
     right: 5px;
 
     a {
-        font-size: 18px;
-        font-weight: 600;
+        font-size: 15px;
+        font-weight: 500;
         text-decoration: none;
         color: white;
 
@@ -20,6 +20,18 @@
 
         &:active {
             color: red;
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) {
+    .footer-container {
+        bottom: 1px;
+        right: 1px;
+
+        a {
+            font-size: 12px;
+            font-weight: 300;
         }
     }
 }

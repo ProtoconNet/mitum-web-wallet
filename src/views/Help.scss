@@ -10,7 +10,6 @@
     justify-content: center;
 
     #help-start {
-
         position: fixed;
         top: 0;
         bottom: 0;
@@ -71,7 +70,7 @@
                 .react-pdf__Page__canvas {
                     margin: 0 auto;
                     width: 900px !important;
-                    height: fit-content !important;
+                    height: auto !important;
                 }
             }
         }
@@ -154,5 +153,75 @@
 
     100% {
         opacity: 0;
+    }
+}
+
+@media screen and (min-width: 650px) and (max-width: 1090px) {
+    .help-container {
+        margin: 1em;
+
+        #help-start {
+            font-size: 30px;
+        }
+    
+        #help-document {
+    
+            #link {
+                margin: 2px;
+                width: 80vw;
+                font-size: 12px;
+            }
+    
+            div {
+                div {
+                    .react-pdf__Page__canvas {
+                        width: 80vw !important;
+                    }
+                }
+            }
+    
+            #switch {
+                font-size: 15px;
+            }
+
+            #exp {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .help-container {
+        margin: 0.5em;
+
+        #help-start {
+            font-size: 25px;
+        }
+    
+        #help-document {
+    
+            #link {
+                margin: 1px;
+                width: 80vw;
+                font-size: 10px;
+            }
+    
+            div {
+                div {
+                    .react-pdf__Page__canvas {
+                        width: 80vw !important;
+                    }
+                }
+            }
+    
+            #switch {
+                font-size: 12px;
+            }
+
+            #exp {
+                font-size: 8px;
+            }
+        }
     }
 }

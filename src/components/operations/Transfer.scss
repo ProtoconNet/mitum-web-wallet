@@ -1,5 +1,4 @@
 .tf-container {
-    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -59,7 +58,7 @@
 
                     text-align: center;
 
-                    margin: 0 0.5em 0 0;
+                    margin: 0 0.5em 0 0.2em;
                     padding: 0.2em;
 
                     width: fit-content;
@@ -70,6 +69,84 @@
                 div {
                     margin: 0;
                     text-align: start;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .tf-container {
+        padding: 2em;
+
+        h1 {
+            font-size: 2em;
+            margin: 0.5em;
+            letter-spacing: 3px;
+        }
+
+        .tf-balance-wrap {
+            width: 100%;
+            margin: 1em 0 2em 0;
+            padding: 0;
+        }
+
+        .tf-input-wrap {
+            width: 100%;
+
+            margin: 0.5em 0 1em 0;
+            padding: 0.5em 0 0.5em 0;
+
+            .tf-amounts {
+                margin: 2em 0 0 0;
+
+                .tf-address-adder {
+                    padding: 0.5em 0.5em 0.5em 0;
+
+                    p {
+                        font-size: 0.8em;
+                        margin: 0 0.3em 0 0.5em;
+                        padding: 0.1em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .tf-container {
+        padding: 2em 1em 1em 1em;
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0.3em;
+            letter-spacing: 1px;
+        }
+
+        .tf-balance-wrap {
+            width: 100%;
+            margin: 0.5em 0 1em 0;
+            padding: 0;
+        }
+
+        .tf-input-wrap {
+            width: 100%;
+
+            margin: 0.3em 0 0.5em 0;
+            padding: 0.3em 0 0.3em 0;
+
+            .tf-amounts {
+                margin: 1em 0 0 0;
+
+                .tf-address-adder {
+                    padding: 0.3em 0.3em 0.3em 0;
+
+                    p {
+                        font-size: 0.6em;
+                        margin: 0 0.1em 0 0.3em;
+                        padding: 0.1em;
+                    }
                 }
             }
         }

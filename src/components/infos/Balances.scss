@@ -164,3 +164,148 @@
         }
     }
 }
+
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .balance-container {
+        #head {
+            font-size: 1em;
+            font-weight: 400;
+            margin: 0 0 0.1em 0;
+            padding: 0.1em 0 0.1em 0;
+        }
+
+        .label {
+            p {
+                padding-top: 0.1em;
+                padding-bottom: 0.1em;
+                padding-left: 0.1em;
+                font-weight: 400;
+                font-size: 1em;
+            }
+
+            #currency,
+            #amount {
+                font-size: 0.8em;
+            }
+
+            #currency {
+                width: 25%;
+                padding-right: 0.1em;
+                border-right: 1px solid lightgray;
+            }
+
+            #amount {
+                width: 75%;
+                padding-right: 1.1em;
+            }
+        }
+
+        .wide {
+            height: 150px;
+            font-size: 0.8em;
+
+            li {
+                font-weight: 400;
+                letter-spacing: 1px;
+
+                p {
+                    padding: 0.1em;
+                }
+            }
+        }
+
+        .slim {
+            font-size: 0.8em;
+
+            li {
+                padding: 1px 0 1px 0;
+
+                p {
+                    padding: 0.1em;
+                    font-weight: 400;
+                }
+
+                #currency {
+                    width: 20%;
+                }
+
+                #amount {
+                    width: 80%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .balance-container {
+        #head {
+            font-size: 0.8em;
+            font-weight: 400;
+            margin: 0 0 0.1em 0;
+            padding: 0.1em 0 0.1em 0;
+        }
+
+        .label {
+            p {
+                padding-top: 0.1em;
+                padding-bottom: 0.1em;
+                padding-left: 0.1em;
+                font-weight: 400;
+                font-size: 0.8em;
+            }
+
+            #currency,
+            #amount {
+                font-size: 0.7em;
+            }
+
+            #currency {
+                width: 25%;
+                padding-right: 0.1em;
+                border-right: 1px solid lightgray;
+            }
+
+            #amount {
+                width: 75%;
+                padding-right: 1.1em;
+            }
+        }
+
+        .wide {
+            height: 150px;
+            font-size: 0.7em;
+
+            li {
+                font-weight: 400;
+                letter-spacing: 1px;
+
+                p {
+                    padding: 0.1em;
+                }
+            }
+        }
+
+        .slim {
+            font-size: 0.7em;
+
+            li {
+                padding: 1px 0 1px 0;
+
+                p {
+                    padding: 0.1em;
+                    font-weight: 400;
+                }
+                
+                #currency {
+                    width: 20%;
+                }
+
+                #amount {
+                    width: 80%;
+                }
+            }
+        }
+    }
+}

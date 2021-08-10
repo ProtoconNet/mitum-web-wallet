@@ -8,8 +8,8 @@ import UpdateKey from '../components/operations/UpdateKey';
 import Transfer from '../components/operations/Transfer';
 import { connect } from 'react-redux';
 
-import * as mode from '../text/mode';
 import { isStateValid } from '../lib/Validation';
+import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY } from '../text/mode';
 
 class Operation extends React.Component {
     constructor(props) {
@@ -21,38 +21,41 @@ class Operation extends React.Component {
 
             this.state = {
                 isRedirect: true,
-                account: undefined,
                 operation: undefined
             };
             return;
         }
 
         this.state = {
-            isRedirect: this.props.isLogin ? false : true,
-            account: this.props.account,
+            isRedirect: false,
             operation: this.props.location.state.operation
         }
     }
 
-    render() {
-        let redirect;
-        if (this.props.isLogin) {
-            redirect = `/wallet/${this.props.account.address}`;
+    renderOperation() {
+        switch (this.state.operation) {
+            case OPER_CREATE_ACCOUNT:
+                return <CreateAccount account={this.props.account} />;
+            case OPER_UPDATE_KEY:
+                return <UpdateKey account={this.props.account} />;
+            case OPER_TRANSFER:
+                return <Transfer account={this.props.account} />;
+            default:
+                return <Redirect to={`/wallet/${this.props.account.address}`} />;
         }
-        else {
-            redirect = '/login';
-        }
+    }
 
+    render() {
+        if (!this.props.isLogin) {
+            return <Redirect to='/login' />;
+        }
+        if (this.state.isRedirect) {
+            return <Redirect to={`/wallet/${this.props.account.address}`} />;
+        }
+        
         return (
             <div className="oper-container">
-                {this.state.isRedirect ? <Redirect to={redirect} /> : false}
-                {this.state.operation === mode.OPER_CREATE_ACCOUNT ?
-                    <CreateAccount account={this.state.account} /> : (
-                        this.state.operation === mode.OPER_UPDATE_KEY ?
-                            <UpdateKey account={this.state.account} /> : (
-                                this.state.operation === mode.OPER_TRANSFER ?
-                                    <Transfer account={this.state.account} /> : <Redirect to={redirect} />
-                            ))}
+                {this.renderOperation()}
             </div>
         );
     }

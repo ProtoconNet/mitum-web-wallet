@@ -12,19 +12,50 @@
         justify-content: center;
         align-items: center;
         padding: 10px;
-    
+
         width: 80%;
     }
-    
+
     .key-boxer {
-        width: 100%; 
+        width: 100%;
         display: flex;
         justify-content: center;
-        align-items: center;  
+        align-items: center;
         flex-direction: column;
+
+        padding: 0;
+        margin: 0;
 
         div button {
             margin-left: 1em;
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .key-gen-container {
+        .key-selector {
+            padding: 5px;
+        }
+
+        .key-boxer {
+            div button {
+                margin-left: 0.5em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .key-gen-container {
+        .key-selector {
+            padding: 3px;
+        }
+
+        .key-boxer {
+            div button {
+                margin-left: 0.3em;
+            }
         }
     }
 }

@@ -37,3 +37,45 @@
         }
     }
 }
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .load-container {
+        width: 500px;
+
+        .load-detail {
+
+            h1 {
+                margin: 0 0 0.3em 0;
+                font-size: 1.5em;
+
+                letter-spacing: 1px;
+                padding: 0.1em 0 0.1em 0;
+            }
+
+            p {
+                font-weight: 300;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .load-container {
+        width: 400px;
+
+        .load-detail {
+
+            h1 {
+                margin: 0 0 0.2em 0;
+                font-size: 1.2em;
+
+                letter-spacing: 1px;
+                padding: 0.1em 0 0.1em 0;
+            }
+
+            p {
+                font-weight: 300;
+            }
+        }
+    }
+}

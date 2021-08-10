@@ -120,11 +120,20 @@
     }
 }
 
+@media screen and (min-width: 1090px) {
+    .nav {
+        display: flex;
+    }
+    // .nav a {
+    //     left: initial;
+    //     top: initial;
+    //     bottom: 0px;
+    //     width: initial;
+    // }
+}
+
 @media screen and (max-width: 1090px) {
-    .nav a {
-        left: initial;
-        top: initial;
-        bottom: 0px;
-        width: initial;
+    .nav {
+        display: none;
     }
 }

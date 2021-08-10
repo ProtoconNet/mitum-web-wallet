@@ -17,16 +17,8 @@ class UpdateKeyLoad extends React.Component {
         }
     }
 
-    renderRedirect() {
-        if (this.state.isRedirect) {
-            return (
-                <Redirect to='/response' />
-            )
-        }
-    }
-
     getResponse() {
-        if (this.state.counter < 50) {
+        if (this.state.counter < 15) {
             const { data, res, isBroadcast } = this.props;
 
             const getResult = async (_hash, _res, isBroadcast) => {
@@ -59,6 +51,7 @@ class UpdateKeyLoad extends React.Component {
                     )
                     .catch(
                         e => {
+                            
                             if (e.response.status === 404 || e.response.status === 400) {
                                 this.setState({
                                     counter: this.state.counter + 1
@@ -76,7 +69,7 @@ class UpdateKeyLoad extends React.Component {
 
             setTimeout((hs, rs, broad) => {
                 getResult(hs, rs, broad);
-            }, 2000, data, res, isBroadcast);
+            }, 5000, data, res, isBroadcast);
 
             return () => this.getResponse();
         }
@@ -95,9 +88,12 @@ class UpdateKeyLoad extends React.Component {
     }
 
     render() {
+        if (this.state.isRedirect) {
+            return <Redirect to='/response' />;
+        }
+
         return (
             <div className="load-container">
-                {this.renderRedirect()}
                 <section className="load-detail">
                     <h1>Loading...</h1>
                     <p>{"키 업데이트 성공 여부를 조회 중입니다. 잠시만 기다려주세요."}</p>

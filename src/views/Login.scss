@@ -172,3 +172,85 @@
         opacity: 0;
     }
 }
+
+@media screen and (max-width: 1090px) and (min-width: 750px){
+    .login-container {
+    
+        #login-main {
+    
+            .login-radio {
+                flex-direction: column;
+    
+                .rad-label {
+                    padding: 5px 10px;
+                    margin: 5px;
+
+                    .rad-design {
+                        width: 11px;
+                        height: 11px;
+                    }
+    
+                    .rad-text {
+                        margin-left: 7px;
+                        letter-spacing: 1px;
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+                }
+            }
+    
+            h1 {
+                font-size: 2em;
+                font-weight: 300;
+                margin: 0 0.5em 0.2em 0.5em;
+                letter-spacing: 2px;
+            }
+        }
+    
+        #login-load {
+            font-weight: 300;
+            font-size: 2em;
+        }
+    }
+}
+
+@media screen and (max-width: 750px){
+    .login-container {
+    
+        #login-main {
+    
+            .login-radio {
+                flex-direction: column;
+    
+                .rad-label {
+                    padding: 5px 10px;
+                    margin: 5px;
+
+                    .rad-design {
+                        width: 11px;
+                        height: 11px;
+                    }
+    
+                    .rad-text {
+                        margin-left: 7px;
+                        letter-spacing: 1px;
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+                }
+            }
+    
+            h1 {
+                font-size: 1.7em;
+                font-weight: 300;
+                margin: 0 0.5em 0.2em 0.5em;
+                letter-spacing: 2px;
+            }
+        }
+    
+        #login-load {
+            font-weight: 300;
+            font-size: 1em;
+        }
+    }
+}

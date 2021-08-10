@@ -55,3 +55,46 @@
         }
     }
 }
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .key-adder-container {
+    
+        .key-adder {
+            div {
+                input {
+                    margin-right: 0.1em;
+                }
+            }
+        }
+    
+        .thres-adder {
+            margin-top: 0.1em;
+    
+            p {
+                font-size: 0.8em;
+                padding: 0.1em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .key-adder-container {
+        .key-adder {
+            div {
+                input {
+                    margin-right: 0.1em;
+                }
+            }
+        }
+    
+        .thres-adder {
+            margin-top: 0.1em;
+    
+            p {
+                font-size: 0.7em;
+                padding: 0.1em;
+            }
+        }
+    }
+}

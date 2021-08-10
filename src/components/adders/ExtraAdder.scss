@@ -38,3 +38,31 @@
         }
     }
 }
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .extra-adder-container {
+        .currency-adder,
+        .thres-adder {
+            margin: 0.1em;
+    
+            p {
+                font-size: 0.8em;
+                padding: 0.1em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .extra-adder-container {
+        .currency-adder,
+        .thres-adder {
+            margin: 0.1em;
+    
+            p {
+                font-size: 0.7em;
+                padding: 0.1em;
+            }
+        }
+    }
+}

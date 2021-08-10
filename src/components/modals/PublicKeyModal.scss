@@ -11,9 +11,8 @@
     color: black;
 
     section {
-        width: 90%;
+        width: 80%;
         max-width: 780px;
-        min-width: 750px;
         margin: 0 auto;
         border-radius: .3rem;
         background-color: white;
@@ -54,13 +53,13 @@
                 width: 100%;
 
                 margin: 5px;
-                padding: 0; 
+                padding: 0;
 
                 li {
                     margin: 3px;
                     font-size: 15px;
                     font-weight: 300;
-                
+
                     &:hover {
                         text-decoration: underline;
                         color: blue;
@@ -100,5 +99,77 @@
 
     to {
         opacity: 1;
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .pub-modal {
+        section {
+            max-width: 500px;
+            border-radius: .1rem;
+
+            header {
+                padding: 12px 50px 12px 12px;
+                font-weight: 700;
+                font-size: 0.9em;
+
+                button {
+                    top: 11px;
+                    right: 12px;
+                    width: 22px;
+                    font-size: 15px;
+                    font-weight: 500;
+                }
+            }
+
+            main {
+                padding: 12px;
+
+                ul {
+                    margin: 3px;
+
+                    li {
+                        margin: 2px;
+                        font-size: 0.8em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .pub-modal {
+        section {
+            max-width: 400px;
+            border-radius: .1rem;
+
+            header {
+                padding: 9px 42px 9px 9px;
+                font-weight: 700;
+                font-size: 0.8em;
+
+                button {
+                    top: 8px;
+                    right: 9px;
+                    width: 18px;
+                    font-size: 11px;
+                    font-weight: 500;
+                }
+            }
+
+            main {
+                padding: 10px;
+
+                ul {
+                    margin: 2px;
+
+                    li {
+                        margin: 1px;
+                        font-size: 0.7em;
+                    }
+                }
+            }
+        }
     }
 }

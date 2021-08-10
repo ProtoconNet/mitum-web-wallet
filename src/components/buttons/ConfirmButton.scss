@@ -1,12 +1,18 @@
 .confirm-button {
     text-decoration: none;
+    
     border: 1px solid transparent;
     border-radius: 5px;
+    
     position: relative;
     overflow: hidden;
+    
     font-size: 1.3rem;
     font-weight: 600;
+
     padding: 0.8rem 3rem;
+    margin: 1em;
+    
     color: black;
     background-color: white;
     text-transform: uppercase;
@@ -39,6 +45,34 @@
         &::before,
         &::after {
             background-color: lightsalmon;
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .confirm-button {
+        font-size: 1.2em;
+        font-weight: 500;
+        padding: 0.3em 0.8em;
+        margin: 0.5em;
+        border-radius: 3px;
+    
+        &:hover {
+            box-shadow: 1px 1px 15px 5px lightyellow;
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .confirm-button {
+        font-size: 0.8rem;
+        font-weight: 300;
+        padding: 0.3em 0.5em;
+        margin: 1em;
+        border-radius: 2px;
+    
+        &:hover {
+            box-shadow: 1px 1px 12px 3px lightyellow;
         }
     }
 }

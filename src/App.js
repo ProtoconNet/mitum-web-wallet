@@ -16,6 +16,7 @@ import Logout from './views/Logout';
 import Footer from './components/Footer';
 import Response from './views/Response';
 import UpdateKeyLoad from './views/UpdateKeyLoad';
+import SubNavigation from './components/SubNavigation';
 
 class App extends React.Component {
   render() {
@@ -24,6 +25,7 @@ class App extends React.Component {
       <div className="app-container">
         <HashRouter >
           <Navigation />
+          <SubNavigation />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/wallet/:account" component={Wallet} />

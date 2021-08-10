@@ -94,18 +94,14 @@ class Response extends React.Component {
         }
     }
 
-    renderRedirect() {
+    render() {
         if (this.state.isRedirect) {
             this.props.clearJson();
             return <Redirect to='/login' />;
         }
-        return false;
-    }
 
-    render() {
         return (
             <div className="res-container">
-                {this.renderRedirect()}
                 {this.renderResponse()}
                 <LogoutConfirm isOpen={this.state.isModalOpen} onClose={() => this.closeModal()} />
             </div>

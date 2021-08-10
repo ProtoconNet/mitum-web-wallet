@@ -11,10 +11,10 @@ import PublicKeyModal from '../components/modals/PublicKeyModal';
 import PendingModal from '../components/modals/PendingModal';
 import axios from 'axios';
 
-import * as mode from '../text/mode';
 import { isAccountValid } from '../lib/Validation';
 
 import Sleep from '../lib/Sleep';
+import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY, PAGE_LOGIN, PAGE_OPER, SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
 
 const balance = (bal) => {
     return (
@@ -50,24 +50,13 @@ const titleStyle = {
     margin: '0',
     padding: '0'
 }
-const lineStyle = {
-    width: '100%',
-    border: '2px solid white',
-    verticalAlign: 'middle',
-}
 
 const title = (content) => {
     return (
-        <div style={titleStyle}>
-            <div style={lineStyle}></div>
-            <p style={{
-                width: '100%',
-                textAlign: 'center',
-                verticalAlign: 'middle',
-                fontWeight: '400',
-                fontSize: '1.5em'
-            }}>{content}</p>
-            <div style={lineStyle}></div>
+        <div id='container' style={titleStyle}>
+            <div id='line'></div>
+            <p id='body'>{content}</p>
+            <div id='line'></div>
         </div>
     )
 }
@@ -91,7 +80,7 @@ class Wallet extends React.Component {
             isQueueUpdate: 1,
 
             isRedirect: this.props.isLogin ? false : true,
-            redirect: this.props.isLogin ? undefined : mode.PAGE_LOGIN,
+            redirect: this.props.isLogin ? undefined : PAGE_LOGIN,
             operation: undefined
         }
     }
@@ -136,12 +125,12 @@ class Wallet extends React.Component {
     }
 
     onShowClick(target) {
-        if (target === mode.SHOW_PRIVATE) {
+        if (target === SHOW_PRIVATE) {
             this.setState({
                 isPrivVisible: !this.state.isPrivVisible
             })
         }
-        else if (target === mode.SHOW_RESTORE) {
+        else if (target === SHOW_RESTORE) {
             this.setState({
                 isResVisible: !this.state.isResVisible
             })
@@ -152,37 +141,14 @@ class Wallet extends React.Component {
     }
 
     onSelect(oper) {
-        if (oper === mode.OPER_CREATE_ACCOUNT
-            || oper === mode.OPER_UPDATE_KEY
-            || oper === mode.OPER_TRANSFER) {
+        if (oper === OPER_CREATE_ACCOUNT
+            || oper === OPER_UPDATE_KEY
+            || oper === OPER_TRANSFER) {
             this.setState({
                 isRedirect: true,
-                redirect: mode.PAGE_OPER,
+                redirect: PAGE_OPER,
                 operation: oper
             });
-        }
-    }
-
-    renderRedirect() {
-        if (!this.props.account || !isAccountValid(this.props.account)) {
-            return <Redirect to="/login" />;
-        }
-
-        if (!this.state.isRedirect) {
-            return false;
-        }
-
-        switch (this.state.redirect) {
-            case mode.PAGE_OPER:
-                return <Redirect to={{
-                    pathname: '/operation',
-                    state: {
-                        operation: this.state.operation,
-                    }
-                }} />;
-            case mode.PAGE_LOGIN:
-                return <Redirect to='/login' />
-            default: return false;
         }
     }
 
@@ -224,15 +190,33 @@ class Wallet extends React.Component {
     refresh() {
         this.setState({
             isRedirect: true,
-            redirect: mode.PAGE_LOGIN
+            redirect: PAGE_LOGIN
         });
     }
 
     render() {
+        
+        if (!this.props.account || !isAccountValid(this.props.account)) {
+            return <Redirect to="/login" />;
+        }
+
+        if (this.state.isRedirect) {
+            if (this.state.redirect === PAGE_OPER) {
+                return <Redirect to={{
+                    pathname: '/operation',
+                    state: {
+                        operation: this.state.operation,
+                    }
+                }} />;
+            }
+            else if (this.state.redirect === PAGE_LOGIN) {
+                return <Redirect to='/login' />;
+            }
+        }
+
         return (
-            <div className="wallet-container">
-                {this.renderRedirect()}
-                <div className="wallet-ref" ref={this.walletRef}></div>
+            <div className="wallet-container" >
+                <div className="wallet-ref" ref={this.walletRef} ></div>
                 <div id='wallet-refresh'><p onClick={() => this.refresh()}>↻</p></div>
                 <div className="wallet-info">
                     {title("ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE"))}
@@ -245,9 +229,9 @@ class Wallet extends React.Component {
                     </section>
                 </div>
                 <div className="wallet-operation">
-                    <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_CREATE_ACCOUNT)}>CREATE ACCOUNT</SelectButton>
-                    <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_UPDATE_KEY)}>UPDATE KEY</SelectButton>
-                    <SelectButton size="wide" onClick={() => this.onSelect(mode.OPER_TRANSFER)}>TRANSFER</SelectButton>
+                    <SelectButton size="wide" onClick={() => this.onSelect(OPER_CREATE_ACCOUNT)}>CREATE ACCOUNT</SelectButton>
+                    <SelectButton size="wide" onClick={() => this.onSelect(OPER_UPDATE_KEY)}>UPDATE KEY</SelectButton>
+                    <SelectButton size="wide" onClick={() => this.onSelect(OPER_TRANSFER)}>TRANSFER</SelectButton>
                 </div>
                 <div className="wallet-history">
                     {title('HISTORY')}
@@ -260,7 +244,7 @@ class Wallet extends React.Component {
                 </div>
                 <PublicKeyModal onClose={() => this.closePubModal()} isOpen={this.state.isPubModalOpen} />
                 <PendingModal onClose={() => this.closePendModal()} isOpen={this.state.isPendModalOpen} />
-            </div>
+            </div >
         );
     }
 }

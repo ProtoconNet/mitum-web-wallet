@@ -20,9 +20,12 @@ class Home extends React.Component {
     }
 
     render() {
+        if (this.state.isRedirect) {
+            return <Redirect to="/login" />;
+        }
+
         return (
             <div className="home-container">
-                { this.state.isRedirect ? <Redirect to="/login" /> : false }
                 <div className="home-wrapper"
                     onClick={() => this.onClick()}>
                     <div className="home-title-wrapper">
@@ -37,6 +40,5 @@ class Home extends React.Component {
         );
     }
 }
-
 
 export default Home;

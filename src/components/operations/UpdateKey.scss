@@ -1,5 +1,4 @@
 .uk-container {
-    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -47,6 +46,60 @@
                 width: 100%;
                 margin: 0;
                 padding: 0;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .uk-container {
+        padding: 2em;
+
+        h1 {
+            font-size: 2em;
+            margin: 0.5em;
+            letter-spacing: 3px;
+        }
+
+        .uk-info-wrap {
+            width: 100%;
+            margin: 0.5em 0 1em 0;
+        }
+
+        .uk-input-wrap {
+            width: 100%;
+
+            margin: 0.5em 0 1em 0;
+
+            .uk-keys {
+                margin: 2em 0 0 0;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .uk-container {
+        padding: 2em 1em 1em 1em;
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0.3em;
+            letter-spacing: 1px;
+        }
+
+        .uk-info-wrap {
+            width: 100%;
+            margin: 0.3em 0 3em 0;
+        }
+
+        .uk-input-wrap {
+            width: 100%;
+
+            margin: 0.3em 0 0.5em 0;
+
+            .uk-keys {
+                margin: 1em 0 0 0;
             }
         }
     }

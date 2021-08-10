@@ -17,7 +17,7 @@
         opacity: 0.6;
 
         font-weight: 400;
-        
+
 
         &:focus {
             outline: none !important;
@@ -33,12 +33,12 @@
 }
 
 .big {
-    width: 60%;
-    height: 50px;
+    width: 75%;
+    height: 40px;
     margin: 1em;
 
-    .input-box{
-        font-size: 1.4em;
+    .input-box {
+        font-size: 1.3em;
     }
 }
 
@@ -46,7 +46,7 @@
     width: 75%;
     height: 25px;
 
-    .input-box{
+    .input-box {
         font-size: 1.0em;
     }
 }
@@ -55,7 +55,91 @@
     width: 25%;
     height: 25px;
 
-    .input-box{
+    .input-box {
         font-size: 1.0em;
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px){
+    .box {
+
+        .input-box {
+
+            border: 1px solid lightblue;
+            padding: 0.1em;
+            letter-spacing: 1px;
+
+            &:focus {
+                border: 1px solid lightcoral;
+            }
+        }
+    }
+
+    .big {
+        width: 85%;
+        height: 30px;
+        margin: 0.5em;
+
+        .input-box {
+            font-size: 1em;
+        }
+    }
+
+    .medium {
+        height: 18px;
+
+        .input-box {
+            font-size: 0.7em;
+        }
+    }
+
+    .small {
+        height: 18px;
+
+        .input-box {
+            font-size: 0.7em;
+        }
+    }
+}
+
+@media screen and (max-width: 750px){
+    .box {
+
+        .input-box {
+
+            border: 1px solid lightblue;
+            padding: 0.1em;
+            letter-spacing: 1px;
+
+            &:focus {
+                border: 1px solid lightcoral;
+            }
+        }
+    }
+
+    .big {
+        width: 85%;
+        height: 25px;
+        margin: 0.4em;
+
+        .input-box {
+            font-size: 0.8em;
+        }
+    }
+
+    .medium {
+        height: 15px;
+
+        .input-box {
+            font-size: 0.5em;
+        }
+    }
+
+    .small {
+        height: 15px;
+
+        .input-box {
+            font-size: 0.5em;
+        }
     }
 }

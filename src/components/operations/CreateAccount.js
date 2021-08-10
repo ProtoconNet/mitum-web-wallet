@@ -184,7 +184,7 @@ class CreateAccount extends React.Component {
             return;
         }
 
-        if(isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
+        if (isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
             return;
         }
@@ -219,9 +219,13 @@ class CreateAccount extends React.Component {
 
     render() {
         const account = this.props.account;
+
+        if (this.state.isRedirect) {
+            return <Redirect to='/login' />;
+        }
+
         return (
             <div className="ca-container">
-                {this.state.isRedirect ? <Redirect to='/login' /> : false}
                 <div ref={this.titleRef}></div>
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">

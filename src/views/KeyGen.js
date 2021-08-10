@@ -14,9 +14,14 @@ const KEY_ETHER = "ether";
 const KEY_STELLAR = "stellar";
 
 class KeyGen extends React.Component {
-    state = {
-        privKey: "",
-        pubKey: "",
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            privKey: "",
+            pubKey: "",
+        }
     }
 
     getKey(_type) {

@@ -144,8 +144,8 @@ class Login extends React.Component {
             isShowLoad: true
         });
 
-        this.onLogin(addr, priv);
-
+        this.onLogin(addr, priv)
+        
         if (!(this.props.isLogin && this.props.isLoadHistory)) {
             this.setState({
                 isShowLoad: false

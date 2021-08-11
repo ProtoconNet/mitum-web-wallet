@@ -249,6 +249,10 @@
                 p {
                     padding: 0.5em;
                     margin: 0;
+
+                    overflow: visible;
+                    white-space: pre-wrap;
+                    word-break: break-all;
                 }
 
                 #SUCCESS,

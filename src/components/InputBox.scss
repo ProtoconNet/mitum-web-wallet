@@ -15,9 +15,7 @@
         letter-spacing: 1px;
 
         opacity: 0.6;
-
         font-weight: 400;
-
 
         &:focus {
             outline: none !important;
@@ -60,7 +58,7 @@
     }
 }
 
-@media screen and (max-width: 1090px) and (min-width: 750px){
+@media screen and (max-width: 1090px) and (min-width: 750px) {
     .box {
 
         .input-box {
@@ -102,7 +100,7 @@
     }
 }
 
-@media screen and (max-width: 750px){
+@media screen and (max-width: 750px) {
     .box {
 
         .input-box {

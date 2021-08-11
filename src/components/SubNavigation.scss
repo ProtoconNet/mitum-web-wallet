@@ -48,21 +48,46 @@
                 transition: 0.5s ease;
 
                 display: none;
-
-                font-size: 15px;
                 text-decoration: none;
 
-                color: black;
                 margin: 0;
                 padding: 0;
 
                 &:hover {
                     text-decoration: underline;
                 }
-        
+
                 &:active {
                     color: red;
                 }
+            }
+
+            .main {
+                color: black;
+                font-size: 1em;
+            }
+
+            #nav-addr {
+                font-size: 0.8em;
+                text-decoration: underline;
+
+                &:hover {
+                    color: red;
+                }
+
+                &:active {
+                    color: cyan;
+                }
+            }
+
+            .on {
+                color: darkred;
+                font-size: 1em;
+            }
+
+            .off {
+                color: black;
+                font-size: 1em;
             }
         }
     }

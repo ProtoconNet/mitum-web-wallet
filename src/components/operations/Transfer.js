@@ -72,7 +72,7 @@ class Transfer extends React.Component {
     }
 
     onClick() {
-        if (!isAddressValid(this.state.address)) {
+        if (!isAddressValid(this.state.address.trim())) {
             this.openAlert('작업을 생성할 수 없습니다 :(', 'receiver address 형식이 올바르지 않습니다.');
             return;
         }
@@ -89,7 +89,7 @@ class Transfer extends React.Component {
             const transfersFact = generator.createTransfersFact(
                 account.address,
                 [generator.createTransfersItem(
-                    this.state.address, amounts
+                    this.state.address.trim(), amounts
                 )]
             );
 
@@ -127,25 +127,25 @@ class Transfer extends React.Component {
     }
 
     addAmount() {
-        if (!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
+        if (!isCurrencyValid(this.state.currency.trim(), this.props.account.balances.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }
 
-        if (!isAmountValid(this.state.amount)) {
+        if (!isAmountValid(this.state.amount.trim())) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
+        if (isDuplicate(this.state.currency.trim(), this.state.amounts.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
             return;
         }
 
         this.setState({
             amounts: [...this.state.amounts, {
-                currency: this.state.currency,
-                amount: this.state.amount
+                currency: this.state.currency.trim(),
+                amount: this.state.amount.trim()
             }],
             currency: "",
             amount: ""

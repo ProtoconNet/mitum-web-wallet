@@ -143,30 +143,30 @@ class CreateAccount extends React.Component {
     }
 
     addKey() {
-        if (!isThresholdValid(this.state.threshold)) {
+        if (!isThresholdValid(this.state.threshold.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 threshold입니다. threshold를 먼저 입력해주세요. (0 < threshold <=100)');
             return;
         }
 
-        if (!isPublicKeyValid(this.state.publicKey)) {
+        if (!isPublicKeyValid(this.state.publicKey.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 public key입니다.');
             return;
         }
 
-        if (!isWeightValid(this.state.weight)) {
+        if (!isWeightValid(this.state.weight.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 weight입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.publicKey, this.state.keys.map(x => x.key))) {
+        if (isDuplicate(this.state.publicKey.trim(), this.state.keys.map(x => x.key))) {
             this.openAlert('키를 추가할 수 없습니다 :(', '이미 리스트에 중복된 키가 존재합니다.');
             return;
         }
 
         this.setState({
             keys: [...this.state.keys, {
-                key: this.state.publicKey,
-                weight: this.state.weight
+                key: this.state.publicKey.trim(),
+                weight: this.state.weight.trim()
             }],
             publicKey: "",
             weight: "",
@@ -174,25 +174,25 @@ class CreateAccount extends React.Component {
     }
 
     addAmount() {
-        if (!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
+        if (!isCurrencyValid(this.state.currency.trim(), this.props.account.balances.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }
 
-        if (!isAmountValid(this.state.amount)) {
+        if (!isAmountValid(this.state.amount.trim())) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
+        if (isDuplicate(this.state.currency.trim(), this.state.amounts.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
             return;
         }
 
         this.setState({
             amounts: [...this.state.amounts, {
-                currency: this.state.currency,
-                amount: this.state.amount
+                currency: this.state.currency.trim(),
+                amount: this.state.amount.trim()
             }],
             currency: "",
             amount: ""

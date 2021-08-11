@@ -74,12 +74,12 @@ class UpdateKey extends React.Component {
     }
 
     onClick() {
-        if (!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
+        if (!isCurrencyValid(this.state.currency.trim(), this.props.account.balances.map(x => x.currency))) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }
 
-        if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold)) {
+        if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold.trim())) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '모든 weight들의 합은 threshold 이상이어야 합니다.');
             return;
         }
@@ -91,11 +91,11 @@ class UpdateKey extends React.Component {
             const keys = generator.createKeys(
                 this.state.keys.map(x =>
                     generator.formatKey(x.key, parseInt(x.weight))),
-                parseInt(this.state.threshold)
+                parseInt(this.state.threshold.trim())
             );
 
             const keyUpdaterFact = generator.createKeyUpdaterFact(
-                account.address, this.state.currency, keys
+                account.address, this.state.currency.trim(), keys
             );
 
             const keyUpdater = generator.createOperation(keyUpdaterFact, "");
@@ -137,30 +137,30 @@ class UpdateKey extends React.Component {
     }
 
     addKey() {
-        if (!isThresholdValid(this.state.threshold)) {
+        if (!isThresholdValid(this.state.threshold.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 threshold입니다. threshold를 먼저 입력해주세요. (0 < threshold <=100)');
             return;
         }
 
-        if (!isPublicKeyValid(this.state.publicKey)) {
+        if (!isPublicKeyValid(this.state.publicKey.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 public key입니다.');
             return;
         }
 
-        if (!isWeightValid(this.state.weight)) {
+        if (!isWeightValid(this.state.weight.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 weight입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.publicKey, this.state.keys.map(x => x.key))) {
+        if (isDuplicate(this.state.publicKey.trim(), this.state.keys.map(x => x.key))) {
             this.openAlert('키를 추가할 수 없습니다 :(', '이미 리스트에 중복된 키가 존재합니다.');
             return;
         }
 
         this.setState({
             keys: [...this.state.keys, {
-                key: this.state.publicKey,
-                weight: this.state.weight
+                key: this.state.publicKey.trim(),
+                weight: this.state.weight.trim()
             }],
             publicKey: "",
             weight: "",

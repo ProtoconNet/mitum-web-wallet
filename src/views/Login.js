@@ -58,7 +58,10 @@ class Login extends React.Component {
         });
     }
 
-    onLogin(addr, priv) {
+    onLogin(_addr, _priv) {
+        const addr = _addr.trim();
+        const priv = _priv.trim();
+        
         if (!isAddressValid(addr) || !isPrivateKeyValid(priv)) {
             this.openAlert('지갑 열기 실패 :(', '주소 혹은 키 형식이 올바르지 않습니다.');
             return;

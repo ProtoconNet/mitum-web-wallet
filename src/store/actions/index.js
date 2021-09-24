@@ -13,6 +13,11 @@ export const ENQUEUE_OPERATION = 'ENQUEUE_OPERATION';
 export const DEQUEUE_OPERATION = 'DEQUEUE_OPERATION';
 export const CLEAR_QUEUE = 'CLEAR_QUEUE';
 
+export const SET_NETWORK = 'SET_NETWORK';
+export const CLEAR_NETWORK = 'CLEAR_NETWORK';
+export const SET_NETWORK_ID = 'SET_NETWORK_ID';
+export const CLEAR_NETWORK_ID = 'CLEAR_NETWORK_ID';
+
 export function login(address, privateKey, publicKey, data) {
     const account = new Account(address, privateKey, publicKey, data);
     return {
@@ -117,3 +122,30 @@ export function clearQueue() {
         type: CLEAR_QUEUE
     }
 }
+
+export function setNetworkId(id) {
+    return {
+        type: SET_NETWORK_ID,
+        id,
+    }
+}
+
+export function setNetwork(network) {
+    return {
+        type: SET_NETWORK,
+        network,
+    }
+}
+
+export function clearNetworkId() {
+    return {
+        type: CLEAR_NETWORK_ID,
+    }
+}
+
+export function clearNetwork() {
+    return {
+        type: CLEAR_NETWORK
+    }
+}
+

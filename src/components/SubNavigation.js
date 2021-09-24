@@ -75,6 +75,10 @@ class SubNavigation extends React.Component {
                             onClick={() => this.onCheckOut()}>
                             <p>GENERATE KEYPAIR</p>
                         </Link>
+                        <Link className="main" to="/get-address"
+                            onClick={() => this.onCheckOut()}>
+                            <p>GET ADDRESS</p>
+                        </Link>
                         {account && account.restoreKey
                             ? (
                                 <Link className="main" to="/res-key-generate"
@@ -85,6 +89,10 @@ class SubNavigation extends React.Component {
                         <Link className="main" to="/help"
                             onClick={() => this.onCheckOut()}>
                             <p>HELP</p>
+                        </Link>
+                        <Link className="main" to="/network"
+                            onClick={() => this.onCheckOut()}>
+                            <p>SETTING</p>
                         </Link>
                         {isLogin ? <p onClick={() => this.close()} id="nav-addr">{addr}</p> : false}
                     </div>

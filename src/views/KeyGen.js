@@ -4,8 +4,6 @@ import './KeyGen.scss';
 import SelectButton from '../components/buttons/SelectButton';
 import InputBox from '../components/InputBox';
 
-import { version, key } from "../text/hint.json";
-
 import { getKeypair } from 'mitumc';
 
 
@@ -27,31 +25,9 @@ class KeyGen extends React.Component {
     getKey(_type) {
         const keypair = getKeypair(_type);
 
-        let privateKey = keypair.privKey.key + ':';
-        let publicKey = keypair.pubKey + ':';
-
-        switch (_type) {
-            case KEY_BTC:
-                privateKey += key.btc.priv;
-                publicKey += key.btc.pub;
-                break;
-            case KEY_ETHER:
-                privateKey += key.ether.priv;
-                publicKey += key.ether.pub;
-                break;
-            case KEY_STELLAR:
-                privateKey += key.stellar.priv;
-                publicKey += key.stellar.pub;
-                break;
-            default: throw new Error("Invalid key type");
-        }
-
-        privateKey += '-' + version;
-        publicKey += '-' + version;
-
         this.setState({
-            privKey: privateKey,
-            pubKey: publicKey
+            privKey: keypair.getPrivateKey(),
+            pubKey: keypair.getPublicKey()
         })
     }
 

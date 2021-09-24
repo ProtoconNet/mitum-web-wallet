@@ -164,7 +164,7 @@ class Sign extends React.Component {
             return;
         }
 
-        const signer = new Signer(process.env.REACT_APP_NETWORK_ID, this.props.account.privateKey);
+        const signer = new Signer(this.props.networkId, this.props.account.privateKey);
 
         try {
             const json = signer.signOperation(target);
@@ -257,6 +257,8 @@ const mapStateToProps = state => ({
 
     operation: state.operation.operation,
     json: state.operation.json,
+
+    networkId: state.network.networkId,
 });
 
 const mapDispatchToProps = dispatch => ({

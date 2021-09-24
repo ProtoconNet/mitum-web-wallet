@@ -23,11 +23,45 @@
         font-size: 1.4em;
     }
 
+    .nav-title,
     .nav-login,
     .nav-sign,
     .main {
+
+        &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 6px;
+            bottom: 5px;
+            transition: all 0.2s ease-out;
+        }
+
+        &:hover:before {
+            transform: translateY(10px)
+        }
+
+        &:active {
+            p {
+                color: cyan;
+            }
+        }
+
         p {
             text-align: start;
+
+            background: linear-gradient(to bottom, lightgray 100%, lightgray 60%, #fff 60%, #fff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-repeat: no-repeat;
+            transition: background 0.2s ease-out;
+            white-space: nowrap;
+
+            &:hover {
+                background-position: 0 0;
+            }
         }
     }
 
@@ -71,30 +105,14 @@
         }
     }
 
-    a {
+    .setting,
+    .main,
+    .nav-title,
+    .nav-sign,
+    .nav-login {
         position: relative;
         margin: 0.5em;
         width: 100%;
-
-        &:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 6px;
-            bottom: 5px;
-            transition: all 0.2s ease-out;
-        }
-
-        &:hover:before {
-            transform: translateY(10px)
-        }
-
-        &:active {
-            p {
-                color: cyan;
-            }
-        }
 
         p {
             text-decoration: none;
@@ -103,19 +121,37 @@
             cursor: pointer;
             position: relative;
             display: inline-block;
+        }
+    }
+
+    .setting,
+    .main,
+    .nav-sign,
+    .nav-login {
+        p {
             font-size: 1.2em;
+        }
+    }
 
-            background: linear-gradient(to bottom, lightgray 100%, lightgray 60%, #fff 60%, #fff 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            background-repeat: no-repeat;
-            transition: background 0.2s ease-out;
-            white-space: nowrap;
+    .setting {
+        background-color: white;
+        text-align: center;
 
-            &:hover {
-                background-position: 0 0;
+        &:hover {
+            background-color: skyblue;
+
+            p {
+                color: white;
             }
+        }
+
+        &:active {
+            background-color: hotpink;
+        }
+
+        p {
+            color: black;
+            font-weight: 400;
         }
     }
 }

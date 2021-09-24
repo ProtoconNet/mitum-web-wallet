@@ -85,7 +85,7 @@ class UpdateKey extends React.Component {
         }
 
         try {
-            const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
+            const generator = new Generator(this.props.networkId);
 
             const account = this.props.account;
             const keys = generator.createKeys(
@@ -228,11 +228,15 @@ class UpdateKey extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    networkId: state.network.networkId,
+});
+
 const mapDispatchToProps = dispatch => ({
     setJson: (json) => dispatch(setOperation(OPER_UPDATE_KEY, json)),
 });
 
 export default withRouter(connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(UpdateKey));

@@ -10,14 +10,6 @@ import { isOperation } from '../../lib/Validation';
 import { OPER_CREATE_ACCOUNT, OPER_UPDATE_KEY, OPER_TRANSFER } from '../../text/mode';
 import hint from '../../text/hint.json';
 
-const broadcast = async (operation) => {
-    if (!isOperation(operation)) {
-        return undefined;
-    }
-
-    return await axios.post(process.env.REACT_APP_API_BROADCAST, operation);
-}
-
 class OperationConfirm extends React.Component {
 
     constructor(props) {
@@ -28,8 +20,16 @@ class OperationConfirm extends React.Component {
         }
     }
 
+    async broadcast(operation) {
+        if (!isOperation(operation)) {
+            return undefined;
+        }
+    
+        return await axios.post(this.props.networkBroadcast, operation);
+    }
+
     onSend(json) {
-        broadcast(json).then(
+        this.broadcast(json).then(
             res => {
                 if (res.request.status === 200) {
                     let data = undefined;
@@ -119,6 +119,7 @@ const mapStateToProps = state => ({
     data: state.operation.data,
     res: state.operation.res,
     status: state.operation.status,
+    networkBroadcast: state.network.networkBroadcast
 });
 
 const mapDispatchToProps = dispatch => ({

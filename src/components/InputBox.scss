@@ -64,8 +64,8 @@
         .input-box {
 
             border: 1px solid lightblue;
-            padding: 0.1em;
-            letter-spacing: 1px;
+            padding: 0.2em;
+            letter-spacing: 2px;
 
             &:focus {
                 border: 1px solid lightcoral;
@@ -76,7 +76,7 @@
     .big {
         width: 85%;
         height: 30px;
-        margin: 0.5em;
+        margin: 1em;
 
         .input-box {
             font-size: 1em;
@@ -106,8 +106,8 @@
         .input-box {
 
             border: 1px solid lightblue;
-            padding: 0.1em;
-            letter-spacing: 1px;
+            padding: 0.2em;
+            letter-spacing: 2px;
 
             &:focus {
                 border: 1px solid lightcoral;
@@ -118,7 +118,7 @@
     .big {
         width: 85%;
         height: 25px;
-        margin: 0.4em;
+        margin: 0.8em;
 
         .input-box {
             font-size: 0.8em;

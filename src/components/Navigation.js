@@ -52,6 +52,9 @@ class Navigation extends React.Component {
                 <Link className="main" to="/key-generate">
                     <p>GENERATE KEYPAIR</p>
                 </Link>
+                <Link className="main" to="/get-address">
+                    <p>GET ADDRESS</p>
+                </Link>
                 {account && account.restoreKey
                     ? (
                         <Link className="main" to="/res-key-generate">
@@ -60,6 +63,9 @@ class Navigation extends React.Component {
                     ) : false}
                 <Link className="main nav-help" to="/help">
                     <p>HELP</p>
+                </Link>
+                <Link className="setting" to="/network">
+                    <p>SETTING</p>
                 </Link>
             </div>
         );

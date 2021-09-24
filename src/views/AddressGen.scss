@@ -1,0 +1,167 @@
+.address-gen-container {
+    width: 95%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+
+    padding: 3em;
+
+    opacity: 0.8;
+
+    h1 {
+        font-size: 3em;
+        font-weight: 400;
+        margin: 1em;
+        letter-spacing: 5px;
+    }
+
+    .address-gen-input-wrap {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin: 1em 0 2em 0;
+        padding: 0;
+
+        .address-gen-keys {
+            margin: 3em 0 0 0;
+            padding: 0;
+
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .address-keys-adder {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+
+    .address-gen-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+
+        width: 60%;
+
+        margin-top: 0;
+        margin-bottom: 2em;
+        padding: 0;
+    }
+
+    .address-gen-account {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        width: 60%;
+
+        padding: 0;
+        margin: 0;
+
+        p {
+            padding: 0.2em;
+            margin: 0.2em;
+
+            text-align: center;
+
+            font-size: 1.5em;
+            font-weight: 500;
+            color: black;
+
+            background-color: white;
+        }
+
+        #header {
+            width: 20%;
+        }
+
+        #body {
+            width: 80%;
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .address-gen-container {
+        padding: 3em;
+
+        h1 {
+            font-size: 2em;
+            margin: 0.5em;
+            letter-spacing: 5px;
+        }
+
+        .address-gen-input-wrap {
+            width: 100%;
+            margin: 0.5em 0 1em 0;
+
+            .address-gen-keys {
+                margin: 2.5em 0 0 0;
+            }
+        }
+
+        .address-gen-buttons {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        .address-gen-account {
+            width: 100%;
+
+            p {
+                padding: 0.2em;
+                margin: 0.2em;
+                font-size: 1em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .address-gen-container {
+        padding: 3em;
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0.5em;
+            letter-spacing: 5px;
+        }
+
+        .address-gen-input-wrap {
+            width: 100%;
+            margin: 0.5em 0 1em 0;
+
+            .address-gen-keys {
+                margin: 2em 0 0 0;
+            }
+        }
+
+        .address-gen-buttons {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        .address-gen-account {
+            width: 100%;
+
+            p {
+                padding: 0.2em;
+                margin: 0.2em;
+                font-size: 0.8em;
+            }
+        }
+    }
+}

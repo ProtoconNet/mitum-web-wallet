@@ -158,7 +158,7 @@
 
 @media screen and (min-width: 650px) and (max-width: 1090px) {
     .help-container {
-        margin: 1em;
+        margin: 1.5em;
 
         #help-start {
             font-size: 30px;
@@ -167,9 +167,9 @@
         #help-document {
     
             #link {
-                margin: 2px;
+                margin: 5px;
                 width: 80vw;
-                font-size: 12px;
+                font-size: 20px;
             }
     
             div {
@@ -181,11 +181,12 @@
             }
     
             #switch {
-                font-size: 15px;
+                font-size: 25px;
             }
 
             #exp {
-                font-size: 12px;
+                font-size: 15px;
+                padding: 1em;
             }
         }
     }
@@ -193,7 +194,7 @@
 
 @media screen and (max-width: 650px) {
     .help-container {
-        margin: 0.5em;
+        margin: 1em;
 
         #help-start {
             font-size: 25px;
@@ -202,9 +203,9 @@
         #help-document {
     
             #link {
-                margin: 1px;
+                margin: 5px;
                 width: 80vw;
-                font-size: 10px;
+                font-size: 20px;
             }
     
             div {
@@ -216,11 +217,12 @@
             }
     
             #switch {
-                font-size: 12px;
+                font-size: 20px;
             }
 
             #exp {
-                font-size: 8px;
+                font-size: 10px;
+                padding: 1em;
             }
         }
     }

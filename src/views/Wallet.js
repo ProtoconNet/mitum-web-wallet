@@ -61,10 +61,6 @@ const title = (content) => {
     )
 }
 
-const getFactInState = async (hash) => {
-    return await axios.get(process.env.REACT_APP_API_SEARCH_FACT + hash);
-}
-
 class Wallet extends React.Component {
 
     constructor(props) {
@@ -85,6 +81,10 @@ class Wallet extends React.Component {
         }
     }
 
+    async getFactInState(hash) {
+        return await axios.get(this.props.networkSearchFact + hash);
+    }
+
     async checkInState() {
         while (!this.props.queue.isEmpty()) {
             const target = this.props.queue.target;
@@ -94,7 +94,7 @@ class Wallet extends React.Component {
             }
 
             var isResult = false;
-            getFactInState(target.hash)
+            this.getFactInState(target.hash)
                 .then(
                     res => {
                         if (res.request.status === 200) {
@@ -253,7 +253,8 @@ const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
     history: state.login.history,
-    queue: state.queue.queue
+    queue: state.queue.queue,
+    networkSearchFact: state.network.networkSearchFact
 });
 
 const mapDispatchToProps = dispatch => ({

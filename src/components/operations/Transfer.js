@@ -78,7 +78,7 @@ class Transfer extends React.Component {
         }
 
         try {
-            const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
+            const generator = new Generator(this.props.networkId);
 
             const account = this.props.account;
             const amounts = generator.createAmounts(
@@ -216,11 +216,15 @@ class Transfer extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    networkId: state.network.networkId,
+});
+
 const mapDispatchToProps = dispatch => ({
     setJson: (json) => dispatch(setOperation(OPER_TRANSFER, json)),
 });
 
 export default withRouter(connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(Transfer));

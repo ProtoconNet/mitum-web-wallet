@@ -14,14 +14,6 @@ import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
 import { isAddressValid, isPrivateKeyValid } from '../lib/Validation';
 import AlertModal from '../components/modals/AlertModal';
 
-const getAccountInformation = async (account) => {
-    return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
-}
-
-const getAccountHistory = async (account) => {
-    return await axios.get(`${process.env.REACT_APP_API_ACCOUNT}${account}/operations?reverse=1`);
-}
-
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -44,6 +36,14 @@ class Login extends React.Component {
         }
     }
 
+    async getAccountInformation(account) {
+        return await axios.get(this.props.networkAccount + account);
+    }
+
+    async getAccountHistory(account) {
+        return await axios.get(`${this.props.networkAccount}${account}/operations?reverse=1`);
+    }
+
     openAlert(title, msg) {
         this.setState({
             isAlertShow: true,
@@ -61,7 +61,7 @@ class Login extends React.Component {
     onLogin(_addr, _priv) {
         const addr = _addr.trim();
         const priv = _priv.trim();
-        
+
         if (!isAddressValid(addr) || !isPrivateKeyValid(priv)) {
             this.openAlert('지갑 열기 실패 :(', '주소 혹은 키 형식이 올바르지 않습니다.');
             return;
@@ -75,7 +75,7 @@ class Login extends React.Component {
             return;
         }
 
-        getAccountHistory(addr)
+        this.getAccountHistory(addr)
             .then(
                 res => {
                     this.props.setHistory(res.data, addr);
@@ -87,7 +87,7 @@ class Login extends React.Component {
                 }
             )
 
-        getAccountInformation(addr)
+        this.getAccountInformation(addr)
             .then(
                 res => {
                     const pubKeys = res.data._embedded.keys.keys.map(x => x.key);
@@ -148,7 +148,7 @@ class Login extends React.Component {
         });
 
         this.onLogin(addr, priv)
-        
+
         if (!(this.props.isLogin && this.props.isLoadHistory)) {
             this.setState({
                 isShowLoad: false
@@ -157,7 +157,7 @@ class Login extends React.Component {
     }
 
     render() {
-        if(this.props.isLogin && this.props.isLoadHistory) {
+        if (this.props.isLogin && this.props.isLoadHistory) {
             return <Redirect to={`/wallet/${this.props.account.address}`} />
         }
 
@@ -202,7 +202,8 @@ const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
     history: state.login.history,
-    isLoadHistory: state.login.isLoadHistory
+    isLoadHistory: state.login.isLoadHistory,
+    networkAccount: state.network.networkAccount,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -32,6 +32,9 @@ class InputBox extends React.Component {
                     autoCapitalize="off"
                     autoSave="off"
                     autoFocus="off"
+                    style={{
+                        textTransform: "none"
+                    }}
                     value={this.state.value ? this.state.value : this.props.value}
                     disabled={this.props.disabled}
                     onChange={this.props.onChange ? this.props.onChange : () => this.onChange()}

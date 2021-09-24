@@ -8053,7 +8053,7 @@
     "int64-buffer" "^1.0.1"
     "js-sha3" "^0.8.0"
     "secp256k1" "^4.0.2"
-    "stellar-sdk" "^8.2.3"
+    "stellar-sdk" "^8.2.5"
     "url-parse" "^1.5.3"
 
 "mixin-deep@^1.2.0":

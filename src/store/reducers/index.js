@@ -4,7 +4,6 @@ import { reducer as operationReducer } from './OperationReducer';
 import { reducer as queueReducer } from './QueueReducer';
 import { reducer as networkReducer } from './NetworkReducer';
 
-
 const rootReducer = combineReducers({
     login: loginReducer,
     operation: operationReducer,

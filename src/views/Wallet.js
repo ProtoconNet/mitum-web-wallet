@@ -27,7 +27,7 @@ const balance = (bal) => {
 
 const history = (hist) => {
     return (
-        <li key={hist.hash + hist.target} onClick={() => {
+        <li key={hist.hash + hist.currency} onClick={() => {
             copy(hist.hash);
             alert('fact hash copied!');
         }}>

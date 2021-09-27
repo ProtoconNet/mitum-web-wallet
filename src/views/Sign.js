@@ -12,10 +12,11 @@ import { Signer } from 'mitumc';
 
 import OperationConfirm from '../components/modals/OperationConfirm';
 
-import { TYPE_CREATE_ACCOUNT, TYPE_UPDATE_KEY, TYPE_TRANSFER } from '../text/mode';
 import { isDuplicate, isOperation } from '../lib/Validation';
-import { OPER_CREATE_ACCOUNT, OPER_DEFAULT, OPER_TRANSFER, OPER_UPDATE_KEY } from '../text/mode';
+import { OPER_DEFAULT } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
+import SmallButton from '../components/buttons/SmallButton';
+import getOperationFromType from '../lib/Parse';
 
 const onCopy = (msg) => {
     copy(msg);
@@ -30,18 +31,7 @@ const preStyle = {
     whiteSpace: "pre-wrap"
 }
 
-const getOperationFromType = (type) => {
-    switch (type) {
-        case TYPE_CREATE_ACCOUNT:
-            return OPER_CREATE_ACCOUNT;
-        case TYPE_UPDATE_KEY:
-            return OPER_UPDATE_KEY;
-        case TYPE_TRANSFER:
-            return OPER_TRANSFER;
-        default:
-            return OPER_DEFAULT;
-    }
-}
+
 
 class Sign extends React.Component {
 
@@ -51,7 +41,7 @@ class Sign extends React.Component {
         this.createdRef = createRef();
         this.infoRef = createRef();
         this.jsonRef = createRef();
-        
+
         this.props.setJson(OPER_DEFAULT, null);
 
         this.state = {
@@ -62,8 +52,16 @@ class Sign extends React.Component {
 
             isAlertOpen: false,
             alertTitle: '',
-            alertMsg: ''
+            alertMsg: '',
+
+            toQr: false,
         }
+    }
+
+    toQrPage() {
+        this.setState({
+            toQr: true
+        })
     }
 
     openAlert(title, msg) {
@@ -159,7 +157,7 @@ class Sign extends React.Component {
             return;
         }
 
-        if(isDuplicate(this.props.account.publicKey, this.props.json.fact_signs.map(x => x.signer))){
+        if (isDuplicate(this.props.account.publicKey, this.props.json.fact_signs.map(x => x.signer))) {
             this.openAlert('서명 추가 실패 :(', '이미 서명 된 작업입니다.');
             return;
         }
@@ -188,7 +186,11 @@ class Sign extends React.Component {
 
     render() {
 
-        if(this.state.isRedirect) {
+        if (this.state.toQr) {
+            return <Redirect to='/qr-reader' />;
+        }
+
+        if (this.state.isRedirect) {
             return <Redirect to='/login' />;
         }
 
@@ -237,6 +239,10 @@ class Sign extends React.Component {
                     {this.state.isJsonOpen ? this.jsonView() : false}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
+                        <SmallButton 
+                            visible={true}
+                            disabled={true}
+                            onClick={() => this.toQrPage()}>import from qr code</SmallButton>
                     </div>
                 </div>
                 <div className="sign-buttons">

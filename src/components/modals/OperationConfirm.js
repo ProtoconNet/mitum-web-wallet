@@ -4,6 +4,8 @@ import { setResponse } from '../../store/actions';
 import axios from 'axios';
 import { Redirect, withRouter } from 'react-router-dom';
 
+import QRCode from 'qrcode.react';
+
 import "./OperationConfirm.scss";
 import { isOperation } from '../../lib/Validation';
 
@@ -17,6 +19,7 @@ class OperationConfirm extends React.Component {
 
         this.state = {
             isRedirect: false,
+            isExport: false,
         }
     }
 
@@ -24,7 +27,7 @@ class OperationConfirm extends React.Component {
         if (!isOperation(operation)) {
             return undefined;
         }
-    
+
         return await axios.post(this.props.networkBroadcast, operation);
     }
 
@@ -67,8 +70,78 @@ class OperationConfirm extends React.Component {
         );
     }
 
+    onExport() {
+        this.setState({
+            isExport: true
+        });
+    }
+
+    downloadQr() {
+        const { filename } = this.props;
+        const canvas = document.getElementById("modal-qrcode");
+        const pngUrl = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+        let downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = `${filename}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        this.onClose();
+    }
+
+    buttonView() {
+        const { json, filename, download } = this.props;
+
+        return (
+            this.state.isExport
+                ? (
+                    <span>
+                        <QRCode
+                            style={{
+                                display: "none"
+                            }}
+                            id="modal-qrcode"
+                            value={
+                                JSON.stringify(json)
+                            }
+                            size={290}
+                            level={"L"}
+                            includeMargin={true}
+                        />
+                        <a className="oper-modal-button" id="yes" target="_blank" rel="noreferrer"
+                            onClick={() => this.downloadQr()}>QR CODE</a>
+                        <a className="oper-modal-button" id="yes" target="_blank" download={`${filename}.json`}
+                            href={download} rel="noreferrer"
+                            onClick={() => this.onClose()}>
+                            JSON 파일 다운로드
+                        </a>
+                    </span>
+                )
+                :
+                (
+                    <span>
+                        <p className="oper-modal-button" id="no" onClick={() => this.onClose()}>{"취소!:("}</p>
+                        <a className="oper-modal-button" id="no" onClick={() => this.onExport()}>{"내보내기 :["}</a>
+                        <p className="oper-modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
+                    </span>
+                )
+        );
+    }
+
+    onClose() {
+        const {onClose} = this.props;
+
+        this.setState({
+            isExport: false
+        });
+        onClose();
+    }
+
     render() {
-        const { isOpen, onClose, json, filename, download } = this.props;
+        const { isOpen } = this.props;
 
         if (this.state.isRedirect) {
             const { operation } = this.props;
@@ -89,20 +162,20 @@ class OperationConfirm extends React.Component {
                 {isOpen ? (
                     <section>
                         <header>
-                            이 작업을 전송하겠습니까?
-                            <button className="close" onClick={onClose}> &times; </button>
+                            {
+                                this.state.isExport
+                                    ? "작업 파일 다운로드"
+                                    : "이 작업을 전송하겠습니까?"
+                            }
+                            <button className="close" onClick={()=> this.onClose()}> &times; </button>
                         </header>
                         <main>
-                            <p id='oper-exp'>전송 버튼을 누른 후에는 작업을 되돌릴 수 없습니다.</p>
-                            <p id='oper-exp'>작업 내용이 정확한가요?</p>
-                            <span>
-                                <p className="oper-modal-button" id="no" onClick={onClose}>{"취소!:("}</p>
-                                <a className="oper-modal-button" id="no" target="_blank" download={`${filename}.json`}
-                                    href={download} rel="noreferrer">
-                                    {"JSON 파일 다운로드!:["}
-                                </a>
-                                <p className="oper-modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
-                            </span>
+                            {
+                                this.state.isExport
+                                    ? <p id='oper-exp'>파일 형식을 선택하세요.</p>
+                                    : <p id='oper-exp'>전송 버튼을 누른 후에는 작업을 되돌릴 수 없습니다.<br />작업 내용이 정확한가요?</p>
+                            }
+                            {this.buttonView()}
                         </main>
                     </section>
                 ) : null}

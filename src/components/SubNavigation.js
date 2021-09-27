@@ -50,7 +50,7 @@ class SubNavigation extends React.Component {
             <div className="sub-nav">
                 {this.state.rand ? this.check() : false}
                 <input className='burger-check' id="burger-check" type="checkbox" checked={this.state.isChecked} />
-                <label className="burger-icon" for="burger-check"
+                <label className="burger-icon" htmlFor="burger-check"
                     onClick={() => this.onCheck()}>
                     <span className="burger-sticks"></span>
                 </label>

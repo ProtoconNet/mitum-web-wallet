@@ -18,6 +18,21 @@ export const CLEAR_NETWORK = 'CLEAR_NETWORK';
 export const SET_NETWORK_ID = 'SET_NETWORK_ID';
 export const CLEAR_NETWORK_ID = 'CLEAR_NETWORK_ID';
 
+export const SET_PAGE = 'SET_PAGE';
+export const CLEAR_PAGE = 'CLEAR_PAGE';
+ 
+export function setPage() {
+    return {
+        type: SET_PAGE,
+    };
+}
+
+export function clearPage() {
+    return {
+        type: CLEAR_PAGE
+    }
+}
+
 export function login(address, privateKey, publicKey, data) {
     const account = new Account(address, privateKey, publicKey, data);
     return {

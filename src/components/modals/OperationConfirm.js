@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { setResponse } from '../../store/actions';
 import axios from 'axios';
 import { Redirect, withRouter } from 'react-router-dom';
 
 import QRCode from 'qrcode.react';
-
 import "./OperationConfirm.scss";
 import { isOperation } from '../../lib/Validation';
 
 import { OPER_CREATE_ACCOUNT, OPER_UPDATE_KEY, OPER_TRANSFER } from '../../text/mode';
 import hint from '../../text/hint.json';
 
+import {encode} from 'base-64'
+
 class OperationConfirm extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.wrapperRef = createRef();
 
         this.state = {
             isRedirect: false,
@@ -105,9 +108,9 @@ class OperationConfirm extends React.Component {
                             }}
                             id="modal-qrcode"
                             value={
-                                JSON.stringify(json)
+                                encode(encode(JSON.stringify(json)))
                             }
-                            size={290}
+                            size={500}
                             level={"L"}
                             includeMargin={true}
                         />
@@ -116,7 +119,7 @@ class OperationConfirm extends React.Component {
                         <a className="oper-modal-button" id="yes" target="_blank" download={`${filename}.json`}
                             href={download} rel="noreferrer"
                             onClick={() => this.onClose()}>
-                            JSON 파일 다운로드
+                            {"JSON 파일 다운로드!:["}
                         </a>
                     </span>
                 )
@@ -132,7 +135,7 @@ class OperationConfirm extends React.Component {
     }
 
     onClose() {
-        const {onClose} = this.props;
+        const { onClose } = this.props;
 
         this.setState({
             isExport: false
@@ -167,7 +170,7 @@ class OperationConfirm extends React.Component {
                                     ? "작업 파일 다운로드"
                                     : "이 작업을 전송하겠습니까?"
                             }
-                            <button className="close" onClick={()=> this.onClose()}> &times; </button>
+                            <button className="close" onClick={() => this.onClose()}> &times; </button>
                         </header>
                         <main>
                             {

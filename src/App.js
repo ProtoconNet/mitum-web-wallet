@@ -20,6 +20,8 @@ import Response from './views/Response';
 import UpdateKeyLoad from './views/UpdateKeyLoad';
 import SubNavigation from './components/SubNavigation';
 
+import ImportQr from './views/ImportQr';
+
 class App extends React.Component {
   render() {
 
@@ -41,6 +43,7 @@ class App extends React.Component {
           <Route path="/network" component={NetworkSetter} />
           <Route path="/response" component={Response} />
           <Route path='/loading' component={UpdateKeyLoad} />
+          <Route path='/qr-reader' component={ImportQr} />
           <Footer />
         </HashRouter>
       </div>

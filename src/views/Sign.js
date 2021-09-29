@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setOperation } from '../store/actions';
+import { clearPage, setOperation } from '../store/actions';
 import copy from 'copy-to-clipboard';
 
 import './Sign.scss';
@@ -12,6 +12,7 @@ import { Signer } from 'mitumc';
 
 import OperationConfirm from '../components/modals/OperationConfirm';
 
+import { PAGE_QR } from '../text/mode';
 import { isDuplicate, isOperation } from '../lib/Validation';
 import { OPER_DEFAULT } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
@@ -42,7 +43,10 @@ class Sign extends React.Component {
         this.infoRef = createRef();
         this.jsonRef = createRef();
 
-        this.props.setJson(OPER_DEFAULT, null);
+        if(this.props.pageBefore !== PAGE_QR) {
+            this.props.setJson(OPER_DEFAULT, null);
+        }
+        this.props.clearPage();
 
         this.state = {
             isRedirect: false,
@@ -241,7 +245,7 @@ class Sign extends React.Component {
                         <input type="file" onChange={(e) => this.importJSON(e)} />
                         <SmallButton 
                             visible={true}
-                            disabled={true}
+                            disabled={false}
                             onClick={() => this.toQrPage()}>import from qr code</SmallButton>
                     </div>
                 </div>
@@ -265,10 +269,13 @@ const mapStateToProps = state => ({
     json: state.operation.json,
 
     networkId: state.network.networkId,
+
+    pageBefore: state.page.pageBefore,
 });
 
 const mapDispatchToProps = dispatch => ({
     setJson: (operation, json) => dispatch(setOperation(operation, json)),
+    clearPage: () => dispatch(clearPage()),
 });
 
 export default withRouter(connect(

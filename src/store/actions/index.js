@@ -21,6 +21,16 @@ export const CLEAR_NETWORK_ID = 'CLEAR_NETWORK_ID';
 export const SET_PAGE = 'SET_PAGE';
 export const CLEAR_PAGE = 'CLEAR_PAGE';
  
+export const SET_MAINTAIN_INFO = "SET_MAINTAIN_INFO";
+
+export function setMaintainInfo(info, onMaintain) {
+    return {
+        type: SET_MAINTAIN_INFO,
+        info,
+        onMaintain,
+    }
+}
+
 export function setPage() {
     return {
         type: SET_PAGE,

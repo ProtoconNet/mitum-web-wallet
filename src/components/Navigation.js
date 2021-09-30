@@ -1,17 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import './Navigation.scss';
 
 var isClose = false;
+
+const allowPath = {1: '/', 2: '/key-generate', 3: '/get-address', 4: '/help', 5: '/network'};
 
 class Navigation extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            rand: 0
+            rand: 0,
+            isRedirect: false,
         }
+
+        this.checkMaintain();
+    }
+
+    checkMaintain() {
+        if (this.props.maintain.maintain) {
+
+            var redirect = true;
+
+            for(var path in allowPath) {
+                if(this.props.location.pathname == allowPath[path]){
+                    redirect = false;
+                    break;
+                }
+            }
+
+            if(redirect) {
+                this.props.history.push('/');
+            }
+            
+        }
+
+        setTimeout(() => this.checkMaintain(), 500);
     }
 
     close() {
@@ -35,11 +61,13 @@ class Navigation extends React.Component {
 
         return (
             <div className="nav">
+                {this.state.isRedirect ? <Redirect to="/" /> : false}
                 {this.state.rand ? this.check() : false}
                 <Link className="nav-title" to="/">
                     <p>MITUM WEB WALLET</p>
                 </Link>
-                <Link className={"nav-login " + (isLogin ? "on" : "off")} to="/login">
+                <Link className={"nav-login " + (isLogin ? "on" : "off")} 
+                    to={this.props.maintain.maintain ? '/' : '/login'}>
                     <p>OPEN WALLET</p>
                 </Link>
                 {isLogin ? <p onClick={() => this.close()} id="nav-addr">{addr}</p> : false}
@@ -74,9 +102,10 @@ class Navigation extends React.Component {
 
 const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
-    account: state.login.account
+    account: state.login.account,
+    maintain: state.maintain
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
-)(Navigation);
+)(Navigation));

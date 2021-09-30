@@ -90,6 +90,19 @@
 
         #body {
             width: 80%;
+
+            &:hover {
+                color: gray;
+                text-decoration: underline;
+            }
+
+            &:active {
+                color: red;
+            }
+
+            overflow: visible;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
     }
 }

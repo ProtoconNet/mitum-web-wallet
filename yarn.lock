@@ -8041,7 +8041,7 @@
 
 "mitumc@file:../mitum-js-util":
   "resolved" "file:../mitum-js-util"
-  "version" "0.0.2"
+  "version" "0.0.3"
   dependencies:
     "bs58" "^4.0.1"
     "bs58check" "^2.1.2"

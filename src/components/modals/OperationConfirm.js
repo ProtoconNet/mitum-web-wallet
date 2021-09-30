@@ -119,7 +119,7 @@ class OperationConfirm extends React.Component {
                         <a className="oper-modal-button" id="yes" target="_blank" download={`${filename}.json`}
                             href={download} rel="noreferrer"
                             onClick={() => this.onClose()}>
-                            {"JSON 파일 다운로드!:["}
+                            JSON FILE
                         </a>
                     </span>
                 )

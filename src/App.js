@@ -22,13 +22,56 @@ import SubNavigation from './components/SubNavigation';
 
 import ImportQr from './views/ImportQr';
 
+import axios from 'axios';
+import { setMaintainInfo } from './store/actions';
+import { connect } from 'react-redux';
+
+const checkMaintainInfo = async () => {
+  return await axios.get("ks.json");
+}
+
 class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.runMaintain();
+  }
+
+  runMaintain() {
+    var isOnMaintain;
+
+    checkMaintainInfo()
+      .then(
+        res => {
+          var start = new Date(res.data.start_time).valueOf();
+          var end = new Date(res.data.end_time).valueOf();
+          var curr = new Date().valueOf();
+          isOnMaintain = (curr <= end && curr >= start) ? true : false;
+          this.props.setMaintainInfo(res.data, isOnMaintain);
+        }
+      )
+      .catch(
+        err =>
+          this.props.setMaintainInfo({
+            start_time: null,
+            end_time: null,
+            message: {
+              en: "",
+              ko: ""
+            }
+          }, false)
+      )
+
+    setTimeout(() => this.runMaintain(), 500);
+  }
+
   render() {
 
     return (
       <div className="app-container">
         <HashRouter >
-          <Navigation />
+          <Navigation history={this.props.history}/>
           <SubNavigation />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
@@ -51,4 +94,15 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  maintain: state.maintain
+});
+
+const mapDispatchToProps = dispatch => ({
+  setMaintainInfo: (info, onMaintain) => dispatch(setMaintainInfo(info, onMaintain))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

@@ -161,6 +161,11 @@ class Sign extends React.Component {
             return;
         }
 
+        if (this.props.account.address !== this.props.json.fact.sender) {
+            this.openAlert('서명 추가 실패 :(', '이 계정에서 생성된 작업이 아닙니다.');
+            return;
+        }
+
         if (isDuplicate(this.props.account.publicKey, this.props.json.fact_signs.map(x => x.signer))) {
             this.openAlert('서명 추가 실패 :(', '이미 서명 된 작업입니다.');
             return;

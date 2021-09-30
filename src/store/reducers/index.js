@@ -4,6 +4,7 @@ import { reducer as operationReducer } from './OperationReducer';
 import { reducer as queueReducer } from './QueueReducer';
 import { reducer as networkReducer } from './NetworkReducer';
 import { reducer as pageReducer } from './PageReducer';
+import { reducer as maintainReducer } from './MaintainReducer';
 
 const rootReducer = combineReducers({
     login: loginReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     queue: queueReducer,
     network: networkReducer,
     page: pageReducer,
+    maintain: maintainReducer,
 });
 
 export default rootReducer;

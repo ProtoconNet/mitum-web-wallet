@@ -2,7 +2,6 @@
   "name": "mitum-web-wallet",
   "version": "0.1.0",
   "private": false,
-  "proxy": "http://walletinfo.testnet.protocon.io.s3-website.ap-northeast-2.amazonaws.com",
   "dependencies": {
     "@babel/core": "^7.13.0",
     "@babel/eslint-parser": "^7.14.7",
@@ -39,7 +38,6 @@
     "html-webpack-plugin": "4.5.0",
     "identity-obj-proxy": "3.0.0",
     "mini-css-extract-plugin": "^1.0.0",
-    "mitumc": "^0.0.2",
     "node-sass": "^6.0.1",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",

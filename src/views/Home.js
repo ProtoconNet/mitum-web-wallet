@@ -44,9 +44,6 @@ class Home extends React.Component {
                         this.props.maintain.maintain
                             ? <div className="home-maintain">
                                 <div dangerouslySetInnerHTML={{ __html: this.props.maintain.msg.ko }} />
-                                <div id="end-time">
-                                    {`Untill ${this.props.maintain.end}`}
-                                </div>
                             </div>
                             : null
                     }

@@ -27,7 +27,7 @@ import { setMaintainInfo } from './store/actions';
 import { connect } from 'react-redux';
 
 const checkMaintainInfo = async () => {
-  return await axios.get("ks.json");
+  return await axios.get(process.env.REACT_APP_MAINTAIN + "?" + Math.random());
 }
 
 class App extends React.Component {

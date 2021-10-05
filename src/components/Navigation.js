@@ -5,7 +5,7 @@ import './Navigation.scss';
 
 var isClose = false;
 
-const allowPath = {1: '/', 2: '/key-generate', 3: '/get-address', 4: '/help', 5: '/network'};
+const allowPath = {1: '/', 2: '/key-generate', 3: '/get-address', 4: '/help', 5: '/network', 6: '/get-pub'};
 
 class Navigation extends React.Component {
     constructor(props) {
@@ -25,7 +25,7 @@ class Navigation extends React.Component {
             var redirect = true;
 
             for(var path in allowPath) {
-                if(this.props.location.pathname == allowPath[path]){
+                if(this.props.location.pathname === allowPath[path]){
                     redirect = false;
                     break;
                 }
@@ -82,6 +82,9 @@ class Navigation extends React.Component {
                 </Link>
                 <Link className="main" to="/get-address">
                     <p>GET ADDRESS</p>
+                </Link>
+                <Link className="main" to="/get-pub">
+                    <p>GET PUBLIC KEY</p>
                 </Link>
                 {account && account.restoreKey
                     ? (

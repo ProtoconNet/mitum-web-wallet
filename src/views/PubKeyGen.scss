@@ -1,0 +1,166 @@
+.pubkey-gen-container {
+    width: 95%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+
+    padding: 3em;
+
+    opacity: 0.8;
+
+    h1 {
+        font-size: 3em;
+        font-weight: 400;
+        margin: 1em;
+        letter-spacing: 5px;
+    }
+
+    .pubkey-gen-input-wrap {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin: 1em 0 2em 0;
+        padding: 0;
+
+        #clear-button {
+            width: 75%;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: flex-end;
+
+            p {
+                width: fit-content;
+                color: white;
+                border: 5px white solid;
+
+                padding: 0.2em 0.5em 0.2em 0.5em;
+                font-size: 1.2em;
+                font-weight: 400;
+
+                &:hover {
+                    color: gray;
+                    border: 5px gray solid;
+                }
+
+                &:active {
+                    color: red;
+                    border: 5px red solid;
+                }
+            }
+        }
+    }
+
+    .pubkey-gen-buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 80%;
+
+        margin: 0 0 2em 0;
+        padding: 0;
+
+        #key-selector {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+
+            padding: 0;
+
+            button {
+                width: 15%;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .pubkey-gen-container {
+
+        h1 {
+            font-size: 2em;
+            margin: 0.5em;
+            letter-spacing: 5px;
+        }
+
+        .pubkey-gen-input-wrap {
+            width: 100%;
+            margin: 0.5em 0 1em 0;
+
+            #clear-button {
+                width: 90%;
+
+                p {
+                    border: 3px white solid;
+
+                    padding: 0.1em 0.3em 0.1em 0.3em;
+                    font-size: 1em;
+
+                    &:hover {
+                        border: 3px gray solid;
+                    }
+
+                    &:active {
+                        border: 3px red solid;
+                    }
+                }
+            }
+        }
+
+        .pubkey-gen-buttons {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .pubkey-gen-container {
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0.5em;
+            letter-spacing: 5px;
+        }
+
+        .pubkey-gen-input-wrap {
+            width: 100%;
+            margin: 0.5em 0 1em 0;
+
+            #clear-button {
+                width: 90%;
+
+                p {
+                    border: 2px white solid;
+
+                    padding: 0.1em 0.2em 0.1em 0.2em;
+                    font-size: 0.8em;
+
+                    &:hover {
+                        border: 2px gray solid;
+                    }
+
+                    &:active {
+                        border: 2px red solid;
+                    }
+                }
+            }
+        }
+
+        .pubkey-gen-buttons {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+    }
+}

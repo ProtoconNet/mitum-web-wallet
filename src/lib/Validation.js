@@ -108,6 +108,19 @@ export const isAccountValid = (account) => {
     return true;
 }
 
+export const isPrivateKeyValidWithNotHint = (pk) => {
+
+    if (typeof (pk) !== typeof ("string")) {
+        return false;
+    }
+
+    if(!/^[a-zA-Z0-9]+(?![^a-zA-Z0-9])\b/.test(pk)) {
+        return false;
+    }
+
+    return true;
+}
+
 export const isPrivateKeyValid = (pk) => {
 
     if (typeof (pk) !== typeof ("string")) {
@@ -121,7 +134,7 @@ export const isPrivateKeyValid = (pk) => {
     const key = pk.substring(0, idx);
     const hint = pk.substring(idx + 1);
 
-    if(!/[a-zA-Z0-9]+/.test(key)) {
+    if(!/^[a-zA-Z0-9]+(?![^a-zA-Z0-9])\b/.test(key)) {
         return false;
     }
 

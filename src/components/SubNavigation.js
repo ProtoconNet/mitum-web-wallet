@@ -79,6 +79,10 @@ class SubNavigation extends React.Component {
                             onClick={() => this.onCheckOut()}>
                             <p>GET ADDRESS</p>
                         </Link>
+                        <Link className="main" to="/get-pub"
+                            onClick={() => this.onCheckOut()}>
+                            <p>GET PUBLIC KEY</p>
+                        </Link>
                         {account && account.restoreKey
                             ? (
                                 <Link className="main" to="/res-key-generate"

@@ -7,6 +7,7 @@ import Login from './views/Login';
 import Wallet from './views/Wallet';
 import KeyGen from './views/KeyGen';
 import AddressGen from './views/AddressGen';
+import PubKeyGen from './views/PubKeyGen';
 import ResKeyGen from './views/ResKeyGen';
 import Help from './views/Help';
 import Operation from './views/Operation';
@@ -87,6 +88,7 @@ class App extends React.Component {
           <Route path="/response" component={Response} />
           <Route path='/loading' component={UpdateKeyLoad} />
           <Route path='/qr-reader' component={ImportQr} />
+          <Route path="/get-pub" component={PubKeyGen} />
           <Footer />
         </HashRouter>
       </div>

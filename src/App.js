@@ -64,7 +64,7 @@ class App extends React.Component {
           }, false)
       )
 
-    setTimeout(() => this.runMaintain(), 500);
+    setTimeout(() => this.runMaintain(), 5000);
   }
 
   render() {

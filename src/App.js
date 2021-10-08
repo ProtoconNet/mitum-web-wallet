@@ -26,6 +26,7 @@ import ImportQr from './views/ImportQr';
 import axios from 'axios';
 import { setMaintainInfo } from './store/actions';
 import { connect } from 'react-redux';
+import InitiateAccounts from './views/InitiateAccounts';
 
 const checkMaintainInfo = async () => {
   return await axios.get(process.env.REACT_APP_MAINTAIN + "?" + Math.random());
@@ -40,16 +41,24 @@ class App extends React.Component {
   }
 
   runMaintain() {
-    var isOnMaintain;
+    // var isOnMaintain;
 
     checkMaintainInfo()
       .then(
         res => {
-          var start = new Date(res.data.start_time).valueOf();
-          var end = new Date(res.data.end_time).valueOf();
-          var curr = new Date().valueOf();
-          isOnMaintain = (curr <= end && curr >= start) ? true : false;
-          this.props.setMaintainInfo(res.data, isOnMaintain);
+          // var start = new Date(res.data.start_time).valueOf();
+          // var end = new Date(res.data.end_time).valueOf();
+          // var curr = new Date().valueOf();
+          // isOnMaintain = (curr <= end && curr >= start) ? true : false;
+          // this.props.setMaintainInfo(res.data, isOnMaintain);
+          this.props.setMaintainInfo({
+            start_time: null,
+            end_time: null,
+            message: {
+              en: "",
+              ko: ""
+            }
+          }, false)
         }
       )
       .catch(
@@ -72,7 +81,7 @@ class App extends React.Component {
     return (
       <div className="app-container">
         <HashRouter >
-          <Navigation history={this.props.history}/>
+          <Navigation history={this.props.history} />
           <SubNavigation />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
@@ -89,6 +98,7 @@ class App extends React.Component {
           <Route path='/loading' component={UpdateKeyLoad} />
           <Route path='/qr-reader' component={ImportQr} />
           <Route path="/get-pub" component={PubKeyGen} />
+          <Route path="/init" component={InitiateAccounts} />
           <Footer />
         </HashRouter>
       </div>

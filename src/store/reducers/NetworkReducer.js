@@ -6,6 +6,7 @@ const initialState = {
     networkBroadcast: process.env.REACT_APP_API_BROADCAST,
     networkSearchFact: process.env.REACT_APP_API_SEARCH_FACT,
     networkId: process.env.REACT_APP_NETWORK_ID,
+    networkPubAccounts: process.env.REACT_APP_API_PUBLIC_ACCOUNTS
 };
 
 export const reducer = (state = initialState, action) => {
@@ -16,7 +17,8 @@ export const reducer = (state = initialState, action) => {
                 network: action.network,
                 networkAccount: action.network + '/account/',
                 networkBroadcast: action.network + '/builder/send',
-                networkSearchFact: action.network + '/operation/'
+                networkSearchFact: action.network + '/operation/',
+                networkPubAccounts: action.network + '/accounts?publickey='
             };
         case actions.CLEAR_NETWORK:
             return {
@@ -25,6 +27,7 @@ export const reducer = (state = initialState, action) => {
                 networkAccount: process.env.REACT_APP_API_ACCOUNT,
                 networkBroadcast: process.env.REACT_APP_API_BROADCAST,
                 networkSearchFact: process.env.REACT_APP_API_SEARCH_FACT,
+                networkPubAccounts: process.env.REACT_APP_API_PUBLIC_ACCOUNTS,
             }
         case actions.SET_NETWORK_ID:
             return {

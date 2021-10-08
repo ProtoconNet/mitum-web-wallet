@@ -14,7 +14,7 @@ import axios from 'axios';
 import { isAccountValid } from '../lib/Validation';
 
 import Sleep from '../lib/Sleep';
-import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY, PAGE_LOGIN, PAGE_OPER, SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
+import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY, PAGE_LOGIN, PAGE_OPER } from '../text/mode';
 
 const balance = (bal) => {
     return (
@@ -67,7 +67,6 @@ class Wallet extends React.Component {
         super(props);
 
         this.walletRef = createRef();
-
         this.state = {
             restoreKey: undefined,
 
@@ -115,28 +114,6 @@ class Wallet extends React.Component {
             while (!isResult) {
                 await Sleep(500);
             }
-        }
-    }
-
-    onMoreClick() {
-        this.setState({
-            isDetailVisible: !this.state.isDetailVisible
-        });
-    }
-
-    onShowClick(target) {
-        if (target === SHOW_PRIVATE) {
-            this.setState({
-                isPrivVisible: !this.state.isPrivVisible
-            })
-        }
-        else if (target === SHOW_RESTORE) {
-            this.setState({
-                isResVisible: !this.state.isResVisible
-            })
-        }
-        else {
-            return;
         }
     }
 
@@ -195,7 +172,6 @@ class Wallet extends React.Component {
     }
 
     render() {
-        
         if (!this.props.account || !isAccountValid(this.props.account)) {
             return <Redirect to="/login" />;
         }
@@ -217,7 +193,9 @@ class Wallet extends React.Component {
         return (
             <div className="wallet-container" >
                 <div className="wallet-ref" ref={this.walletRef} ></div>
-                <div id='wallet-refresh'><p onClick={() => this.refresh()}>↻</p></div>
+                <div id='wallet-refresh'>
+                    <p onClick={() => this.refresh()}>↻</p>
+                </div>
                 <div className="wallet-info">
                     {title("ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE"))}
                     <p id='address' onClick={() => this.openPubModal()}>{this.props.account.address}</p>
@@ -239,7 +217,7 @@ class Wallet extends React.Component {
                         {this.props.history.length > 0 ? this.props.history.map(x => history(x)) : false}
                     </ul>
                     <p id='pend' onClick={() => this.openPendModal()}>
-                        {this.state.isQueueUpdate ? `${this.props.queue.length} 개의 작업을 처리 중입니다.` : false}
+                        {this.state.isQueueUpdate ? `이 브라우저에서 전송된 ${this.props.queue.length} 개의 작업을 처리 중입니다.` : false}
                     </p>
                 </div>
                 <PublicKeyModal onClose={() => this.closePubModal()} isOpen={this.state.isPubModalOpen} />

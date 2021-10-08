@@ -6,7 +6,7 @@ import './Login.scss';
 import PrivateKeyLoginBox from '../components/PrivateKeyLoginBox';
 import RestoreKeyLoginBox from '../components/RestoreKeyLoginBox';
 
-import { clearHistory, login, setHistory } from '../store/actions';
+import { clearHistory, login, setHistory, setKeypair } from '../store/actions';
 import { connect } from 'react-redux';
 
 import { toKeypair } from 'mitumc';
@@ -33,6 +33,10 @@ class Login extends React.Component {
 
             isShowLoad: false,
             isRedirect: false,
+
+            tryLogin: false,
+
+            initiate: false,
         }
     }
 
@@ -143,22 +147,22 @@ class Login extends React.Component {
     }
 
     async onStartLogin(addr, priv) {
+        const pubKey = toKeypair(priv, '').getPublicKey();
+        this.props.setKeypair(priv, pubKey);
+
         this.setState({
-            isShowLoad: true
-        });
-
-        this.onLogin(addr, priv)
-
-        if (!(this.props.isLogin && this.props.isLoadHistory)) {
-            this.setState({
-                isShowLoad: false
-            });
-        }
+            initiate: true,
+        })
     }
 
     render() {
+
         if (this.props.isLogin && this.props.isLoadHistory) {
             return <Redirect to={`/wallet/${this.props.account.address}`} />
+        }
+
+        if(this.state.initiate) {
+            return <Redirect to="/init" />
         }
 
         return (
@@ -208,6 +212,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     signIn: (address, privateKey, publicKey, data) => dispatch(login(address, privateKey, publicKey, data)),
+    setKeypair: (priv, pub) => dispatch(setKeypair(priv, pub)),
     setHistory: (data, me) => dispatch(setHistory(data, me)),
     clearHistory: () => dispatch(clearHistory())
 });

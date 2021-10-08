@@ -4,11 +4,19 @@ const initialState = {
     isLogin: false,
     account: undefined,
     history: undefined,
-    isLoadHistory: false
+    isLoadHistory: false,
+    priv: "",
+    pub: "",
 }
 
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actions.SET_KEYPAIR:
+            return {
+                ...state,
+                priv: action.priv,
+                pub: action.pub,
+            }
         case actions.LOGIN:
             return {
                 ...state,

@@ -2,6 +2,7 @@ import Account from '../../lib/Account';
 import History from '../../lib/History';
 
 export const LOGIN = 'LOGIN';
+export const SET_KEYPAIR = "SET_KEYPAIR";
 export const LOGOUT = 'LOGOUT';
 export const SET_HISTORY = 'SET_HISTORY';
 export const CLEAR_HISTORY = 'CLEAR_HISTORY';
@@ -56,6 +57,14 @@ export function login(address, privateKey, publicKey, data) {
             privateKey: account.privateKey,
             restoreKey: undefined,
         }
+    }
+}
+
+export function setKeypair(priv, pub) {
+    return {
+        type: SET_KEYPAIR,
+        priv,
+        pub,
     }
 }
 

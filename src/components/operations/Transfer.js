@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -24,10 +24,7 @@ class Transfer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.createdRef = createRef();
-        this.titleRef = createRef();
-
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
+        if (!this.props.isLogin) {
             this.state = { isRedirect: true }
             return;
         }
@@ -94,7 +91,7 @@ class Transfer extends React.Component {
             );
 
             const transfers = generator.createOperation(transfersFact, "");
-            transfers.addSign(account.privateKey);
+            transfers.addSign(this.props.priv);
 
             const created = transfers.dict();
 
@@ -152,24 +149,6 @@ class Transfer extends React.Component {
         })
     }
 
-    componentDidMount() {
-        this.scrollToInput();
-    }
-
-    componentDidUpdate() {
-        this.scrollToInput();
-    }
-
-    scrollToInput = () => {
-
-        if (this.createdRef.current && this.state.amounts.length > 0) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.titleRef.current) {
-            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
     render() {
         const account = this.props.account;
 
@@ -179,13 +158,11 @@ class Transfer extends React.Component {
 
         return (
             <div className="tf-container">
-                <div ref={this.titleRef}></div>
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
                     <Balances title='CURRENT BALANCE LIST' labeled={false} balances={account.balances} />
                 </div>
                 <div className="tf-input-wrap">
-                    <div ref={this.createdRef} />
                     <div className="tf-amounts">
                         <Balances title='AMOUNT LIST' labeled={true} balances={this.state.amounts} />
                         <AmountAdder
@@ -199,7 +176,7 @@ class Transfer extends React.Component {
                             <p>RECEIVER'S ADDRESS:</p>
                             <InputBox
                                 size="medium" useCopy={false} disabled={false} placeholder='target address'
-                                value={this.state.threshold}
+                                value={this.state.address}
                                 onChange={(e) => this.onChangeAddress(e)} />
                         </div>
                     </div>
@@ -217,6 +194,9 @@ class Transfer extends React.Component {
 }
 
 const mapStateToProps = state => ({
+    isLogin: state.login.isLogin,
+    account: state.login.account,
+    priv: state.login.privateKey,
     networkId: state.network.networkId,
 });
 

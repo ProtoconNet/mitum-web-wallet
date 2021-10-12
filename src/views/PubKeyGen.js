@@ -58,7 +58,7 @@ class PubKeyGen extends React.Component {
     getPubKey(keyType) {
 
         try {
-            const keypair = toKeypair(this.state.privKey, keyType);
+            const keypair = toKeypair(this.state.privKey.trim(), keyType);
             this.setState({
                 pubKey: keypair.getPublicKey(),
                 privKeyGen: keypair.getPrivateKey()
@@ -91,13 +91,13 @@ class PubKeyGen extends React.Component {
                 <div className="pubkey-gen-buttons">
                     <span id="key-selector">
                         <ConfirmButton
-                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey) ? false : true}
+                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey.trim()) ? false : true}
                             onClick={() => this.getPubKey(KEY_BTC)}>BTC</ConfirmButton>
                         <ConfirmButton
-                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey) ? false : true}
+                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey.trim()) ? false : true}
                             onClick={() => this.getPubKey(KEY_ETHER)}>ETHER</ConfirmButton>
                         <ConfirmButton
-                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey) ? false : true}
+                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey.trim()) ? false : true}
                             onClick={() => this.getPubKey(KEY_STELLAR)}>STELLAR</ConfirmButton>
                     </span>
                 </div>

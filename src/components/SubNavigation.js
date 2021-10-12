@@ -71,6 +71,13 @@ class SubNavigation extends React.Component {
                                     <p>SIGN OPERATION</p>
                                 </Link>
                             ) : false}
+                        {isLogin
+                            ? (
+                                <Link className="main" to="/res-key-generate"
+                                    onClick={() => this.onCheckOut()}>
+                                    <p>SET RESTORE PASSWORD</p>
+                                </Link>
+                            ) : false}
                         <Link className="main" to="/key-generate"
                             onClick={() => this.onCheckOut()}>
                             <p>GENERATE KEYPAIR</p>
@@ -83,13 +90,7 @@ class SubNavigation extends React.Component {
                             onClick={() => this.onCheckOut()}>
                             <p>GET PUBLIC KEY</p>
                         </Link>
-                        {account && account.restoreKey
-                            ? (
-                                <Link className="main" to="/res-key-generate"
-                                    onClick={() => this.onCheckOut()}>
-                                    <p>GENERATE RESTORE KEY</p>
-                                </Link>
-                            ) : false}
+
                         <Link className="main" to="/help"
                             onClick={() => this.onCheckOut()}>
                             <p>HELP</p>

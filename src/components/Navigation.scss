@@ -26,6 +26,7 @@
     .nav-title,
     .nav-login,
     .nav-sign,
+    .nav-res,
     .main {
 
         &:before {
@@ -79,7 +80,7 @@
         }
     }
 
-    .nav-sign {
+    .nav-sign, .nav-res {
         &:before {
             background: gray;
         }
@@ -109,7 +110,8 @@
     .main,
     .nav-title,
     .nav-sign,
-    .nav-login {
+    .nav-login,
+    .nav-res {
         position: relative;
         margin: 0.5em;
         width: 100%;
@@ -127,7 +129,8 @@
     .setting,
     .main,
     .nav-sign,
-    .nav-login {
+    .nav-login,
+    .nav-res {
         p {
             font-size: 1.2em;
         }
@@ -160,12 +163,6 @@
     .nav {
         display: flex;
     }
-    // .nav a {
-    //     left: initial;
-    //     top: initial;
-    //     bottom: 0px;
-    //     width: initial;
-    // }
 }
 
 @media screen and (max-width: 1090px) {

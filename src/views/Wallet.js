@@ -1,7 +1,7 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { dequeueOperation, login } from '../store/actions';
+import { dequeueOperation, login, setAccountList } from '../store/actions';
 import './Wallet.scss';
 
 import copy from 'copy-to-clipboard';
@@ -14,7 +14,8 @@ import axios from 'axios';
 import { isAccountValid } from '../lib/Validation';
 
 import Sleep from '../lib/Sleep';
-import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY, PAGE_LOGIN, PAGE_OPER, SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
+import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY, PAGE_ACC_SEL, PAGE_LOGIN, PAGE_OPER } from '../text/mode';
+import AlertModal from '../components/modals/AlertModal';
 
 const balance = (bal) => {
     return (
@@ -66,19 +67,35 @@ class Wallet extends React.Component {
     constructor(props) {
         super(props);
 
-        this.walletRef = createRef();
-
         this.state = {
             restoreKey: undefined,
 
             isPubModalOpen: false,
             isPendModalOpen: false,
             isQueueUpdate: 1,
+            
+            isAlertOpen: false,
+            alertTitle: "",
+            alertMsg: "",
 
             isRedirect: this.props.isLogin ? false : true,
             redirect: this.props.isLogin ? undefined : PAGE_LOGIN,
             operation: undefined
         }
+    }
+
+    closeAlert() {
+        this.setState({
+            isAlertOpen: false
+        })
+    }
+
+    openAlert(title, msg) {
+        this.setState({
+            isAlertOpen: true,
+            alertTitle: title,
+            alertMsg: msg,
+        })
     }
 
     async getFactInState(hash) {
@@ -118,28 +135,6 @@ class Wallet extends React.Component {
         }
     }
 
-    onMoreClick() {
-        this.setState({
-            isDetailVisible: !this.state.isDetailVisible
-        });
-    }
-
-    onShowClick(target) {
-        if (target === SHOW_PRIVATE) {
-            this.setState({
-                isPrivVisible: !this.state.isPrivVisible
-            })
-        }
-        else if (target === SHOW_RESTORE) {
-            this.setState({
-                isResVisible: !this.state.isResVisible
-            })
-        }
-        else {
-            return;
-        }
-    }
-
     onSelect(oper) {
         if (oper === OPER_CREATE_ACCOUNT
             || oper === OPER_UPDATE_KEY
@@ -153,22 +148,11 @@ class Wallet extends React.Component {
     }
 
     componentDidMount() {
-        this.scrollToAccount();
         this.checkInState();
 
         setTimeout(() => {
             this.refresh();
         }, 5000);
-    }
-
-    componentDidUpdate() {
-        this.scrollToAccount();
-    }
-
-    scrollToAccount = () => {
-        if (this.walletRef.current) {
-            this.walletRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     }
 
     closePubModal() {
@@ -194,8 +178,51 @@ class Wallet extends React.Component {
         });
     }
 
+    async getPubAccounts(pub) {
+        return await axios.get(`${this.props.networkPubAccounts}${pub}`);
+    }
+
+    goAccountSelector() {
+        this.getPubAccounts(this.props.pub)
+        .then(
+            res => {
+                if(res.data._embedded == null ){
+                    this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.");
+                    return;
+                }
+
+                let result = res.data._embedded.map(
+                    x => {
+                        return (x._embedded.address)
+                    }
+                );
+                result.unshift(res.data._links.next.href); 
+
+                return result;
+            }
+        )
+        .then(
+            res => {
+                if(res == null || res.length < 2) {
+                    this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.");
+                    return;
+                }
+
+                const next = res.shift();
+                this.props.setAccountList(res, next);
+
+                this.setState({
+                    redirect: PAGE_ACC_SEL,
+                    isRedirect: true,
+                });
+            }
+        )
+        .catch(
+            e => this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.")
+        )
+    }
+
     render() {
-        
         if (!this.props.account || !isAccountValid(this.props.account)) {
             return <Redirect to="/login" />;
         }
@@ -212,12 +239,17 @@ class Wallet extends React.Component {
             else if (this.state.redirect === PAGE_LOGIN) {
                 return <Redirect to='/login' />;
             }
+            else if (this.state.redirect === PAGE_ACC_SEL) {
+                return <Redirect to='/account-select' />;
+            }
         }
 
         return (
             <div className="wallet-container" >
-                <div className="wallet-ref" ref={this.walletRef} ></div>
-                <div id='wallet-refresh'><p onClick={() => this.refresh()}>↻</p></div>
+                <div id='wallet-refresh'>
+                    <p id="change-account" onClick={() => this.goAccountSelector()}>change account</p>
+                    <p id="refresh" onClick={() => this.refresh()}>↻</p>
+                </div>
                 <div className="wallet-info">
                     {title("ADDRESS" + (this.props.account.accountType === "multi" ? " - MULTI" : " - SINGLE"))}
                     <p id='address' onClick={() => this.openPubModal()}>{this.props.account.address}</p>
@@ -239,11 +271,13 @@ class Wallet extends React.Component {
                         {this.props.history.length > 0 ? this.props.history.map(x => history(x)) : false}
                     </ul>
                     <p id='pend' onClick={() => this.openPendModal()}>
-                        {this.state.isQueueUpdate ? `${this.props.queue.length} 개의 작업을 처리 중입니다.` : false}
+                        {this.state.isQueueUpdate ? `이 브라우저에서 전송된 ${this.props.queue.length} 개의 작업을 처리 중입니다.` : false}
                     </p>
                 </div>
                 <PublicKeyModal onClose={() => this.closePubModal()} isOpen={this.state.isPubModalOpen} />
                 <PendingModal onClose={() => this.closePendModal()} isOpen={this.state.isPendModalOpen} />
+                <AlertModal isOpen={this.state.isAlertOpen} onClose={() => this.closeAlert()}
+                    title={this.state.alertTitle} msg={this.state.alertMsg} />
             </div >
         );
     }
@@ -254,10 +288,13 @@ const mapStateToProps = state => ({
     account: state.login.account,
     history: state.login.history,
     queue: state.queue.queue,
-    networkSearchFact: state.network.networkSearchFact
+    networkSearchFact: state.network.networkSearchFact,
+    networkPubAccounts: state.network.networkPubAccounts,
+    pub: state.login.pub,
 });
 
 const mapDispatchToProps = dispatch => ({
+    setAccountList: (accList, next) => dispatch(setAccountList(accList, next)),
     signIn: (address, privateKey, data) => dispatch(login(address, privateKey, data)),
     deleteJob: () => dispatch(dequeueOperation())
 });

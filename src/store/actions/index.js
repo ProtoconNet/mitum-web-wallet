@@ -1,5 +1,6 @@
 import Account from '../../lib/Account';
 import History from '../../lib/History';
+import { sha3_256 } from 'js-sha3';
 
 export const LOGIN = 'LOGIN';
 export const SET_KEYPAIR = "SET_KEYPAIR";
@@ -23,6 +24,40 @@ export const SET_PAGE = 'SET_PAGE';
 export const CLEAR_PAGE = 'CLEAR_PAGE';
  
 export const SET_MAINTAIN_INFO = "SET_MAINTAIN_INFO";
+
+export const SET_ACCOUNT_LIST = "SET_ACCOUNT_LIST";
+
+export const SET_RESTORE_KEY = "SET_RESTORE_KEY";
+export const CLEAR_RESTORE_KEY = "CLEAR_RESTORE_KEY";
+
+export const ALLOW_LOGIN = "ALLOW_LOGIN";
+export const REJECT_LOGIN="REJECT_LOGIN";
+
+export function allowLogin() {
+    return {
+        type: ALLOW_LOGIN,
+    }
+}
+
+export function rejectLogin() {
+    return {
+        type: REJECT_LOGIN,
+    }
+}
+
+export function setRestoreKey(priv, reskey) {
+    return {
+        type: SET_RESTORE_KEY,
+        priv,
+        verify: sha3_256.create().update(priv + reskey).hex(),
+    }
+}
+
+export function clearRestoreKey() {
+    return {
+        type: CLEAR_RESTORE_KEY,
+    }
+}
 
 export function setMaintainInfo(info, onMaintain) {
     return {
@@ -57,6 +92,14 @@ export function login(address, privateKey, publicKey, data) {
             privateKey: account.privateKey,
             restoreKey: undefined,
         }
+    }
+}
+
+export function setAccountList(list, next) {
+    return {
+        type: SET_ACCOUNT_LIST,
+        list,
+        next,
     }
 }
 

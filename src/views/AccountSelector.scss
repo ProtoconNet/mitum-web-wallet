@@ -1,0 +1,156 @@
+.account-selector-container {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+
+    padding: 3em;
+    opacity: 0.8;
+
+    h1 {
+        font-size: 3em;
+        font-weight: 400;
+        margin: 1em 1em 2em 1em;
+        letter-spacing: 5px;
+    }
+
+    ul {
+        width: 60%;
+        height: fit-content;
+        list-style: none;
+        padding: 0.2em;
+        margin: 0;
+
+        li {
+            padding: 0.3em 0.5em 0.3em 0.5em;
+            margin: 0.5em;
+
+            font-size: 1.3em;
+
+            overflow: visible;
+            white-space: pre-wrap;
+            word-break: break-all;
+
+            text-align: center;
+        }
+
+        #account {
+            background-color: white;
+            color: black;
+
+            &:hover{
+                background-color: transparent;
+                color: white;
+            }
+
+            &:active {
+                background-color: red;
+                color: white;
+            }
+        }
+
+        #load {
+            border: 3px solid white;
+            background-color: transparent;
+            color: white;
+
+            &:hover {
+                background-color: skyblue;
+                color: white;
+            }
+
+            &:active {
+                background-color: lightpink;
+                color: white;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1300px) and (min-width: 1090px) {
+    .account-selector-container ul li {
+        font-size: 1.1em;
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .account-selector-container {
+        padding: 2em;
+
+        h1 {
+            font-size: 2em;
+            margin: 1em 1em 2em 1em;
+        }
+
+        ul {
+            width: 90%;
+
+            li {
+
+                padding: 0.2em 0.3em 0.2em 0.3em;
+                margin: 0.3em;
+                font-size: 1em;
+            }
+
+            #load {
+                border: 2px solid white;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .account-selector-container {
+        padding: 3em;
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0.5em 0.5em 1em 0.5em;
+        }
+
+        ul {
+            width: 90%;
+
+            li {
+
+                padding: 0.2em 0.3em 0.2em 0.3em;
+                margin: 0.3em;
+                font-size: 0.9em;
+            }
+
+            #load {
+                border: 1px solid white;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .account-selector-container {
+        padding: 3em;
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0.5em 0.5em 1em 0.5em;
+        }
+
+        ul {
+            width: 90%;
+
+            li {
+
+                padding: 0.2em 0.3em 0.2em 0.3em;
+                margin: 0.3em;
+                font-size: 0.8em;
+            }
+
+            #load {
+                border: 1px solid white;
+            }
+        }
+    }
+}

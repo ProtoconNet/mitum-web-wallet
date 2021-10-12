@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { clearPage, setOperation } from '../store/actions';
@@ -38,10 +38,6 @@ class Sign extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.createdRef = createRef();
-        this.infoRef = createRef();
-        this.jsonRef = createRef();
 
         if(this.props.pageBefore !== PAGE_QR) {
             this.props.setJson(OPER_DEFAULT, null);
@@ -84,26 +80,6 @@ class Sign extends React.Component {
 
     closeModal() {
         this.setState({ isModalOpen: false })
-    }
-
-    componentDidMount() {
-        this.scrollToJSON();
-    }
-
-    componentDidUpdate() {
-        this.scrollToJSON();
-    }
-
-    scrollToJSON = () => {
-        if (this.jsonRef.current && this.state.isJsonOpen) {
-            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.infoRef.current && this.state.json && !this.state.isJsonOpen) {
-            this.infoRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.createdRef.current) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     }
 
     jsonView() {
@@ -205,9 +181,7 @@ class Sign extends React.Component {
 
         return (
             <div className="sign-container">
-                <div ref={this.createdRef} />
                 <h1>SIGN / SEND OPERATION</h1>
-                <div ref={this.infoRef} />
                 <div className="sign-operation">
                     <div className="sign-info">
                         <span id="other">
@@ -237,7 +211,6 @@ class Sign extends React.Component {
                             ) : 'No signature'}</p>
                         </span>
                     </div>
-                    <div ref={this.jsonRef} />
                     {this.props.json
                         ? (
                             <div className='sign-view-json'

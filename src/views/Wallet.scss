@@ -24,16 +24,17 @@
         flex-direction: row;
         align-items: flex-end;
         justify-content: flex-end;
+        vertical-align: middle;
 
-        p {
+        #refresh {
             color: white;
             background-color: transparent;
 
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: 400;
 
             padding: 0.2em 0.5em 0.2em 0.5em;
-            margin: 0;
+            margin: 0.5em;
 
             text-align: center;
             border-radius: 30%;
@@ -47,6 +48,28 @@
             &:hover {
                 background-color: white;
                 color: black;
+            }
+        }
+
+        #change-account {
+            color: black;
+            background-color: white;
+            font-size: 1.3em;
+            font-weight: 500;
+
+            padding: 0.2em 0.5em 0.2em 0.5em;
+            margin: 0.5em;
+
+            vertical-align: middle;
+
+            &:active {
+                color: white;
+                background-color: lightgray;
+            }
+
+            &:hover {
+                color: white;
+                background-color: skyblue;
             }
         }
     }
@@ -348,11 +371,15 @@
 
         #wallet-refresh {
             width: 90%;
-            font-size: 1.2em;
+            font-size: 1.1em;
 
-            p {
-                padding: 0.2em 0.5em 0.2em 0.5em;
+            #refresh {
+                margin: 0.3em;
                 border: 1px solid white;
+            }
+
+            #change-account {
+                margin: 0.3em;
             }
         }
 
@@ -456,9 +483,13 @@
             width: 90%;
             font-size: 1.0em;
 
-            p {
-                padding: 0.2em 0.5em 0.2em 0.5em;
+            #refresh {
+                margin: 0.2em;
                 border: 1px solid white;
+            }
+
+            #change-account {
+                margin: 0.2em;
             }
         }
 

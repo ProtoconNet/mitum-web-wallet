@@ -13,6 +13,7 @@ export const PAGE_SIGN = 'PAGE-SIGN';
 export const PAGE_LOD = 'PAGE-LOD';
 export const PAGE_RES = 'PAGE-RES';
 export const PAGE_GEN = 'PAGE-GEN';
+export const PAGE_ACC_SEL = 'PAGE-ACC-SEL';
 
 export const PAGE_QR = "PAGE-QR";
 export const PAGE_NON = "PAGE-NON";

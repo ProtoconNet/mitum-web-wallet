@@ -114,18 +114,20 @@ export const isPrivateKeyValidWithNotHint = (pk) => {
         return false;
     }
 
-    if(!/^[a-zA-Z0-9]+(?![^a-zA-Z0-9])\b/.test(pk)) {
+    if(!/^[a-zA-Z0-9]+(?![^a-zA-Z0-9])\b/.test(pk.trim())) {
         return false;
     }
 
     return true;
 }
 
-export const isPrivateKeyValid = (pk) => {
+export const isPrivateKeyValid = (pvk) => {
 
-    if (typeof (pk) !== typeof ("string")) {
+    if (typeof (pvk) !== typeof ("string")) {
         return false;
     }
+
+    const pk = pvk.trim();
 
     const idx = pk.indexOf(':');
     if (idx < 0) {
@@ -148,11 +150,13 @@ export const isPrivateKeyValid = (pk) => {
     }
 }
 
-export const isPublicKeyValid = (pubk) => {
+export const isPublicKeyValid = (pbk) => {
 
-    if (typeof (pubk) !== typeof ('string')) {
+    if (typeof (pbk) !== typeof ('string')) {
         return false;
     }
+
+    const pubk = pbk.trim();
 
     const idx = pubk.indexOf(':');
     if (idx < 0) {
@@ -176,11 +180,13 @@ export const isPublicKeyValid = (pubk) => {
     }
 }
 
-export const isAddressValid = (addr) => {
+export const isAddressValid = (adr) => {
 
-    if (typeof (addr) !== typeof ("string")) {
+    if (typeof (adr) !== typeof ("string")) {
         return false;
     }
+
+    const addr = adr.trim();
 
     const idx = addr.indexOf(':');
     if (idx < 0) {
@@ -200,10 +206,24 @@ export const isAddressValid = (addr) => {
     return true;
 }
 
-const isNum = (num) => {
-    if (!num) {
+export const isRestoreKeyValid = (res) => {
+    if(!/^[a-zA-Z0-9@!#^&*+]+(?![^a-zA-Z0-9@!#^&*+])\b/.test(res)) {
         return false;
     }
+
+    if(res.length < 8 || res.length > 16) {
+        return false;
+    }
+
+    return true;
+}
+
+const isNum = (numb) => {
+    if (!numb) {
+        return false;
+    }
+
+    const num = numb.trim();
 
     if (/[^0-9]/.test(num)) {
         return false;
@@ -220,7 +240,9 @@ const isNum = (num) => {
     return true;
 }
 
-export const isThresholdValid = (thres) => {
+export const isThresholdValid = (threshold) => {
+    const thres = threshold.trim();
+
     if (!isNum(thres)) {
         return false;
     }
@@ -238,7 +260,7 @@ export const isThresholdValid = (thres) => {
 }
 
 export const isWeightValid = (weight) => {
-    return isNum(weight);
+    return isNum(weight.trim());
 }
 
 export const isWeightsValidToThres = (weights, thres) => {
@@ -272,15 +294,15 @@ export const isCurrencyValid = (currency, currencies) => {
         return false;
     }
 
-    if(!/[A-Z]{3,3}/.test(currency)) {
+    if(!/[A-Z]{3,3}/.test(currency.trim())) {
         return false;
     }
 
-    return isDuplicate(currency, currencies);
+    return isDuplicate(currency.trim(), currencies);
 }
 
 export const isAmountValid = (amount) => {
-    return isNum(amount);
+    return isNum(amount.trim());
 }
 
 export const isDuplicate = (target, list) => {

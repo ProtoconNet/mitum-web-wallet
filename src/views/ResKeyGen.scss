@@ -1,14 +1,145 @@
-.res-container {
+.res-gen-container {
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
     display: flex;
+    align-items: center;
     flex-direction: column;
-    align-content: center;
     justify-content: center;
+    align-self: center;
+
+    padding: 3em;
+
+    opacity: 0.8;
 
     h1 {
-        width: 100%;
+        font-size: 3em;
+        font-weight: 400;
+        margin: 1em 1em 0.5em 1em;
+        letter-spacing: 5px;
+    }
+
+    #clear-res {
+        width: 45%;
+        font-size: 1.5em;
+        margin: 2em;
+        padding: 0.5em;
         text-align: center;
+        text-decoration: underline;
+        color: white;
+
+        &:hover {
+            background-color: red;
+            color: white;
+        }
+
+        &:active {
+            background-color: gray;
+            color: white;
+        }
+    }
+
+    .res-gen-input {
+        width: 80%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #res-gen-explain {
+        width: 50%;
+        border: 3px solid white;
+        padding: 1.5em;
+        margin: 2em;
+
+        h2 {
+            width: 100%;
+            text-align: center;
+            margin: 0.5em;
+            font-weight: 400;
+        }
+
+        ul {
+            padding: 0.5em;
+            font-weight: 300;
+            font-size: 1.3em;
+
+            li {
+                margin: 0.3em;
+                padding: 0.5em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .res-gen-container {
+    
+        h1 {
+            font-size: 2em;
+            margin: 1em 1em 0.5em 1em;
+        }
+    
+        #clear-res {
+            width: 60%;
+            font-size: 1.3em;
+        }
+    
+        .res-gen-input {
+            width: 95%;
+        }
+    
+        #res-gen-explain {
+            width: 80%;
+            border: 2px solid white;
+            padding: 1.2em;
+            margin: 1.5em;
+
+            ul {
+                font-size: 1.1em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .res-gen-container {
+    
+        h1 {
+            font-size: 2em;
+            margin: 1em 1em 0.5em 1em;
+        }
+    
+        #clear-res {
+            width: 70%;
+            font-size: 1em;
+        }
+    
+        .res-gen-input {
+            width: 95%;
+        }
+    
+        #res-gen-explain {
+            width: 80%;
+            border: 1px solid white;
+            padding: 1.2em;
+            margin: 1.5em;
+
+            h2 {
+                margin: 0.3em;
+            }
+            
+            ul {
+                padding: 0.2em;
+                font-size: 1em;
+            
+                li {
+                    margin: 0.2em;
+                    padding: 0.3em;
+                }
+            }
+        }
     }
 }

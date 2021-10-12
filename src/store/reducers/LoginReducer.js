@@ -7,10 +7,18 @@ const initialState = {
     isLoadHistory: false,
     priv: "",
     pub: "",
+    accountList: [],
+    next: "",
 }
 
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actions.SET_ACCOUNT_LIST:
+            return {
+                ...state,
+                accountList: action.list,
+                next: process.env.REACT_APP_API_URL + action.next,
+            }
         case actions.SET_KEYPAIR:
             return {
                 ...state,
@@ -27,7 +35,11 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLogin: false,
-                account: undefined
+                account: undefined,
+                priv: "",
+                pub: "",
+                accountList: [],
+                next: "",
             }
         case actions.SET_HISTORY:
             return {

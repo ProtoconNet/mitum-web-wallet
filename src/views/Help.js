@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import Sleep from '../lib/Sleep';
 import './Help.scss';
 
@@ -10,8 +10,6 @@ class Help extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.pdfRef = createRef();
 
         this.state = {
             isShowExp: false,
@@ -37,17 +35,6 @@ class Help extends React.Component {
         this.setState({
             isShowExp: true,
         });
-        this.scrollToPdf();
-    }
-
-    scrollToPdf = () => {
-        if (this.pdfRef.current && this.state.isShowExp) {
-            this.pdfRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
-    componentDidUpdate() {
-        this.scrollToPdf();
     }
 
     render() {
@@ -61,7 +48,6 @@ class Help extends React.Component {
                     }}>
                     <h1>Wait...</h1>
                 </div>
-                <div ref={this.pdfRef} />
                 <div id='help-document'
                     style={{
                         display: this.state.isShowExp ? 'flex' : 'none'

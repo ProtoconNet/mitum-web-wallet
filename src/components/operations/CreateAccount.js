@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setOperation } from '../../store/actions';
@@ -25,10 +25,7 @@ class CreateAccount extends React.Component {
     constructor(props) {
         super(props);
 
-        this.createdRef = createRef();
-        this.titleRef = createRef();
-
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
+        if (!this.props.isLogin) {
             this.state = { isRedirect: true }
             return;
         }
@@ -199,24 +196,6 @@ class CreateAccount extends React.Component {
         });
     }
 
-    componentDidMount() {
-        this.scrollToInput();
-    }
-
-    componentDidUpdate() {
-        this.scrollToInput();
-    }
-
-    scrollToInput = () => {
-
-        if (this.createdRef.current && (this.state.keys.length > 0 || this.state.amounts.length > 0)) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.titleRef.current) {
-            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
     render() {
         const account = this.props.account;
 
@@ -226,13 +205,11 @@ class CreateAccount extends React.Component {
 
         return (
             <div className="ca-container">
-                <div ref={this.titleRef}></div>
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">
                     <Balances title="CURRENT BALANCE LIST" labeled={false} balances={account.balances} />
                 </div>
                 <div className="ca-input-wrap">
-                    <div ref={this.createdRef}></div>
                     <div className="ca-keys">
                         <Keys title='KEY LIST' keys={this.state.keys} labeled={true} />
                         <KeyAdder

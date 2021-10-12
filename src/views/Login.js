@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 import { toKeypair } from 'mitumc';
 import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
-import { isAddressValid, isPrivateKeyValid } from '../lib/Validation';
+import { isPrivateKeyValid } from '../lib/Validation';
 import AlertModal from '../components/modals/AlertModal';
 
 class Login extends React.Component {
@@ -19,7 +19,7 @@ class Login extends React.Component {
         super(props);
 
         if (this.props.isLogin) {
-            this.onLogin(this.props.account.address, this.props.account.privateKey);
+            this.onLogin(this.props.account.privateKey);
         }
 
         this.state = {
@@ -62,11 +62,11 @@ class Login extends React.Component {
         });
     }
 
-    onLogin(_addr, _priv) {
-        const addr = _addr.trim();
+    onLogin(_priv) {
+        const addr = this.props.account.address;
         const priv = _priv.trim();
 
-        if (!isAddressValid(addr) || !isPrivateKeyValid(priv)) {
+        if (!isPrivateKeyValid(priv)) {
             this.openAlert('지갑 열기 실패 :(', '주소 혹은 키 형식이 올바르지 않습니다.');
             return;
         }
@@ -106,7 +106,6 @@ class Login extends React.Component {
             )
             .catch(
                 e => {
-                    console.log(e);
                     this.openAlert('지갑 열기 실패 :(', '유효하지 않은 주소 혹은 네트워크 문제로 계정 조회에 실패하였습니다.');
                 }
             );
@@ -128,12 +127,12 @@ class Login extends React.Component {
         switch (mode) {
             case SHOW_PRIVATE:
                 return <PrivateKeyLoginBox
-                    onLogin={(addr, priv) => this.onStartLogin(addr, priv)} />;
+                    onLogin={(priv) => this.onStartLogin(priv)} />;
             case SHOW_RESTORE:
                 return <RestoreKeyLoginBox />;
             default:
                 return <PrivateKeyLoginBox
-                    onLogin={(addr, priv) => this.onStartLogin(addr, priv)} />;
+                    onLogin={(priv) => this.onStartLogin(priv)} />;
         }
     }
 
@@ -146,7 +145,7 @@ class Login extends React.Component {
         else return;
     }
 
-    async onStartLogin(addr, priv) {
+    async onStartLogin(priv) {
         const pubKey = toKeypair(priv, '').getPublicKey();
         this.props.setKeypair(priv, pubKey);
 
@@ -155,13 +154,19 @@ class Login extends React.Component {
         })
     }
 
+    componentDidMount() {
+        if (!this.props.isLogin && this.props.priv.length > 0 && this.props.pub.length > 0) {
+            this.openAlert("지갑 열기 실패! :(", "네트워크 혹은 잘못된 키 문제로 지갑 열기에 실패하였습니다.");
+        }
+    }
+
     render() {
 
         if (this.props.isLogin && this.props.isLoadHistory) {
             return <Redirect to={`/wallet/${this.props.account.address}`} />
         }
 
-        if(this.state.initiate) {
+        if (this.state.initiate) {
             return <Redirect to="/init" />
         }
 
@@ -208,6 +213,8 @@ const mapStateToProps = state => ({
     history: state.login.history,
     isLoadHistory: state.login.isLoadHistory,
     networkAccount: state.network.networkAccount,
+    priv: state.login.priv,
+    pub: state.login.pub,
 });
 
 const mapDispatchToProps = dispatch => ({

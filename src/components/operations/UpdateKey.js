@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -25,10 +25,7 @@ class UpdateKey extends React.Component {
     constructor(props) {
         super(props);
 
-        this.createdRef = createRef();
-        this.titleRef = createRef();
-
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
+        if (!this.props.isLogin) {
             this.state = { isRedirect: true }
             return;
         }
@@ -193,13 +190,11 @@ class UpdateKey extends React.Component {
 
         return (
             <div className="uk-container">
-                <div ref={this.titleRef}></div>
                 <h1>UPDATE KEY</h1>
                 <div className="uk-info-wrap">
                     <Keys title='CURRENT KEY LIST' keys={account.publicKeys} />
                 </div>
                 <div className="uk-input-wrap">
-                    <div ref={this.createdRef} />
                     <div className="uk-keys">
                         <Keys title='NEW KEY LIST' keys={this.state.keys} />
                         <section className='uk-keys-adder'>

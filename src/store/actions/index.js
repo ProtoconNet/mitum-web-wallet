@@ -24,6 +24,8 @@ export const CLEAR_PAGE = 'CLEAR_PAGE';
  
 export const SET_MAINTAIN_INFO = "SET_MAINTAIN_INFO";
 
+export const SET_ACCOUNT_LIST = "SET_ACCOUNT_LIST";
+
 export function setMaintainInfo(info, onMaintain) {
     return {
         type: SET_MAINTAIN_INFO,
@@ -57,6 +59,14 @@ export function login(address, privateKey, publicKey, data) {
             privateKey: account.privateKey,
             restoreKey: undefined,
         }
+    }
+}
+
+export function setAccountList(list, next) {
+    return {
+        type: SET_ACCOUNT_LIST,
+        list,
+        next,
     }
 }
 

@@ -12,13 +12,20 @@ class InitiateAccounts extends React.Component {
         this.state = {
             isRedirect: false,
         }
+
         this.run();
     }
-
+    
     run() {
         this.getPubAccounts(this.props.pub)
             .then(
                 res => {
+                    if(res.data._embedded == null ){
+                        this.setState({
+                            isRedirect: true,
+                        })
+                    }
+
                     return res.data._embedded.map(
                         x => {
                             return x._embedded.address
@@ -41,7 +48,7 @@ class InitiateAccounts extends React.Component {
             )
             .catch(
                 e => {
-                    alert("계정 변경 실패");
+                    console.log("fail login");
                     this.setState({
                         isRedirect: true,
                     })

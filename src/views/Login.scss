@@ -173,15 +173,15 @@
     }
 }
 
-@media screen and (max-width: 1090px) and (min-width: 750px){
+@media screen and (max-width: 1090px) and (min-width: 750px) {
     .login-container {
         width: 100%;
 
         #login-main {
-    
+
             .login-radio {
                 flex-direction: column;
-    
+
                 .rad-label {
                     padding: 10px 15px;
                     margin: 10px;
@@ -190,7 +190,7 @@
                         width: 15px;
                         height: 15px;
                     }
-    
+
                     .rad-text {
                         margin-left: 10px;
                         letter-spacing: 3px;
@@ -199,7 +199,7 @@
                     }
                 }
             }
-    
+
             h1 {
                 font-size: 2em;
                 font-weight: 300;
@@ -207,7 +207,7 @@
                 letter-spacing: 3px;
             }
         }
-    
+
         #login-load {
             font-weight: 300;
             font-size: 2em;
@@ -215,15 +215,15 @@
     }
 }
 
-@media screen and (max-width: 750px){
+@media screen and (max-width: 750px) {
     .login-container {
         width: 100%;
 
         #login-main {
-    
+
             .login-radio {
                 flex-direction: column;
-    
+
                 .rad-label {
                     padding: 10px 15px;
                     margin: 10px;
@@ -232,7 +232,7 @@
                         width: 11px;
                         height: 11px;
                     }
-    
+
                     .rad-text {
                         margin-left: 10px;
                         letter-spacing: 3px;
@@ -241,7 +241,7 @@
                     }
                 }
             }
-    
+
             h1 {
                 font-size: 1.5em;
                 font-weight: 300;
@@ -249,7 +249,7 @@
                 letter-spacing: 3px;
             }
         }
-    
+
         #login-load {
             font-weight: 300;
             font-size: 1.5em;

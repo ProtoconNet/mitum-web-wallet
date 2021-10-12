@@ -25,7 +25,7 @@ class InputBox extends React.Component {
         return (
             <div className={"box " + this.props.size}>
                 <input className='input-box'
-                    type="text/plain"
+                    type={this.props.isPw ? "password" : "text/plain" }
                     name="input-box"
                     autoComplete="off"
                     autoCorrect="off"
@@ -56,7 +56,8 @@ InputBox.propTypes = {
     disabled: PropTypes.bool,
     value: PropTypes.string,
     onChange: PropTypes.func,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    isPw: PropTypes.bool,
 }
 
 export default InputBox;

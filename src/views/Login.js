@@ -6,7 +6,7 @@ import './Login.scss';
 import PrivateKeyLoginBox from '../components/PrivateKeyLoginBox';
 import RestoreKeyLoginBox from '../components/RestoreKeyLoginBox';
 
-import { clearHistory, login, setHistory, setKeypair } from '../store/actions';
+import { allowLogin, clearHistory, login, rejectLogin, setHistory, setKeypair } from '../store/actions';
 import { connect } from 'react-redux';
 
 import { toKeypair } from 'mitumc';
@@ -23,15 +23,15 @@ class Login extends React.Component {
         }
 
         this.state = {
-            mode: SHOW_PRIVATE,
-            isPriv: true,
-            isActive: false,
+            mode: this.props.isRestoreKeyExist ? SHOW_RESTORE : SHOW_PRIVATE,
+            isPriv: this.props.isRestoreKeyExist ? false : true,
+            isActive: true,
 
             isAlertShow: false,
             alertTitle: '',
             alertMsg: '',
 
-            isShowLoad: false,
+            isShowLoad: this.props.isLogin,
             isRedirect: false,
 
             tryLogin: false,
@@ -97,7 +97,9 @@ class Login extends React.Component {
                     const pubKeys = res.data._embedded.keys.keys.map(x => x.key);
                     for (let i = 0; i < pubKeys.length; i++) {
                         if (pubKeys[i] === pubKey) {
-                            this.props.signIn(addr, priv, pubKey, res.data);
+                            if(this.props.isLoginAllowed) {
+                                this.props.signIn(addr, priv, pubKey, res.data);
+                            }
                             return;
                         }
                     }
@@ -129,7 +131,8 @@ class Login extends React.Component {
                 return <PrivateKeyLoginBox
                     onLogin={(priv) => this.onStartLogin(priv)} />;
             case SHOW_RESTORE:
-                return <RestoreKeyLoginBox />;
+                return <RestoreKeyLoginBox 
+                    onLogin={(priv) => this.onStartLogin(priv)}/>;
             default:
                 return <PrivateKeyLoginBox
                     onLogin={(priv) => this.onStartLogin(priv)} />;
@@ -146,6 +149,7 @@ class Login extends React.Component {
     }
 
     async onStartLogin(priv) {
+        this.props.allowLogin();
         const pubKey = toKeypair(priv, '').getPublicKey();
         this.props.setKeypair(priv, pubKey);
 
@@ -200,7 +204,7 @@ class Login extends React.Component {
                     style={{
                         display: this.state.isShowLoad ? 'flex' : 'none'
                     }}>
-                    <h1>Wait...</h1>
+                    <h1>Now Loading...</h1>
                 </div>
             </div>
         );
@@ -215,10 +219,15 @@ const mapStateToProps = state => ({
     networkAccount: state.network.networkAccount,
     priv: state.login.priv,
     pub: state.login.pub,
+
+    isRestoreKeyExist: state.restore.isSet,
+    isLoginAllowed: state.allow.isLoginAllowed,
 });
 
 const mapDispatchToProps = dispatch => ({
     signIn: (address, privateKey, publicKey, data) => dispatch(login(address, privateKey, publicKey, data)),
+    allowLogin: () => dispatch(allowLogin()),
+    rejectLogin: () => dispatch(rejectLogin()),
     setKeypair: (priv, pub) => dispatch(setKeypair(priv, pub)),
     setHistory: (data, me) => dispatch(setHistory(data, me)),
     clearHistory: () => dispatch(clearHistory())

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router';
-import { login } from '../store/actions';
+import { login, rejectLogin } from '../store/actions';
 
 class InitiateAccounts extends React.Component {
 
@@ -15,12 +15,13 @@ class InitiateAccounts extends React.Component {
 
         this.run();
     }
-    
+
     run() {
         this.getPubAccounts(this.props.pub)
             .then(
                 res => {
-                    if(res.data._embedded == null ){
+                    if (res.data._embedded == null) {
+                        this.props.rejectLogin();
                         this.setState({
                             isRedirect: true,
                         })
@@ -40,7 +41,9 @@ class InitiateAccounts extends React.Component {
             )
             .then(
                 res => {
-                    this.props.signIn(res.data._embedded.address, this.props.priv, this.props.pub, res.data);
+                    if(this.props.isLoginAllowed) {
+                        this.props.signIn(res.data._embedded.address, this.props.priv, this.props.pub, res.data);
+                    }
                     this.setState({
                         isRedirect: true,
                     })
@@ -49,6 +52,7 @@ class InitiateAccounts extends React.Component {
             .catch(
                 e => {
                     console.log("fail login");
+                    this.props.rejectLogin();
                     this.setState({
                         isRedirect: true,
                     })
@@ -69,9 +73,20 @@ class InitiateAccounts extends React.Component {
             <Redirect to="/login" />
         }
 
-        return <div>
-            {this.state.isRedirect ? <Redirect to="/login" /> : false}
-        </div>;
+        return (
+            <div
+                style={{
+                    width: "100%",
+                    height: "100vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}>
+                <h1 style={{fontSize:"50px"}}>Now Loading...</h1>
+                {this.state.isRedirect ? <Redirect to="/login" /> : false}
+            </div>
+        );
     }
 }
 
@@ -81,10 +96,13 @@ const mapStateToProps = state => ({
     pub: state.login.pub,
     networkPubAccounts: state.network.networkPubAccounts,
     networkAccount: state.network.networkAccount,
+
+    isLoginAllowed: state.allow.isLoginAllowed,
 });
 
 const mapDispatchToProps = dispatch => ({
     signIn: (address, priv, pub, data) => dispatch(login(address, priv, pub, data)),
+    rejectLogin: () => dispatch(rejectLogin())
 });
 
 export default withRouter(connect(

@@ -206,6 +206,18 @@ export const isAddressValid = (adr) => {
     return true;
 }
 
+export const isRestoreKeyValid = (res) => {
+    if(!/^[a-zA-Z0-9@!#^&*+]+(?![^a-zA-Z0-9@!#^&*+])\b/.test(res)) {
+        return false;
+    }
+
+    if(res.length < 8 || res.length > 16) {
+        return false;
+    }
+
+    return true;
+}
+
 const isNum = (numb) => {
     if (!numb) {
         return false;

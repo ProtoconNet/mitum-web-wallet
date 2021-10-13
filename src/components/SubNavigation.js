@@ -73,7 +73,7 @@ class SubNavigation extends React.Component {
                             ) : false}
                         {isLogin
                             ? (
-                                <Link className="main" to="/res-key-generate"
+                                <Link className={"nav-login " + (isLogin ? "on" : "off")} to="/res-key-generate"
                                     onClick={() => this.onCheckOut()}>
                                     <p>SET RESTORE PASSWORD</p>
                                 </Link>

@@ -1,6 +1,7 @@
 import Account from '../../lib/Account';
 import History from '../../lib/History';
 import { sha3_256 } from 'js-sha3';
+import CryptoJS from 'crypto-js';
 
 export const LOGIN = 'LOGIN';
 export const SET_KEYPAIR = "SET_KEYPAIR";
@@ -46,10 +47,12 @@ export function rejectLogin() {
 }
 
 export function setRestoreKey(priv, reskey) {
+    const encrypted  = CryptoJS.AES.encrypt(priv, reskey).toString();
+    const verify =  sha3_256.create().update(encrypted + reskey).hex();
     return {
         type: SET_RESTORE_KEY,
-        priv,
-        verify: sha3_256.create().update(priv + reskey).hex(),
+        priv: encrypted,
+        verify,
     }
 }
 

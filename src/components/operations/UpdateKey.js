@@ -18,7 +18,7 @@ import { setOperation } from '../../store/actions';
 
 import { OPER_UPDATE_KEY } from '../../text/mode';
 import AlertModal from '../modals/AlertModal';
-import { isCurrencyValid, isDuplicate, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
+import { isCurrencyValid, isDuplicate, isInLimit, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
 
 class UpdateKey extends React.Component {
 
@@ -78,6 +78,11 @@ class UpdateKey extends React.Component {
 
         if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold.trim())) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '모든 weight들의 합은 threshold 이상이어야 합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS))) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', `키의 개수가 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개를 초과하였습니다.`);
             return;
         }
 
@@ -151,6 +156,11 @@ class UpdateKey extends React.Component {
 
         if (isDuplicate(this.state.publicKey.trim(), this.state.keys.map(x => x.key))) {
             this.openAlert('키를 추가할 수 없습니다 :(', '이미 리스트에 중복된 키가 존재합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS) - 1)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', `키는 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개까지 추가할 수 있습니다.`);
             return;
         }
 

@@ -11,7 +11,7 @@ import { isOperation } from '../../lib/Validation';
 import { OPER_CREATE_ACCOUNT, OPER_UPDATE_KEY, OPER_TRANSFER } from '../../text/mode';
 import hint from '../../text/hint.json';
 
-import {encode} from 'base-64'
+import { encode } from 'base-64'
 
 class OperationConfirm extends React.Component {
 
@@ -97,19 +97,18 @@ class OperationConfirm extends React.Component {
 
     buttonView() {
         const { json, filename, download } = this.props;
+        const target = encode(encode(JSON.stringify(json)));
 
-        return (
-            this.state.isExport
-                ? (
+        if (this.state.isExport) {
+            if (target.length < 3000) {
+                return (
                     <span>
                         <QRCode
                             style={{
                                 display: "none"
                             }}
                             id="modal-qrcode"
-                            value={
-                                encode(encode(JSON.stringify(json)))
-                            }
+                            value={target}
                             size={500}
                             level={"L"}
                             includeMargin={true}
@@ -123,15 +122,31 @@ class OperationConfirm extends React.Component {
                         </a>
                     </span>
                 )
-                :
-                (
+            }
+            else {
+                return (
                     <span>
-                        <p className="oper-modal-button" id="no" onClick={() => this.onClose()}>{"취소!:("}</p>
-                        <a className="oper-modal-button" id="no" onClick={() => this.onExport()}>{"내보내기 :["}</a>
-                        <p className="oper-modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
+                        <a style={{ color: "gray", textDecoration: "line-through" }}
+                            className="oper-modal-button" id="yes" target="_blank" rel="noreferrer"
+                            onClick={() => alert("작업 용량이 너무 커 QR CODE를 생성할 수 없습니다.")}>QR CODE</a>
+                        <a className="oper-modal-button" id="yes" target="_blank" download={`${filename}.json`}
+                            href={download} rel="noreferrer"
+                            onClick={() => this.onClose()}>
+                            JSON FILE
+                        </a>
                     </span>
                 )
-        );
+            }
+        }
+        else {
+            return (
+                <span>
+                    <p className="oper-modal-button" id="no" onClick={() => this.onClose()}>{"취소!:("}</p>
+                    <a className="oper-modal-button" id="no" onClick={() => this.onExport()}>{"내보내기 :["}</a>
+                    <p className="oper-modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
+                </span>
+            )
+        }
     }
 
     onClose() {

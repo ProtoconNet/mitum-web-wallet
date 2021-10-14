@@ -18,7 +18,7 @@ import AmountAdder from '../adders/AmountAdder';
 import { Generator } from 'mitumc';
 
 import { OPER_CREATE_ACCOUNT } from '../../text/mode';
-import { isAmountValid, isCurrencyValid, isDuplicate, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
+import { isAmountValid, isCurrencyValid, isDuplicate, isInLimit, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
 import AlertModal from '../modals/AlertModal';
 
 class CreateAccount extends React.Component {
@@ -70,6 +70,16 @@ class CreateAccount extends React.Component {
     onClick() {
         if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold)) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '모든 weight들의 합은 threshold 이상이어야 합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS))) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', `키의 개수가 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개를 초과하였습니다.`);
+            return;
+        }
+
+        if (!isInLimit(this.state.amounts, parseInt(process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM))) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', `어마운트의 개수가 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개를 초과하였습니다.`);
             return;
         }
 
@@ -160,6 +170,11 @@ class CreateAccount extends React.Component {
             return;
         }
 
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS) - 1)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', `키는 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개까지 추가할 수 있습니다.`);
+            return;
+        }
+
         this.setState({
             keys: [...this.state.keys, {
                 key: this.state.publicKey.trim(),
@@ -183,6 +198,11 @@ class CreateAccount extends React.Component {
 
         if (isDuplicate(this.state.currency.trim(), this.state.amounts.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.amounts, parseInt(process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM) - 1)) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', `어마운트는 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개까지 추가할 수 있습니다.`);
             return;
         }
 

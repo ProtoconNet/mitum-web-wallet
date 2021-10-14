@@ -96,7 +96,7 @@ class CreateAccount extends React.Component {
             );
 
             const createAccounts = generator.createOperation(createAccountsFact, "");
-            createAccounts.addSign(account.privateKey);
+            createAccounts.addSign(this.props.priv);
 
             const created = createAccounts.dict();
 
@@ -247,6 +247,9 @@ class CreateAccount extends React.Component {
 
 const mapStateToProps = state => ({
     networkId: state.network.networkId,
+    isLogin: state.login.isLogin,
+    account: state.login.account,
+    priv: state.login.priv,
 });
 
 const mapDispatchToProps = dispatch => ({

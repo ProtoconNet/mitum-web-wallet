@@ -96,7 +96,7 @@ class UpdateKey extends React.Component {
             );
 
             const keyUpdater = generator.createOperation(keyUpdaterFact, "");
-            keyUpdater.addSign(account.privateKey);
+            keyUpdater.addSign(this.props.priv);
 
             const created = keyUpdater.dict();
 
@@ -164,23 +164,6 @@ class UpdateKey extends React.Component {
         });
     }
 
-    componentDidMount() {
-        this.scrollToInput();
-    }
-
-    componentDidUpdate() {
-        this.scrollToInput();
-    }
-
-    scrollToInput = () => {
-        if (this.createdRef.current && this.state.keys.length > 0) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.titleRef.current) {
-            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
     render() {
         const account = this.props.account;
 
@@ -225,6 +208,9 @@ class UpdateKey extends React.Component {
 
 const mapStateToProps = state => ({
     networkId: state.network.networkId,
+    isLogin: state.login.isLogin,
+    account: state.login.account,
+    priv: state.login.priv,
 });
 
 const mapDispatchToProps = dispatch => ({

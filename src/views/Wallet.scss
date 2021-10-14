@@ -371,15 +371,17 @@
 
         #wallet-refresh {
             width: 90%;
-            font-size: 1.1em;
 
             #refresh {
-                margin: 0.3em;
-                border: 1px solid white;
+                font-size: 1em;
+                padding: 0.1em 0.3em 0.1em 0.3em;
+                margin: 0.2em;
             }
 
             #change-account {
-                margin: 0.3em;
+                font-size: 1em;
+                padding: 0.1em 0.3em 0.1em 0.3em;
+                margin: 0.2em;
             }
         }
 
@@ -481,14 +483,18 @@
 
         #wallet-refresh {
             width: 90%;
-            font-size: 1.0em;
 
             #refresh {
+                font-size: 0.8em;
+                padding: 0.1em 0.2em 0.1em 0.2em;
                 margin: 0.2em;
+
                 border: 1px solid white;
             }
-
+    
             #change-account {
+                font-size: 0.8em;
+                padding: 0.1em 0.2em 0.1em 0.2em;
                 margin: 0.2em;
             }
         }

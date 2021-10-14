@@ -196,7 +196,7 @@ class Transfer extends React.Component {
 const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
-    priv: state.login.privateKey,
+    priv: state.login.priv,
     networkId: state.network.networkId,
 });
 

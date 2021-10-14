@@ -13,7 +13,7 @@ import { Signer } from 'mitumc';
 import OperationConfirm from '../components/modals/OperationConfirm';
 
 import { PAGE_QR } from '../text/mode';
-import { isDuplicate, isOperation } from '../lib/Validation';
+import { isDuplicate, isItemsInLimit, isOperation } from '../lib/Validation';
 import { OPER_DEFAULT } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
 import SmallButton from '../components/buttons/SmallButton';
@@ -39,7 +39,7 @@ class Sign extends React.Component {
     constructor(props) {
         super(props);
 
-        if(this.props.pageBefore !== PAGE_QR) {
+        if (this.props.pageBefore !== PAGE_QR) {
             this.props.setJson(OPER_DEFAULT, null);
         }
         this.props.clearPage();
@@ -107,6 +107,9 @@ class Sign extends React.Component {
                 if (!isOperation(parsed)) {
                     this.openAlert('파일을 불러올 수 없습니다 :(', '[memo, hash, _hint, fact, fact_signs]를 포함한 JSON 파일을 사용해 주세요.');
                 }
+                else if (!isItemsInLimit(parsed)) {
+                    this.openAlert('파일을 불러올 수 없습니다 :(', '작업 파일의 아이템, 키, 혹은 어마운트의 수가 정책 기준을 초과합니다.');
+                }
                 else {
                     const operation = getOperationFromType(parsed._hint);
                     this.props.setJson(operation, parsed);
@@ -134,6 +137,12 @@ class Sign extends React.Component {
         let target = this.props.json;
 
         if (!isOperation(target)) {
+            this.openAlert('서명 추가 실패 :(', '잘못된 작업 파일입니다.');
+            return;
+        }
+
+        if (!isItemsInLimit(target)) {
+            this.openAlert('서명 추가 실패 :(', '작업 파일의 아이템, 키, 혹은 어마운트의 수가 정책 기준을 초과합니다.');
             return;
         }
 
@@ -221,7 +230,7 @@ class Sign extends React.Component {
                     {this.state.isJsonOpen ? this.jsonView() : false}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
-                        <SmallButton 
+                        <SmallButton
                             visible={true}
                             disabled={false}
                             onClick={() => this.toQrPage()}>import from qr code</SmallButton>

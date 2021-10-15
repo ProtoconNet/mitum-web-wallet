@@ -56,10 +56,10 @@ class Response extends React.Component {
                     <section className={"res-detail success"}>
                         {
                             operation === OPER_UPDATE_KEY
-                                ? <h1>KEY UPDATE SUCCESS~ :D</h1>
-                                : <h1>BROADCAST SUCCESS~ :D</h1>
+                                ? <h1>KEY UPDATE SUCCESS :D</h1>
+                                : <h1>BROADCAST SUCCESS :D</h1>
                         }
-                        <div>
+                        <div id="exp">
                             {operation === OPER_CREATE_ACCOUNT
                                 ? (
                                     <section>

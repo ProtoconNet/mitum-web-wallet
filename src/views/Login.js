@@ -99,7 +99,6 @@ class Login extends React.Component {
                     if(this.props.isLoginAllowed) {
                         this.props.signIn(addr, priv, pubKey, res.data);
                     }
-                    this.props.rejectLogin();
                 }
             )
             .catch(

@@ -38,7 +38,7 @@
     }
 
     .success {
-        div {
+        #exp {
             margin: 0;
             width: 100%;
 
@@ -54,6 +54,7 @@
 
                 p {
                     font-size: 1em;
+                    text-align: center;
                 }
 
                 h2 {

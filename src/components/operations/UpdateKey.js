@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -18,17 +18,14 @@ import { setOperation } from '../../store/actions';
 
 import { OPER_UPDATE_KEY } from '../../text/mode';
 import AlertModal from '../modals/AlertModal';
-import { isCurrencyValid, isDuplicate, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
+import { isCurrencyValid, isDuplicate, isInLimit, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
 
 class UpdateKey extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.createdRef = createRef();
-        this.titleRef = createRef();
-
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
+        if (!this.props.isLogin) {
             this.state = { isRedirect: true }
             return;
         }
@@ -74,32 +71,37 @@ class UpdateKey extends React.Component {
     }
 
     onClick() {
-        if (!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
+        if (!isCurrencyValid(this.state.currency.trim(), this.props.account.balances.map(x => x.currency))) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }
 
-        if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold)) {
+        if (!isWeightsValidToThres(this.state.keys.map(x => x.weight), this.state.threshold.trim())) {
             this.openAlert('작업을 생성할 수 없습니다 :(', '모든 weight들의 합은 threshold 이상이어야 합니다.');
             return;
         }
 
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS))) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', `키의 개수가 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개를 초과하였습니다.`);
+            return;
+        }
+
         try {
-            const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
+            const generator = new Generator(this.props.networkId);
 
             const account = this.props.account;
             const keys = generator.createKeys(
                 this.state.keys.map(x =>
                     generator.formatKey(x.key, parseInt(x.weight))),
-                parseInt(this.state.threshold)
+                parseInt(this.state.threshold.trim())
             );
 
             const keyUpdaterFact = generator.createKeyUpdaterFact(
-                account.address, this.state.currency, keys
+                account.address, this.state.currency.trim(), keys
             );
 
             const keyUpdater = generator.createOperation(keyUpdaterFact, "");
-            keyUpdater.addSign(account.privateKey);
+            keyUpdater.addSign(this.props.priv);
 
             const created = keyUpdater.dict();
 
@@ -137,51 +139,39 @@ class UpdateKey extends React.Component {
     }
 
     addKey() {
-        if (!isThresholdValid(this.state.threshold)) {
+        if (!isThresholdValid(this.state.threshold.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 threshold입니다. threshold를 먼저 입력해주세요. (0 < threshold <=100)');
             return;
         }
 
-        if (!isPublicKeyValid(this.state.publicKey)) {
+        if (!isPublicKeyValid(this.state.publicKey.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 public key입니다.');
             return;
         }
 
-        if (!isWeightValid(this.state.weight)) {
+        if (!isWeightValid(this.state.weight.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 weight입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.publicKey, this.state.keys.map(x => x.key))) {
+        if (isDuplicate(this.state.publicKey.trim(), this.state.keys.map(x => x.key))) {
             this.openAlert('키를 추가할 수 없습니다 :(', '이미 리스트에 중복된 키가 존재합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS) - 1)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', `키는 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개까지 추가할 수 있습니다.`);
             return;
         }
 
         this.setState({
             keys: [...this.state.keys, {
-                key: this.state.publicKey,
-                weight: this.state.weight
+                key: this.state.publicKey.trim(),
+                weight: this.state.weight.trim()
             }],
             publicKey: "",
             weight: "",
         });
-    }
-
-    componentDidMount() {
-        this.scrollToInput();
-    }
-
-    componentDidUpdate() {
-        this.scrollToInput();
-    }
-
-    scrollToInput = () => {
-        if (this.createdRef.current && this.state.keys.length > 0) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.titleRef.current) {
-            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     }
 
     render() {
@@ -193,13 +183,11 @@ class UpdateKey extends React.Component {
 
         return (
             <div className="uk-container">
-                <div ref={this.titleRef}></div>
                 <h1>UPDATE KEY</h1>
                 <div className="uk-info-wrap">
                     <Keys title='CURRENT KEY LIST' keys={account.publicKeys} />
                 </div>
                 <div className="uk-input-wrap">
-                    <div ref={this.createdRef} />
                     <div className="uk-keys">
                         <Keys title='NEW KEY LIST' keys={this.state.keys} />
                         <section className='uk-keys-adder'>
@@ -228,11 +216,18 @@ class UpdateKey extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    networkId: state.network.networkId,
+    isLogin: state.login.isLogin,
+    account: state.login.account,
+    priv: state.login.priv,
+});
+
 const mapDispatchToProps = dispatch => ({
     setJson: (json) => dispatch(setOperation(OPER_UPDATE_KEY, json)),
 });
 
 export default withRouter(connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(UpdateKey));

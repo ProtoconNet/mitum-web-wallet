@@ -1,6 +1,6 @@
 .login-container {
     height: 100vh;
-    width: 100%;
+    width: 80%;
 
     #login-main {
         width: 100%;
@@ -102,155 +102,87 @@
 
         z-index: 54354;
 
+        h1 {
+            font-size: 50px;
+        }
+
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
-        font-weight: 300;
-        font-size: 50px;
-
-        -webkit-animation: flickerAnimation 2s infinite;
-        -moz-animation: flickerAnimation 2s infinite;
-        -o-animation: flickerAnimation 2s infinite;
-        animation: flickerAnimation 2s infinite;
     }
 }
 
-@keyframes flickerAnimation {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-@-o-keyframes flickerAnimation {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-@-moz-keyframes flickerAnimation {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-@-webkit-keyframes flickerAnimation {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-@media screen and (max-width: 1090px) and (min-width: 750px){
+@media screen and (max-width: 1090px) and (min-width: 750px) {
     .login-container {
-    
+        width: 100%;
+
         #login-main {
-    
+
             .login-radio {
                 flex-direction: column;
-    
+
                 .rad-label {
-                    padding: 5px 10px;
-                    margin: 5px;
+                    padding: 10px 15px;
+                    margin: 10px;
 
                     .rad-design {
-                        width: 11px;
-                        height: 11px;
+                        width: 15px;
+                        height: 15px;
                     }
-    
+
                     .rad-text {
-                        margin-left: 7px;
-                        letter-spacing: 1px;
-                        font-size: 12px;
+                        margin-left: 10px;
+                        letter-spacing: 3px;
+                        font-size: 15px;
                         font-weight: 500;
                     }
                 }
             }
-    
+
             h1 {
                 font-size: 2em;
                 font-weight: 300;
-                margin: 0 0.5em 0.2em 0.5em;
-                letter-spacing: 2px;
+                margin: 0 1em 0.5em 1em;
+                letter-spacing: 3px;
             }
-        }
-    
-        #login-load {
-            font-weight: 300;
-            font-size: 2em;
         }
     }
 }
 
-@media screen and (max-width: 750px){
+@media screen and (max-width: 750px) {
     .login-container {
-    
+        width: 100%;
+
         #login-main {
-    
+
             .login-radio {
                 flex-direction: column;
-    
+
                 .rad-label {
-                    padding: 5px 10px;
-                    margin: 5px;
+                    padding: 10px 15px;
+                    margin: 10px;
 
                     .rad-design {
                         width: 11px;
                         height: 11px;
                     }
-    
+
                     .rad-text {
-                        margin-left: 7px;
-                        letter-spacing: 1px;
-                        font-size: 12px;
+                        margin-left: 10px;
+                        letter-spacing: 3px;
+                        font-size: 11px;
                         font-weight: 500;
                     }
                 }
             }
-    
+
             h1 {
-                font-size: 1.7em;
+                font-size: 1.5em;
                 font-weight: 300;
-                margin: 0 0.5em 0.2em 0.5em;
-                letter-spacing: 2px;
+                margin: 0 1em 0.5em 1em;
+                letter-spacing: 3px;
             }
-        }
-    
-        #login-load {
-            font-weight: 300;
-            font-size: 1em;
         }
     }
 }

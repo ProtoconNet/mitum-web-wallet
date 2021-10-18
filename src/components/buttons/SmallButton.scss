@@ -85,7 +85,10 @@
     font: 700 1em 'Roboto Slab', sans-serif;
     letter-spacing: 1px;
 
-    margin: 0.5em;
+    text-align: center;
+
+    margin: 1em;
+    padding: 0.5em;
 }
 
 @media screen and (max-width: 1090px) and (min-width: 750px) {
@@ -93,7 +96,7 @@
         line-height: 1;
         font: 500 0.8em 'Roboto Slab', sans-serif;
 
-        margin: 0.1em;
+        margin: 0.5em;
         padding: 0.5em;
     }
 }
@@ -101,9 +104,9 @@
 @media screen and (max-width: 750px) {
     .small-button {
         line-height: 0.8;
-        font: 500 0.7em 'Roboto Slab', sans-serif;
+        font: 400 0.6em 'Roboto Slab', sans-serif;
 
-        margin: 0.1em;
-        padding: 0.2em;
+        margin: 0.5em;
+        padding: 0.3em;
     }
 }

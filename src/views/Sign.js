@@ -1,7 +1,7 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setOperation } from '../store/actions';
+import { clearPage, setOperation } from '../store/actions';
 import copy from 'copy-to-clipboard';
 
 import './Sign.scss';
@@ -12,10 +12,12 @@ import { Signer } from 'mitumc';
 
 import OperationConfirm from '../components/modals/OperationConfirm';
 
-import { TYPE_CREATE_ACCOUNT, TYPE_UPDATE_KEY, TYPE_TRANSFER } from '../text/mode';
-import { isDuplicate, isOperation } from '../lib/Validation';
-import { OPER_CREATE_ACCOUNT, OPER_DEFAULT, OPER_TRANSFER, OPER_UPDATE_KEY } from '../text/mode';
+import { PAGE_QR } from '../text/mode';
+import { isDuplicate, isItemsInLimit, isOperation } from '../lib/Validation';
+import { OPER_DEFAULT } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
+import SmallButton from '../components/buttons/SmallButton';
+import getOperationFromType from '../lib/Parse';
 
 const onCopy = (msg) => {
     copy(msg);
@@ -30,29 +32,17 @@ const preStyle = {
     whiteSpace: "pre-wrap"
 }
 
-const getOperationFromType = (type) => {
-    switch (type) {
-        case TYPE_CREATE_ACCOUNT:
-            return OPER_CREATE_ACCOUNT;
-        case TYPE_UPDATE_KEY:
-            return OPER_UPDATE_KEY;
-        case TYPE_TRANSFER:
-            return OPER_TRANSFER;
-        default:
-            return OPER_DEFAULT;
-    }
-}
+
 
 class Sign extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.createdRef = createRef();
-        this.infoRef = createRef();
-        this.jsonRef = createRef();
-        
-        this.props.setJson(OPER_DEFAULT, null);
+        if (this.props.pageBefore !== PAGE_QR) {
+            this.props.setJson(OPER_DEFAULT, null);
+        }
+        this.props.clearPage();
 
         this.state = {
             isRedirect: false,
@@ -62,8 +52,16 @@ class Sign extends React.Component {
 
             isAlertOpen: false,
             alertTitle: '',
-            alertMsg: ''
+            alertMsg: '',
+
+            toQr: false,
         }
+    }
+
+    toQrPage() {
+        this.setState({
+            toQr: true
+        })
     }
 
     openAlert(title, msg) {
@@ -82,26 +80,6 @@ class Sign extends React.Component {
 
     closeModal() {
         this.setState({ isModalOpen: false })
-    }
-
-    componentDidMount() {
-        this.scrollToJSON();
-    }
-
-    componentDidUpdate() {
-        this.scrollToJSON();
-    }
-
-    scrollToJSON = () => {
-        if (this.jsonRef.current && this.state.isJsonOpen) {
-            this.jsonRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.infoRef.current && this.state.json && !this.state.isJsonOpen) {
-            this.infoRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.createdRef.current) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     }
 
     jsonView() {
@@ -128,6 +106,9 @@ class Sign extends React.Component {
                 const parsed = JSON.parse(reader.result);
                 if (!isOperation(parsed)) {
                     this.openAlert('파일을 불러올 수 없습니다 :(', '[memo, hash, _hint, fact, fact_signs]를 포함한 JSON 파일을 사용해 주세요.');
+                }
+                else if (!isItemsInLimit(parsed)) {
+                    this.openAlert('파일을 불러올 수 없습니다 :(', '작업 파일의 아이템, 키, 혹은 어마운트의 수가 정책 기준을 초과합니다.');
                 }
                 else {
                     const operation = getOperationFromType(parsed._hint);
@@ -156,15 +137,26 @@ class Sign extends React.Component {
         let target = this.props.json;
 
         if (!isOperation(target)) {
+            this.openAlert('서명 추가 실패 :(', '잘못된 작업 파일입니다.');
             return;
         }
 
-        if(isDuplicate(this.props.account.publicKey, this.props.json.fact_signs.map(x => x.signer))){
+        if (!isItemsInLimit(target)) {
+            this.openAlert('서명 추가 실패 :(', '작업 파일의 아이템, 키, 혹은 어마운트의 수가 정책 기준을 초과합니다.');
+            return;
+        }
+
+        if (this.props.account.address !== this.props.json.fact.sender) {
+            this.openAlert('서명 추가 실패 :(', '이 계정에서 생성된 작업이 아닙니다.');
+            return;
+        }
+
+        if (isDuplicate(this.props.account.publicKey, this.props.json.fact_signs.map(x => x.signer))) {
             this.openAlert('서명 추가 실패 :(', '이미 서명 된 작업입니다.');
             return;
         }
 
-        const signer = new Signer(process.env.REACT_APP_NETWORK_ID, this.props.account.privateKey);
+        const signer = new Signer(this.props.networkId, this.props.account.privateKey);
 
         try {
             const json = signer.signOperation(target);
@@ -188,15 +180,17 @@ class Sign extends React.Component {
 
     render() {
 
-        if(this.state.isRedirect) {
+        if (this.state.toQr) {
+            return <Redirect to='/qr-reader' />;
+        }
+
+        if (this.state.isRedirect) {
             return <Redirect to='/login' />;
         }
 
         return (
             <div className="sign-container">
-                <div ref={this.createdRef} />
                 <h1>SIGN / SEND OPERATION</h1>
-                <div ref={this.infoRef} />
                 <div className="sign-operation">
                     <div className="sign-info">
                         <span id="other">
@@ -226,7 +220,6 @@ class Sign extends React.Component {
                             ) : 'No signature'}</p>
                         </span>
                     </div>
-                    <div ref={this.jsonRef} />
                     {this.props.json
                         ? (
                             <div className='sign-view-json'
@@ -237,6 +230,10 @@ class Sign extends React.Component {
                     {this.state.isJsonOpen ? this.jsonView() : false}
                     <div className="sign-files">
                         <input type="file" onChange={(e) => this.importJSON(e)} />
+                        <SmallButton
+                            visible={true}
+                            disabled={false}
+                            onClick={() => this.toQrPage()}>import from qr code</SmallButton>
                     </div>
                 </div>
                 <div className="sign-buttons">
@@ -257,10 +254,15 @@ const mapStateToProps = state => ({
 
     operation: state.operation.operation,
     json: state.operation.json,
+
+    networkId: state.network.networkId,
+
+    pageBefore: state.page.pageBefore,
 });
 
 const mapDispatchToProps = dispatch => ({
     setJson: (operation, json) => dispatch(setOperation(operation, json)),
+    clearPage: () => dispatch(clearPage()),
 });
 
 export default withRouter(connect(

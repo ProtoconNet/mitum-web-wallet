@@ -2,7 +2,8 @@ import React from 'react';
 import './Home.scss';
 
 import logo_trans from '../image/logo_trans.png';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class Home extends React.Component {
     constructor(props) {
@@ -14,6 +15,10 @@ class Home extends React.Component {
     }
 
     onClick() {
+        if(this.props.maintain.maintain) {
+            return;
+        }
+
         this.setState({
             isRedirect: true
         });
@@ -35,10 +40,24 @@ class Home extends React.Component {
                         </div>
                     </div>
                     <div className="home-open">OPEN WALLET</div>
+                    {
+                        this.props.maintain.maintain
+                            ? <div className="home-maintain">
+                                <div dangerouslySetInnerHTML={{ __html: this.props.maintain.msg.ko }} />
+                            </div>
+                            : null
+                    }
                 </div>
             </div>
         );
     }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+    maintain: state.maintain
+});
+
+export default withRouter(connect(
+    mapStateToProps,
+    null
+)(Home));

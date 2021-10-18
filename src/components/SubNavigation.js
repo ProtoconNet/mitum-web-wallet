@@ -3,31 +3,22 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import './SubNavigation.scss';
 
-var isClose = false;
-
 class SubNavigation extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             rand: 0,
-            isChecked: false
+            isClosed: false,
+            isChecked: this.props.update
         }
     }
 
     close() {
-        isClose = true;
-        this.setState({ rand: this.state.rand + 1 })
-    }
-
-    check() {
-        if (isClose) {
-            isClose = false;
-            return <Redirect to="/logout" />
-        }
-        else {
-            return false;
-        }
+        this.setState({
+            isChecked: false,
+            isClosed: true,
+        });
     }
 
     onCheckOut() {
@@ -42,13 +33,19 @@ class SubNavigation extends React.Component {
         })
     }
 
+    componentDidUpdate(prevProps) {
+        if(this.props.isLogin !== prevProps.isLogin) {
+            this.onCheckOut();
+        }
+    }
+
     render() {
         const { isLogin, account } = this.props;
         const addr = account ? account.address.substring(0, 20) + "... (close wallet)" : undefined;
 
         return (
             <div className="sub-nav">
-                {this.state.rand ? this.check() : false}
+                { this.state.isClosed ? <Redirect to="/logout"/> : false }
                 <input className='burger-check' id="burger-check" type="checkbox" checked={this.state.isChecked} />
                 <label className="burger-icon" htmlFor="burger-check"
                     onClick={() => this.onCheck()}>

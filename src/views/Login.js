@@ -149,15 +149,14 @@ class Login extends React.Component {
         try {
             const pubKey = toKeypair(priv, '').getPublicKey();
             this.props.setKeypair(priv, pubKey);
+            this.setState({
+                initiate: true,
+            })
         }
         catch(e) {
             this.openAlert("지갑 열기 실패! :(", '유효하지 않은 개인키입니다.');
             this.props.rejectLogin();
         }
-
-        this.setState({
-            initiate: true,
-        })
     }
 
     componentDidMount() {

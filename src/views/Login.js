@@ -6,42 +6,46 @@ import './Login.scss';
 import PrivateKeyLoginBox from '../components/PrivateKeyLoginBox';
 import RestoreKeyLoginBox from '../components/RestoreKeyLoginBox';
 
-import { clearHistory, login, setHistory } from '../store/actions';
+import { allowLogin, clearHistory, login, logout, rejectLogin, setHistory, setKeypair } from '../store/actions';
 import { connect } from 'react-redux';
 
 import { toKeypair } from 'mitumc';
 import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
-import { isAddressValid, isPrivateKeyValid } from '../lib/Validation';
+import { isPrivateKeyValid } from '../lib/Validation';
 import AlertModal from '../components/modals/AlertModal';
-
-const getAccountInformation = async (account) => {
-    return await axios.get(process.env.REACT_APP_API_ACCOUNT + account);
-}
-
-const getAccountHistory = async (account) => {
-    return await axios.get(`${process.env.REACT_APP_API_ACCOUNT}${account}/operations?reverse=1`);
-}
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
 
         if (this.props.isLogin) {
-            this.onLogin(this.props.account.address, this.props.account.privateKey);
+            this.onLogin(this.props.account.privateKey);
         }
 
         this.state = {
-            mode: SHOW_PRIVATE,
-            isPriv: true,
-            isActive: false,
+            mode: this.props.isRestoreKeyExist ? SHOW_RESTORE : SHOW_PRIVATE,
+            isPriv: this.props.isRestoreKeyExist ? false : true,
+            isActive: true,
 
             isAlertShow: false,
             alertTitle: '',
             alertMsg: '',
 
-            isShowLoad: false,
+            isShowLoad: this.props.isLogin,
             isRedirect: false,
+
+            tryLogin: false,
+
+            initiate: false,
         }
+    }
+
+    async getAccountInformation(account) {
+        return await axios.get(this.props.networkAccount + account);
+    }
+
+    async getAccountHistory(account) {
+        return await axios.get(`${this.props.networkAccount}${account}/operations?reverse=1`);
     }
 
     openAlert(title, msg) {
@@ -58,9 +62,13 @@ class Login extends React.Component {
         });
     }
 
-    onLogin(addr, priv) {
-        if (!isAddressValid(addr) || !isPrivateKeyValid(priv)) {
-            this.openAlert('지갑 열기 실패 :(', '주소 혹은 키 형식이 올바르지 않습니다.');
+    onLogin(_priv) {
+        const addr = this.props.account.address;
+        const priv = _priv.trim();
+
+        if (!isPrivateKeyValid(priv)) {
+            this.openAlert('지갑 열기 실패 :(', '키 형식이 올바르지 않습니다.');
+            this.props.rejectLogin();
             return;
         }
 
@@ -69,10 +77,11 @@ class Login extends React.Component {
             pubKey = toKeypair(priv, '').getPublicKey();
         } catch (e) {
             this.openAlert('지갑 열기 실패 :(', '유효하지 않은 개인키입니다.');
+            this.props.rejectLogin();
             return;
         }
 
-        getAccountHistory(addr)
+        this.getAccountHistory(addr)
             .then(
                 res => {
                     this.props.setHistory(res.data, addr);
@@ -84,23 +93,18 @@ class Login extends React.Component {
                 }
             )
 
-        getAccountInformation(addr)
+        this.getAccountInformation(addr)
             .then(
                 res => {
-                    const pubKeys = res.data._embedded.keys.keys.map(x => x.key);
-                    for (let i = 0; i < pubKeys.length; i++) {
-                        if (pubKeys[i] === pubKey) {
-                            this.props.signIn(addr, priv, pubKey, res.data);
-                            return;
-                        }
+                    if(this.props.isLoginAllowed) {
+                        this.props.signIn(addr, priv, pubKey, res.data);
                     }
-                    this.openAlert('지갑 열기 실패 :(', `계정 [${addr}]의 멤버에 해당 키가 존재하지 않습니다.`);
                 }
             )
             .catch(
                 e => {
-                    console.log(e);
-                    this.openAlert('지갑 열기 실패 :(', '유효하지 않은 주소 혹은 네트워크 문제로 계정 조회에 실패하였습니다.');
+                    this.openAlert('지갑 열기 실패 :(', '잘못된 계정 주소 혹은 네트워크 문제로 계정 조회에 실패하였습니다.');
+                    this.props.rejectLogin();
                 }
             );
     }
@@ -121,12 +125,13 @@ class Login extends React.Component {
         switch (mode) {
             case SHOW_PRIVATE:
                 return <PrivateKeyLoginBox
-                    onLogin={(addr, priv) => this.onStartLogin(addr, priv)} />;
+                    onLogin={(priv) => this.onStartLogin(priv)} />;
             case SHOW_RESTORE:
-                return <RestoreKeyLoginBox />;
+                return <RestoreKeyLoginBox 
+                    onLogin={(priv) => this.onStartLogin(priv)}/>;
             default:
                 return <PrivateKeyLoginBox
-                    onLogin={(addr, priv) => this.onStartLogin(addr, priv)} />;
+                    onLogin={(priv) => this.onStartLogin(priv)} />;
         }
     }
 
@@ -139,23 +144,37 @@ class Login extends React.Component {
         else return;
     }
 
-    async onStartLogin(addr, priv) {
-        this.setState({
-            isShowLoad: true
-        });
-
-        this.onLogin(addr, priv)
-        
-        if (!(this.props.isLogin && this.props.isLoadHistory)) {
+    async onStartLogin(priv) {
+        this.props.allowLogin();
+        try {
+            const pubKey = toKeypair(priv, '').getPublicKey();
+            this.props.setKeypair(priv, pubKey);
             this.setState({
-                isShowLoad: false
-            });
+                initiate: true,
+            })
+        }
+        catch(e) {
+            this.openAlert("지갑 열기 실패! :(", '유효하지 않은 개인키입니다.');
+            this.props.rejectLogin();
+        }
+    }
+
+    componentDidMount() {
+        if (!this.props.isLogin && this.props.priv.length > 0 && this.props.pub.length > 0) {
+            this.openAlert("지갑 열기 실패! :(", "네트워크 혹은 잘못된 키 문제로 지갑 열기에 실패하였습니다.");
+            this.props.rejectLogin();
+            this.props.signOut();
         }
     }
 
     render() {
-        if(this.props.isLogin && this.props.isLoadHistory) {
+
+        if (this.props.isLogin && this.props.isLoadHistory) {
             return <Redirect to={`/wallet/${this.props.account.address}`} />
+        }
+
+        if (this.state.initiate) {
+            return <Redirect to="/init" />
         }
 
         return (
@@ -188,7 +207,7 @@ class Login extends React.Component {
                     style={{
                         display: this.state.isShowLoad ? 'flex' : 'none'
                     }}>
-                    <h1>Wait...</h1>
+                    <h1>Now Loading...</h1>
                 </div>
             </div>
         );
@@ -199,11 +218,21 @@ const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
     history: state.login.history,
-    isLoadHistory: state.login.isLoadHistory
+    isLoadHistory: state.login.isLoadHistory,
+    networkAccount: state.network.networkAccount,
+    priv: state.login.priv,
+    pub: state.login.pub,
+
+    isRestoreKeyExist: state.restore.isSet,
+    isLoginAllowed: state.allow.isLoginAllowed,
 });
 
 const mapDispatchToProps = dispatch => ({
     signIn: (address, privateKey, publicKey, data) => dispatch(login(address, privateKey, publicKey, data)),
+    signOut: () => dispatch(logout()),
+    allowLogin: () => dispatch(allowLogin()),
+    rejectLogin: () => dispatch(rejectLogin()),
+    setKeypair: (priv, pub) => dispatch(setKeypair(priv, pub)),
     setHistory: (data, me) => dispatch(setHistory(data, me)),
     clearHistory: () => dispatch(clearHistory())
 });

@@ -149,10 +149,6 @@
                 font-size: 1em;
                 vertical-align: center;
             }
-
-            button {
-                padding: 0.5em;
-            }
         }
     }
 
@@ -173,19 +169,105 @@
 @media screen and (max-width: 1090px) and (min-width: 750px) {
     .sign-container {
         width: 100%;
-        padding: 1em;
-        margin-top: 2em;
+        padding: 1.5em;
+        margin-top: 3em;
 
         h1 {
             font-size: 2em;
             font-weight: 300;
-            margin: 0.5em;
+            margin: 1em;
+            letter-spacing: 5px;
+        }
+
+        .sign-operation {
+            width: 90%;
+            margin: 1.5em;
+
+            .sign-json {
+                width: 90%;
+                padding: 1em;
+                font-size: 0.8em;
+
+                pre {
+                    width: 95%;
+                    border: 1px solid white;
+                    padding: 1.5em;
+
+                    &:hover {
+                        border: 1px solid red;
+                    }
+
+                    &:active {
+                        border: 1px solid yellowgreen;
+                    }
+                }
+            }
+
+            .sign-view-json {
+                margin: 0.5em;
+
+                p {
+                    padding: 0.2em;
+                    border: 1px solid white;
+                    font-weight: 300;
+                }
+            }
+
+            .sign-info {
+                margin-bottom: 1em;
+                font-size: 0.8em;
+
+                #other,
+                #sig {
+
+                    #head,
+                    #body {
+                        padding: 0.2em 0.5em 0.2em 0.5em;
+                        margin-bottom: 0.5em;
+                    }
+
+                    #head {
+                        margin-right: 1em;
+                    }
+                }
+            }
+
+            .sign-files {
+
+                input {
+                    margin: 1em;
+                    font-size: 0.8em;
+                    vertical-align: center;
+                }
+            }
+        }
+
+        .sign-buttons {
+            width: 30%;
+
+            padding: 0.7em;
+            margin-bottom: 1.5em;
+        }
+    }
+}
+
+
+@media screen and (max-width: 750px) {
+    .sign-container {
+        width: 100%;
+        padding: 1.2em;
+        margin-top: 3em;
+
+        h1 {
+            font-size: 1.5em;
+            font-weight: 300;
+            margin: 1em;
             letter-spacing: 3px;
         }
 
         .sign-operation {
             width: 90%;
-            margin: 1em;
+            margin: 1.5em;
 
             .sign-json {
                 width: 90%;
@@ -195,7 +277,7 @@
                 pre {
                     width: 95%;
                     border: 1px solid white;
-                    padding: 1em;
+                    padding: 1.0em;
 
                     &:hover {
                         border: 1px solid red;
@@ -208,107 +290,17 @@
             }
 
             .sign-view-json {
-                margin: 0.3em;
+                margin: 0.5em;
 
                 p {
-                    padding: 0.1em;
+                    padding: 0.2em;
                     border: 1px solid white;
                     font-weight: 300;
                 }
             }
 
             .sign-info {
-                margin-bottom: 0.5em;
-                font-size: 0.8em;
-
-                #other,
-                #sig {
-
-                    #head,
-                    #body {
-                        padding: 0.1em 0.3em 0.1em 0.3em;
-                        margin-bottom: 0.3em;
-                    }
-
-                    #head {
-                        margin-right: 0.5em;
-                    }
-                }
-            }
-
-            .sign-files {
-
-                input {
-                    margin: 0.5em;
-                    font-size: 0.8em;
-                    vertical-align: center;
-                }
-
-                button {
-                    padding: 0.3em;
-                }
-            }
-        }
-
-        .sign-buttons {
-            width: 30%;
-
-            padding: 0.5em;
-            margin-bottom: 1em;
-        }
-    }
-}
-
-
-@media screen and (max-width: 750px) {
-    .sign-container {
-        width: 100%;
-        padding: 0.8em;
-        margin-top: 1.5em;
-
-        h1 {
-            font-size: 1.8em;
-            font-weight: 300;
-            margin: 0.3em;
-            letter-spacing: 1px;
-        }
-
-        .sign-operation {
-            width: 90%;
-            margin: 0.5em;
-
-            .sign-json {
-                width: 90%;
-                padding: 0.3em;
-                font-size: 0.7em;
-
-                pre {
-                    width: 95%;
-                    border: 1px solid white;
-                    padding: 0.8em;
-
-                    &:hover {
-                        border: 1px solid red;
-                    }
-
-                    &:active {
-                        border: 1px solid yellowgreen;
-                    }
-                }
-            }
-
-            .sign-view-json {
-                margin: 0.2em;
-
-                p {
-                    padding: 0.1em;
-                    border: 1px solid white;
-                    font-weight: 300;
-                }
-            }
-
-            .sign-info {
-                margin-bottom: 0.3em;
+                margin-bottom: 1em;
                 font-size: 0.7em;
 
                 #other,
@@ -316,12 +308,12 @@
 
                     #head,
                     #body {
-                        padding: 0.1em 0.2em 0.1em 0.2em;
-                        margin-bottom: 0.2em;
+                        padding: 0.2em 0.5em 0.2em 0.5em;
+                        margin-bottom: 0.5em;
                     }
 
                     #head {
-                        margin-right: 0.3em;
+                        margin-right: 1em;
                     }
                 }
             }
@@ -329,22 +321,18 @@
             .sign-files {
 
                 input {
-                    margin: 0.3em;
+                    margin: 1em;
                     font-size: 0.7em;
                     vertical-align: center;
                 }
-
-                button {
-                    padding: 0.2em;
-                }
             }
         }
 
         .sign-buttons {
             width: 30%;
 
-            padding: 0.3em;
-            margin-bottom: 0.5em;
+            padding: 0.7em;
+            margin-bottom: 1.5em;
         }
     }
 }

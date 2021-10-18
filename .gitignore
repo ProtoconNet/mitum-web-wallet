@@ -98,3 +98,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+build/
+.env.development
+.env.production

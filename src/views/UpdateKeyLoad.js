@@ -30,7 +30,7 @@ class UpdateKeyLoad extends React.Component {
                     return;
                 }
 
-                return await axios.get(process.env.REACT_APP_API_SEARCH_FACT + _hash)
+                return await axios.get(this.props.networkSearchFact + _hash)
                     .then(
                         response => {
                             if (response.data._embedded.in_state) {
@@ -108,7 +108,8 @@ const mapStateToProps = state => ({
     data: state.operation.data,
     res: state.operation.res,
     status: state.operation.status,
-    isBroadcast: state.operation.isBroadcast
+    isBroadcast: state.operation.isBroadcast,
+    networkSearchFact: state.network.networkSearchFact
 });
 
 const mapDispatchToProps = dispatch => ({

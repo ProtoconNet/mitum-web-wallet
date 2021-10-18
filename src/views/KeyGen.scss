@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    width: 100%;
+    width: 80%;
 
     .key-selector {
         display: flex;
@@ -34,13 +34,15 @@
 
 @media screen and (max-width: 1090px) and (min-width: 750px) {
     .key-gen-container {
+        width: 100%;
+
         .key-selector {
-            padding: 5px;
+            padding: 10px;
         }
 
         .key-boxer {
             div button {
-                margin-left: 0.5em;
+                margin-left: 1em;
             }
         }
     }
@@ -48,13 +50,15 @@
 
 @media screen and (max-width: 750px) {
     .key-gen-container {
+        width: 100%;
+        
         .key-selector {
-            padding: 3px;
+            padding: 7px;
         }
 
         .key-boxer {
             div button {
-                margin-left: 0.3em;
+                margin-left: 1em;
             }
         }
     }

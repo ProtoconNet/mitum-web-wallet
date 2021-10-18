@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setOperation } from '../../store/actions';
@@ -18,17 +18,14 @@ import AmountAdder from '../adders/AmountAdder';
 import { Generator } from 'mitumc';
 
 import { OPER_CREATE_ACCOUNT } from '../../text/mode';
-import { isAmountValid, isCurrencyValid, isDuplicate, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
+import { isAmountValid, isCurrencyValid, isDuplicate, isInLimit, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
 import AlertModal from '../modals/AlertModal';
 
 class CreateAccount extends React.Component {
     constructor(props) {
         super(props);
 
-        this.createdRef = createRef();
-        this.titleRef = createRef();
-
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
+        if (!this.props.isLogin) {
             this.state = { isRedirect: true }
             return;
         }
@@ -76,8 +73,18 @@ class CreateAccount extends React.Component {
             return;
         }
 
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS))) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', `키의 개수가 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개를 초과하였습니다.`);
+            return;
+        }
+
+        if (!isInLimit(this.state.amounts, parseInt(process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM))) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', `어마운트의 개수가 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개를 초과하였습니다.`);
+            return;
+        }
+
         try {
-            const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
+            const generator = new Generator(this.props.networkId);
             const account = this.props.account;
 
             const keys = generator.createKeys(
@@ -99,7 +106,7 @@ class CreateAccount extends React.Component {
             );
 
             const createAccounts = generator.createOperation(createAccountsFact, "");
-            createAccounts.addSign(account.privateKey);
+            createAccounts.addSign(this.props.priv);
 
             const created = createAccounts.dict();
 
@@ -143,30 +150,35 @@ class CreateAccount extends React.Component {
     }
 
     addKey() {
-        if (!isThresholdValid(this.state.threshold)) {
+        if (!isThresholdValid(this.state.threshold.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 threshold입니다. threshold를 먼저 입력해주세요. (0 < threshold <=100)');
             return;
         }
 
-        if (!isPublicKeyValid(this.state.publicKey)) {
+        if (!isPublicKeyValid(this.state.publicKey.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 public key입니다.');
             return;
         }
 
-        if (!isWeightValid(this.state.weight)) {
+        if (!isWeightValid(this.state.weight.trim())) {
             this.openAlert('키를 추가할 수 없습니다 :(', '잘못된 weight입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.publicKey, this.state.keys.map(x => x.key))) {
+        if (isDuplicate(this.state.publicKey.trim(), this.state.keys.map(x => x.key))) {
             this.openAlert('키를 추가할 수 없습니다 :(', '이미 리스트에 중복된 키가 존재합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.keys, parseInt(process.env.REACT_APP_LIMIT_KEYS_IN_KEYS) - 1)) {
+            this.openAlert('키를 추가할 수 없습니다 :(', `키는 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개까지 추가할 수 있습니다.`);
             return;
         }
 
         this.setState({
             keys: [...this.state.keys, {
-                key: this.state.publicKey,
-                weight: this.state.weight
+                key: this.state.publicKey.trim(),
+                weight: this.state.weight.trim()
             }],
             publicKey: "",
             weight: "",
@@ -174,47 +186,34 @@ class CreateAccount extends React.Component {
     }
 
     addAmount() {
-        if (!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
+        if (!isCurrencyValid(this.state.currency.trim(), this.props.account.balances.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }
 
-        if (!isAmountValid(this.state.amount)) {
+        if (!isAmountValid(this.state.amount.trim())) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
+        if (isDuplicate(this.state.currency.trim(), this.state.amounts.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.amounts, parseInt(process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM) - 1)) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', `어마운트는 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개까지 추가할 수 있습니다.`);
             return;
         }
 
         this.setState({
             amounts: [...this.state.amounts, {
-                currency: this.state.currency,
-                amount: this.state.amount
+                currency: this.state.currency.trim(),
+                amount: this.state.amount.trim()
             }],
             currency: "",
             amount: ""
         });
-    }
-
-    componentDidMount() {
-        this.scrollToInput();
-    }
-
-    componentDidUpdate() {
-        this.scrollToInput();
-    }
-
-    scrollToInput = () => {
-
-        if (this.createdRef.current && (this.state.keys.length > 0 || this.state.amounts.length > 0)) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.titleRef.current) {
-            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     }
 
     render() {
@@ -226,13 +225,11 @@ class CreateAccount extends React.Component {
 
         return (
             <div className="ca-container">
-                <div ref={this.titleRef}></div>
                 <h1>CREATE ACCOUNT</h1>
                 <div className="ca-balance-wrap">
                     <Balances title="CURRENT BALANCE LIST" labeled={false} balances={account.balances} />
                 </div>
                 <div className="ca-input-wrap">
-                    <div ref={this.createdRef}></div>
                     <div className="ca-keys">
                         <Keys title='KEY LIST' keys={this.state.keys} labeled={true} />
                         <KeyAdder
@@ -268,11 +265,18 @@ class CreateAccount extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    networkId: state.network.networkId,
+    isLogin: state.login.isLogin,
+    account: state.login.account,
+    priv: state.login.priv,
+});
+
 const mapDispatchToProps = dispatch => ({
     setJson: (json) => dispatch(setOperation(OPER_CREATE_ACCOUNT, json)),
 });
 
 export default withRouter(connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(CreateAccount));

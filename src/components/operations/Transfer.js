@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -16,7 +16,7 @@ import { Generator } from 'mitumc';
 import { OPER_TRANSFER } from '../../text/mode';
 import { setOperation } from '../../store/actions';
 import AlertModal from '../modals/AlertModal';
-import { isAddressValid, isAmountValid, isCurrencyValid, isDuplicate } from '../../lib/Validation';
+import { isAddressValid, isInLimit, isAmountValid, isCurrencyValid, isDuplicate } from '../../lib/Validation';
 
 
 class Transfer extends React.Component {
@@ -24,10 +24,7 @@ class Transfer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.createdRef = createRef();
-        this.titleRef = createRef();
-
-        if (!Object.prototype.hasOwnProperty.call(this.props, 'account') || !this.props.account) {
+        if (!this.props.isLogin) {
             this.state = { isRedirect: true }
             return;
         }
@@ -72,13 +69,18 @@ class Transfer extends React.Component {
     }
 
     onClick() {
-        if (!isAddressValid(this.state.address)) {
+        if (!isAddressValid(this.state.address.trim())) {
             this.openAlert('작업을 생성할 수 없습니다 :(', 'receiver address 형식이 올바르지 않습니다.');
             return;
         }
 
+        if (!isInLimit(this.state.amounts, parseInt(process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM))) {
+            this.openAlert('작업을 생성할 수 없습니다 :(', `어마운트의 개수가 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개를 초과하였습니다.`);
+            return;
+        }
+
         try {
-            const generator = new Generator(process.env.REACT_APP_NETWORK_ID);
+            const generator = new Generator(this.props.networkId);
 
             const account = this.props.account;
             const amounts = generator.createAmounts(
@@ -89,12 +91,12 @@ class Transfer extends React.Component {
             const transfersFact = generator.createTransfersFact(
                 account.address,
                 [generator.createTransfersItem(
-                    this.state.address, amounts
+                    this.state.address.trim(), amounts
                 )]
             );
 
             const transfers = generator.createOperation(transfersFact, "");
-            transfers.addSign(account.privateKey);
+            transfers.addSign(this.props.priv);
 
             const created = transfers.dict();
 
@@ -127,47 +129,34 @@ class Transfer extends React.Component {
     }
 
     addAmount() {
-        if (!isCurrencyValid(this.state.currency, this.props.account.balances.map(x => x.currency))) {
+        if (!isCurrencyValid(this.state.currency.trim(), this.props.account.balances.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency id입니다.');
             return;
         }
 
-        if (!isAmountValid(this.state.amount)) {
+        if (!isAmountValid(this.state.amount.trim())) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
             return;
         }
 
-        if (isDuplicate(this.state.currency, this.state.amounts.map(x => x.currency))) {
+        if (isDuplicate(this.state.currency.trim(), this.state.amounts.map(x => x.currency))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '이미 리스트에 중복된 currency id가 존재합니다.');
+            return;
+        }
+
+        if (!isInLimit(this.state.amounts, parseInt(process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM) - 1)) {
+            this.openAlert('어마운트를 추가할 수 없습니다 :(', `어마운트는 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개까지 추가할 수 있습니다.`);
             return;
         }
 
         this.setState({
             amounts: [...this.state.amounts, {
-                currency: this.state.currency,
-                amount: this.state.amount
+                currency: this.state.currency.trim(),
+                amount: this.state.amount.trim()
             }],
             currency: "",
             amount: ""
         })
-    }
-
-    componentDidMount() {
-        this.scrollToInput();
-    }
-
-    componentDidUpdate() {
-        this.scrollToInput();
-    }
-
-    scrollToInput = () => {
-
-        if (this.createdRef.current && this.state.amounts.length > 0) {
-            this.createdRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else if (this.titleRef.current) {
-            this.titleRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     }
 
     render() {
@@ -179,13 +168,11 @@ class Transfer extends React.Component {
 
         return (
             <div className="tf-container">
-                <div ref={this.titleRef}></div>
                 <h1>TRANSFER</h1>
                 <div className="tf-balance-wrap">
                     <Balances title='CURRENT BALANCE LIST' labeled={false} balances={account.balances} />
                 </div>
                 <div className="tf-input-wrap">
-                    <div ref={this.createdRef} />
                     <div className="tf-amounts">
                         <Balances title='AMOUNT LIST' labeled={true} balances={this.state.amounts} />
                         <AmountAdder
@@ -199,7 +186,7 @@ class Transfer extends React.Component {
                             <p>RECEIVER'S ADDRESS:</p>
                             <InputBox
                                 size="medium" useCopy={false} disabled={false} placeholder='target address'
-                                value={this.state.threshold}
+                                value={this.state.address}
                                 onChange={(e) => this.onChangeAddress(e)} />
                         </div>
                     </div>
@@ -216,11 +203,18 @@ class Transfer extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    isLogin: state.login.isLogin,
+    account: state.login.account,
+    priv: state.login.priv,
+    networkId: state.network.networkId,
+});
+
 const mapDispatchToProps = dispatch => ({
     setJson: (json) => dispatch(setOperation(OPER_TRANSFER, json)),
 });
 
 export default withRouter(connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(Transfer));

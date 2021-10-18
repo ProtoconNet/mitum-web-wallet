@@ -38,6 +38,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      isNavUpdate: false
+    }
+
     this.runMaintain();
   }
 
@@ -69,13 +73,21 @@ class App extends React.Component {
     setTimeout(() => this.runMaintain(), 5000);
   }
 
+  componentDidUpdate(prevProps) {
+      if(this.props.location !== prevProps.location) {
+        this.setState({
+          isNavUpdate: Math.random()
+        })
+      }     
+  }
+
   render() {
 
     return (
       <div className="app-container">
         <HashRouter >
           <Navigation history={this.props.history} />
-          <SubNavigation />
+          <SubNavigation update={this.state.isNavUpdate}/>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/wallet/:account" component={Wallet} />

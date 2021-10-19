@@ -17,7 +17,7 @@ export const reducer = (state = initialState, action) => {
                 network: action.network,
                 networkAccount: action.network + '/account/',
                 networkBroadcast: action.network + '/builder/send',
-                networkSearchFact: action.network + '/operation/',
+                networkSearchFact: action.network + '/block/operation/',
                 networkPubAccounts: action.network + '/accounts?publickey='
             };
         case actions.CLEAR_NETWORK:

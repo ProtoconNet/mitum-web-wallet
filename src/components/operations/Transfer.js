@@ -135,7 +135,7 @@ class Transfer extends React.Component {
             return;
         }
 
-        if (!isAmountValid(this.state.amount.trim(), this.props.decimalPoint)) {
+        if (!isAmountValid(this.state.amount.trim(), parseInt(process.env.REACT_APP_DECIMAL))) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
             return;
         }
@@ -153,7 +153,7 @@ class Transfer extends React.Component {
         this.setState({
             amounts: [...this.state.amounts, {
                 currency: this.state.currency.trim(),
-                amount: parseDecimalToAmount(this.state.amount.trim(), this.props.decimalPoint)
+                amount: parseDecimalToAmount(this.state.amount.trim(), process.env.REACT_APP_DECIMAL)
             }],
             currency: "",
             amount: ""

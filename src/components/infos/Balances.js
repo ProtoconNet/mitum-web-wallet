@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { balance } from './SubInfo';
 import './Balances.scss';
 import { connect } from 'react-redux';
-import { parseAmountToDecimal } from '../../lib/Parse';
+import { cutDecimal, parseAmountToDecimal } from '../../lib/Parse';
 
 class Balances extends Component {
 
@@ -19,7 +19,16 @@ class Balances extends Component {
                     </div>
                 ) : false}
                 <ul className={labeled ? 'wide' : 'slim'}>
-                    {balances ? balances.map(x => balance({ currency: x.currency, amount: parseAmountToDecimal(x.amount, decimalPoint)})) : false}
+                    {balances ? balances.map(
+                        x => balance({
+                            ...x,
+                            amount: cutDecimal(
+                                parseAmountToDecimal(
+                                    x.amount, process.env.REACT_APP_DECIMAL
+                                ),
+                                decimalPoint)
+                        }))
+                        : false}
                 </ul>
             </section>
         );

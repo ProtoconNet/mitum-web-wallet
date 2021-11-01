@@ -340,7 +340,7 @@ export const isCurrencyValid = (currency, currencies) => {
 }
 
 export const isDecimal = (target) => {
-    if(!/[1-9].([0-9]*)/.test(target)) {
+    if(!/([0]|([1-9]*)).([0-9]*)/.test(target)) {
         return false;
     }
     return true;

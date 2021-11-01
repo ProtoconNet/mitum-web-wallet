@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { balance } from './SubInfo';
 import './Balances.scss';
 import { connect } from 'react-redux';
+
 import { cutDecimal, parseAmountToDecimal } from '../../lib/Parse';
 
 class Balances extends Component {

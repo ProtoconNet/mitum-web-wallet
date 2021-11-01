@@ -271,6 +271,7 @@ const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
     priv: state.login.priv,
+    decimalPoint: state.network.decimal,
 });
 
 const mapDispatchToProps = dispatch => ({

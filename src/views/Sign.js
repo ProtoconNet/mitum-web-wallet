@@ -17,7 +17,7 @@ import { isDuplicate, isItemsInLimit, isOperation } from '../lib/Validation';
 import { OPER_DEFAULT } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
 import SmallButton from '../components/buttons/SmallButton';
-import getOperationFromType from '../lib/Parse';
+import { getOperationFromType } from '../lib/Parse';
 
 const onCopy = (msg) => {
     copy(msg);

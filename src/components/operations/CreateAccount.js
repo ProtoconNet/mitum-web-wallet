@@ -20,6 +20,7 @@ import { Generator } from 'mitumc';
 import { OPER_CREATE_ACCOUNT } from '../../text/mode';
 import { isAmountValid, isCurrencyValid, isDuplicate, isInLimit, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
 import AlertModal from '../modals/AlertModal';
+import { parseDecimalToAmount } from '../../lib/Parse';
 
 class CreateAccount extends React.Component {
     constructor(props) {
@@ -95,7 +96,7 @@ class CreateAccount extends React.Component {
 
             const amounts = generator.createAmounts(
                 this.state.amounts.map(x =>
-                    generator.formatAmount(parseInt(x.amount), x.currency))
+                    generator.formatAmount(x.amount, x.currency))
             );
 
             const createAccountsFact = generator.createCreateAccountsFact(
@@ -191,7 +192,7 @@ class CreateAccount extends React.Component {
             return;
         }
 
-        if (!isAmountValid(this.state.amount.trim())) {
+        if (!isAmountValid(this.state.amount.trim(), this.props.decimalPoint)) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
             return;
         }
@@ -209,7 +210,7 @@ class CreateAccount extends React.Component {
         this.setState({
             amounts: [...this.state.amounts, {
                 currency: this.state.currency.trim(),
-                amount: this.state.amount.trim()
+                amount: parseDecimalToAmount(this.state.amount.trim(), this.props.decimalPoint)
             }],
             currency: "",
             amount: ""
@@ -270,6 +271,7 @@ const mapStateToProps = state => ({
     isLogin: state.login.isLogin,
     account: state.login.account,
     priv: state.login.priv,
+    decimalPoint: state.network.decimal,
 });
 
 const mapDispatchToProps = dispatch => ({

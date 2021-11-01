@@ -23,7 +23,7 @@ export const CLEAR_NETWORK_ID = 'CLEAR_NETWORK_ID';
 
 export const SET_PAGE = 'SET_PAGE';
 export const CLEAR_PAGE = 'CLEAR_PAGE';
- 
+
 export const SET_MAINTAIN_INFO = "SET_MAINTAIN_INFO";
 
 export const SET_ACCOUNT_LIST = "SET_ACCOUNT_LIST";
@@ -32,7 +32,10 @@ export const SET_RESTORE_KEY = "SET_RESTORE_KEY";
 export const CLEAR_RESTORE_KEY = "CLEAR_RESTORE_KEY";
 
 export const ALLOW_LOGIN = "ALLOW_LOGIN";
-export const REJECT_LOGIN="REJECT_LOGIN";
+export const REJECT_LOGIN = "REJECT_LOGIN";
+
+export const SET_DECIMAL = "SET_DECIMAL";
+export const CLEAR_DECIMAL = "CLEAR_DECIMAL";
 
 export function allowLogin() {
     return {
@@ -47,8 +50,8 @@ export function rejectLogin() {
 }
 
 export function setRestoreKey(priv, reskey) {
-    const encrypted  = CryptoJS.AES.encrypt(priv, reskey).toString();
-    const verify =  sha3_256.create().update(encrypted + reskey).hex();
+    const encrypted = CryptoJS.AES.encrypt(priv, reskey).toString();
+    const verify = sha3_256.create().update(encrypted + reskey).hex();
     return {
         type: SET_RESTORE_KEY,
         priv: encrypted,
@@ -121,7 +124,7 @@ export function logout() {
 }
 
 export function setHistory(data, me) {
-    if(!data) {
+    if (!data) {
         return {
             type: SET_HISTORY,
             history: [],
@@ -131,14 +134,14 @@ export function setHistory(data, me) {
     const histories = data._embedded.map(x => new History(x._embedded, me));
     const splitHistories = [];
 
-    for(let i = 0; i < histories.length; i++){
+    for (let i = 0; i < histories.length; i++) {
         const _i = histories[i];
-        if(!_i.items){
+        if (!_i.items) {
             continue;
         }
-        for(let j = 0; j < _i.items.length; j++){
+        for (let j = 0; j < _i.items.length; j++) {
             const _j = _i.items[j];
-            for(let z = 0; z < _j.amounts.length; z++) {
+            for (let z = 0; z < _j.amounts.length; z++) {
                 const _z = _j.amounts[z];
                 splitHistories.push({
                     hash: _i.factHash,
@@ -217,6 +220,13 @@ export function setNetwork(network) {
     }
 }
 
+export function setDecimal(decimal) {
+    return {
+        type: SET_DECIMAL,
+        decimal,
+    }
+}
+
 export function clearNetworkId() {
     return {
         type: CLEAR_NETWORK_ID,
@@ -226,6 +236,12 @@ export function clearNetworkId() {
 export function clearNetwork() {
     return {
         type: CLEAR_NETWORK
+    }
+}
+
+export function clearDecimal() {
+    return {
+        type: CLEAR_DECIMAL
     }
 }
 

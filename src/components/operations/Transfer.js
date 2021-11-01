@@ -17,6 +17,7 @@ import { OPER_TRANSFER } from '../../text/mode';
 import { setOperation } from '../../store/actions';
 import AlertModal from '../modals/AlertModal';
 import { isAddressValid, isInLimit, isAmountValid, isCurrencyValid, isDuplicate } from '../../lib/Validation';
+import { parseDecimalToAmount } from '../../lib/Parse';
 
 
 class Transfer extends React.Component {
@@ -85,7 +86,7 @@ class Transfer extends React.Component {
             const account = this.props.account;
             const amounts = generator.createAmounts(
                 this.state.amounts.map(x =>
-                    generator.formatAmount(parseInt(x.amount), x.currency))
+                    generator.formatAmount(x.amount, x.currency))
             );
 
             const transfersFact = generator.createTransfersFact(
@@ -134,7 +135,7 @@ class Transfer extends React.Component {
             return;
         }
 
-        if (!isAmountValid(this.state.amount.trim())) {
+        if (!isAmountValid(this.state.amount.trim(), this.props.decimalPoint)) {
             this.openAlert('어마운트를 추가할 수 없습니다 :(', '잘못된 currency amount입니다.');
             return;
         }
@@ -152,7 +153,7 @@ class Transfer extends React.Component {
         this.setState({
             amounts: [...this.state.amounts, {
                 currency: this.state.currency.trim(),
-                amount: this.state.amount.trim()
+                amount: parseDecimalToAmount(this.state.amount.trim(), this.props.decimalPoint)
             }],
             currency: "",
             amount: ""
@@ -208,6 +209,7 @@ const mapStateToProps = state => ({
     account: state.login.account,
     priv: state.login.priv,
     networkId: state.network.networkId,
+    decimalPoint: state.network.decimal,
 });
 
 const mapDispatchToProps = dispatch => ({

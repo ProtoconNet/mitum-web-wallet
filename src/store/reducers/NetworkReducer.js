@@ -6,7 +6,8 @@ const initialState = {
     networkBroadcast: process.env.REACT_APP_API_BROADCAST,
     networkSearchFact: process.env.REACT_APP_API_SEARCH_FACT,
     networkId: process.env.REACT_APP_NETWORK_ID,
-    networkPubAccounts: process.env.REACT_APP_API_PUBLIC_ACCOUNTS
+    networkPubAccounts: process.env.REACT_APP_API_PUBLIC_ACCOUNTS,
+    decimal: parseInt(process.env.REACT_APP_DECIMAL),
 };
 
 export const reducer = (state = initialState, action) => {
@@ -38,6 +39,16 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 networkId: process.env.REACT_APP_NETWORK_ID
+            }
+        case actions.SET_DECIMAL:
+            return {
+                ...state,
+                decimal: parseInt(action.decimal),
+            }
+        case actions.CLEAR_DECIMAL:
+            return {
+                ...state,
+                decimal: parseInt(process.env.REACT_APP_DECIMAL),
             }
         default:
             return state;

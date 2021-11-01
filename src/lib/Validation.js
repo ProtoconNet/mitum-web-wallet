@@ -339,8 +339,29 @@ export const isCurrencyValid = (currency, currencies) => {
     return isDuplicate(currency.trim(), currencies);
 }
 
-export const isAmountValid = (amount) => {
-    return isNum(amount.trim());
+export const isDecimal = (target) => {
+    if(!/[1-9].([0-9]*)/.test(target)) {
+        return false;
+    }
+    return true;
+}
+
+export const isAmountValid = (amount, decimal) => {
+    const idx = amount.indexOf('.');
+    if(idx < 0) {
+        return isNum(amount);
+    }
+
+    if(!isDecimal(amount)) {
+        return false;
+    }
+
+    const remain = amount.substring(idx + 1, amount.length);
+    if(remain.length > decimal) {
+        return false;
+    }
+
+    return true;
 }
 
 export const isDuplicate = (target, list) => {

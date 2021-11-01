@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import SmallButton from '../components/buttons/SmallButton';
 import InputBox from '../components/InputBox';
 import AlertModal from '../components/modals/AlertModal';
-import { clearNetwork, clearNetworkId, setNetwork, setNetworkId } from '../store/actions';
+import { clearDecimal, clearNetwork, clearNetworkId, setDecimal, setNetwork, setNetworkId } from '../store/actions';
 import './NetworkSetter.scss';
 
 class NetworkSetter extends React.Component {
@@ -18,6 +18,7 @@ class NetworkSetter extends React.Component {
 
             network: this.props.network,
             networkId: this.props.networkId,
+            decimalPoint: "" + this.props.decimalPoint,
         }
     }
 
@@ -29,6 +30,16 @@ class NetworkSetter extends React.Component {
     setNetworkId() {
         this.props.setNetworkId(this.state.networkId);
         this.openAlert("네트워크 ID 변경 성공! :D", `현재 네트워크 ID: ${this.state.networkId}`);
+    }
+
+    setDecimal() {
+        this.props.setDecimal(this.state.decimalPoint);
+        this.openAlert("Balance Decimal Point 변경 성공! :D", `현재 Decimal Point: ${this.state.decimalPoint}`);
+    }
+
+    clearDecimal() {
+        this.props.clearDecimal();
+        this.openAlert("Balance Decimal Point 변경 성공! :D", `현재 Decimal Point: ${process.env.REACT_APP_DECIMAL}`);
     }
 
     clearNetwork() {
@@ -53,6 +64,12 @@ class NetworkSetter extends React.Component {
         });
     }
 
+    onDecimalChange(e) {
+        this.setState({
+            decimalPoint: e.target.value,
+        })
+    }
+
     openAlert(title, msg){
         this.setState({
             isAlertOpen: true,
@@ -66,7 +83,8 @@ class NetworkSetter extends React.Component {
             isAlertOpen: false,
 
             network: this.props.network,
-            networkId: this.props.networkId
+            networkId: this.props.networkId,
+            decimal: this.props.decimalPoint,
         })
     }
 
@@ -110,6 +128,22 @@ class NetworkSetter extends React.Component {
                     <h2>CURRENT VERSION</h2>
                     <p>{`(FIXED) ${process.env.REACT_APP_VERSION}`}</p>
                 </div>
+                <div className="network-decimal-setter setter">
+                    <h2>SET NETWORK ID</h2>
+                    <section id="network-decimal-adder">
+                        <InputBox size="medium" useCopy={false} disabled={false} placeholder="decimal places"
+                            value={this.state.decimalPoint}
+                            onChange={(e) => this.onDecimalChange(e)} />
+                        <SmallButton
+                            visible={true}
+                            disabled={false}
+                            onClick={() => this.setDecimal()}>SET</SmallButton>
+                        <SmallButton
+                            visible={true}
+                            disabled={false}
+                            onClick={() => this.clearDecimal()}>RESET</SmallButton>
+                    </section>
+                </div>
                 <AlertModal isOpen={this.state.isAlertOpen} onClose={() => this.closeAlert()}
                     title={this.state.alertTitle} msg={this.state.alertMsg} />
             </div>
@@ -120,6 +154,7 @@ class NetworkSetter extends React.Component {
 const mapStateToProps = state => ({
     network: state.network.network,
     networkId: state.network.networkId,
+    decimalPoint: state.network.decimal,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -127,6 +162,8 @@ const mapDispatchToProps = dispatch => ({
     setNetworkId: (networkId) => dispatch(setNetworkId(networkId)),
     clearNetwork: () => dispatch(clearNetwork()),
     clearNetworkId: () => dispatch(clearNetworkId()),
+    setDecimal: (decimal) => dispatch(setDecimal(decimal)),
+    clearDecimal: () => dispatch(clearDecimal()),
 });
 
 export default withRouter(connect(

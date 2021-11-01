@@ -16,16 +16,20 @@ export function getOperationFromType(type) {
 export function parseAmountToDecimal(x, decimal) {
     const tmp = "" + x;
     const len = tmp.length;
+    decimal = parseInt(decimal);
 
     if (len >= (decimal + 1)) {
         const integer = tmp.substring(0, len - decimal);
-        const remain = tmp.substring(len - decimal, len);
-
+        const remain = tmp.substring(len - decimal, len)
         return integer + '.' + remain;
     }
     else {
+        let result = "0.";
         if(decimal !== len) {
-            return "0." + "0" * (decimal - len) + tmp;
+            for(var i = 0 ; i < decimal - len; i++) {
+                result += "0"
+            }
+            return result + tmp;
         }
         else {
             return "0." + tmp;
@@ -34,16 +38,22 @@ export function parseAmountToDecimal(x, decimal) {
 }
 
 export function parseDecimalToAmount(x, decimal) {
-    const idx = x.indexOf('.');
+    decimal = parseInt(decimal);
+    const target = "" + x;
+    const idx = target.indexOf('.');
 
     if (idx < 0) {
-        return parseInt(x) * parseInt(Math.pow(10, decimal));
+        return parseInt(target) * parseInt(Math.pow(10, decimal));
     }
 
-    const integer = x.substring(0, idx);
-    let remain = x.substring(idx + 1, x.length);
+    const integer = target.substring(0, idx);
+    let remain = target.substring(idx + 1, target.length);
+
     if(remain.length !== decimal) {
-        remain = remain + '0' * (decimal - remain.length);
+        const len = decimal - remain.length;
+        for(let i = 0; i < len; i++) {
+            remain += '0';
+        }
     }
 
     if(integer === "0") {
@@ -52,4 +62,16 @@ export function parseDecimalToAmount(x, decimal) {
     else {
         return parseInt(integer + remain);
     }
+}
+
+export function cutDecimal(x, decimal) {
+    const idx = x.indexOf('.');
+    let result = x.substring(0, idx + decimal + 2);
+    result = (parseFloat(result) * 1000 / 1000);
+
+    if(result === 0.000) {
+        return "0.000";
+    }
+
+    return result;
 }

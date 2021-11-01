@@ -39,7 +39,7 @@ class NetworkSetter extends React.Component {
 
     clearDecimal() {
         this.props.clearDecimal();
-        this.openAlert("Balance Decimal Point 변경 성공! :D", `현재 Decimal Point: ${process.env.REACT_APP_DECIMAL}`);
+        this.openAlert("Balance Decimal Point 변경 성공! :D", `현재 Decimal Point: ${process.env.REACT_APP_DECIMAL_DISPLAY}`);
     }
 
     clearNetwork() {
@@ -129,7 +129,7 @@ class NetworkSetter extends React.Component {
                     <p>{`(FIXED) ${process.env.REACT_APP_VERSION}`}</p>
                 </div>
                 <div className="network-decimal-setter setter">
-                    <h2>SET NETWORK ID</h2>
+                    <h2>SET DECIMAL PLACES</h2>
                     <section id="network-decimal-adder">
                         <InputBox size="medium" useCopy={false} disabled={false} placeholder="decimal places"
                             value={this.state.decimalPoint}

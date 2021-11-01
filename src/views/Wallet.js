@@ -14,7 +14,7 @@ import { isAccountValid } from '../lib/Validation';
 import Sleep from '../lib/Sleep';
 import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY, PAGE_ACC_SEL, PAGE_LOGIN, PAGE_OPER } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
-import { parseAmountToDecimal } from '../lib/Parse';
+import { cutDecimal, parseAmountToDecimal } from '../lib/Parse';
 
 const openTab = (url) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
@@ -244,7 +244,6 @@ class Wallet extends React.Component {
                 return <Redirect to='/account-select' />;
             }
         }
-
         return (
             <div className="wallet-container" >
                 <div id='wallet-refresh'>
@@ -257,7 +256,14 @@ class Wallet extends React.Component {
                     <section className="wallet-amount">
                         {title('BALANCE')}
                         <ul>
-                            {this.props.account.balances ? this.props.account.balances.map(x => balance({currency: x.currency, amount: parseAmountToDecimal(x.amount, this.props.decimalPoint)})) : false}
+                            {
+                                this.props.account.balances
+                                    ? this.props.account.balances.map(
+                                        x => balance({...x, amount: 
+                                            cutDecimal(parseAmountToDecimal(x.amount, process.env.REACT_APP_DECIMAL), this.props.decimalPoint)
+                                        }))
+                                    : false
+                            }
                         </ul>
                     </section>
                 </div>
@@ -269,7 +275,12 @@ class Wallet extends React.Component {
                 <div className="wallet-history">
                     {title('HISTORY')}
                     <ul>
-                        {this.props.history.length > 0 ? this.props.history.map(x => history({...x, amount: parseAmountToDecimal(x.amount, this.props.decimalPoint)})) : false}
+                        {
+                            this.props.history.length > 0
+                                ? this.props.history.map(
+                                    x => history({...x, amount: cutDecimal(parseAmountToDecimal(x.amount, process.env.REACT_APP_DECIMAL), this.props.decimalPoint)}))
+                                : false
+                        }
                     </ul>
                     <p id='pend' onClick={() => this.openPendModal()}>
                         {this.state.isQueueUpdate ? `이 브라우저에서 전송된 ${this.props.queue.length} 개의 작업을 처리 중입니다.` : false}

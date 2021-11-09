@@ -1,5 +1,5 @@
 import { OPER_CREATE_ACCOUNT, OPER_DEFAULT, OPER_TRANSFER, OPER_UPDATE_KEY, TYPE_CREATE_ACCOUNT, TYPE_TRANSFER, TYPE_UPDATE_KEY } from "../text/mode";
-import { isNum } from './Validation';
+import { isNum, isZero } from './Validation';
 
 export const getOperationFromType = (type) => {
     switch (type) {
@@ -76,13 +76,28 @@ export const parseAmount = (decimal) => {
     const integer = decimal.substring(0, idx);
     let remain = decimal.substring(idx + 1);
 
-    if(remain.length > expDecimal) {
+    if (remain.length > expDecimal) {
         throw new Error("Invalid float precision for parseAmount! You cannot use float for amount with precision > " + expDecimal);
     }
 
     const len = expDecimal - remain.length;
-    for(i = 0; i < len; i++) {
+    for (i = 0; i < len; i++) {
         remain += '0';
+    }
+
+    if (isZero(integer)) {
+        var zeroPos = -1;
+        for (var j = 0; j < remain.length; j++) {
+            if (remain.charAt(j) !== '0') {
+                zeroPos = j;
+                break;
+            }
+        }
+
+        if(zeroPos < 0){
+             return remain;
+        }
+        return remain.substring(zeroPos);
     }
     return integer + remain;
 }

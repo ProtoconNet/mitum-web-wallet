@@ -113,7 +113,7 @@ class OperationConfirm extends React.Component {
                             level={"L"}
                             includeMargin={true}
                         />
-                        <a className="oper-modal-button" id="yes" target="_blank" rel="noreferrer"
+                        <a className="oper-modal-button" id="yes" target="_blank" rel="noreferrer" href
                             onClick={() => this.downloadQr()}>QR CODE</a>
                         <a className="oper-modal-button" id="yes" target="_blank" download={`${filename}.json`}
                             href={download} rel="noreferrer"
@@ -126,7 +126,7 @@ class OperationConfirm extends React.Component {
             else {
                 return (
                     <span>
-                        <a style={{ color: "gray", textDecoration: "line-through" }}
+                        <a style={{ color: "gray", textDecoration: "line-through" }} href
                             className="oper-modal-button" id="yes" target="_blank" rel="noreferrer"
                             onClick={() => alert("작업 용량이 너무 커 QR CODE를 생성할 수 없습니다.")}>QR CODE</a>
                         <a className="oper-modal-button" id="yes" target="_blank" download={`${filename}.json`}
@@ -142,7 +142,7 @@ class OperationConfirm extends React.Component {
             return (
                 <span>
                     <p className="oper-modal-button" id="no" onClick={() => this.onClose()}>{"취소!:("}</p>
-                    <a className="oper-modal-button" id="no" onClick={() => this.onExport()}>{"내보내기 :["}</a>
+                    <a className="oper-modal-button" id="no" onClick={() => this.onExport()} href>{"내보내기 :["}</a>
                     <p className="oper-modal-button" id="yes" onClick={() => this.onSend(json)}>{"전송!:)"}</p>
                 </span>
             )

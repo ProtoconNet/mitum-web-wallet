@@ -59,7 +59,7 @@ export const isItemsInLimit = (operation) => {
                 }
                 return x;
             });
-            
+
             if (!isInLimit(operationItems, parseInt(process.env.REACT_APP_LIMIT_ITEMS_IN_OPERATION))) {
                 operationValid = false;
             }
@@ -340,18 +340,18 @@ export const isCurrencyValid = (currency, currencies) => {
 }
 
 export const isFloat = (num) => {
-    if(isNum(num.trim())) {
+    if (isNum(num.trim())) {
         return true;
     }
 
     const idx = num.indexOf('.');
-    if(idx < 0) {
+    if (idx < 0) {
         return false;
     }
 
     const integer = num.substring(0, idx);
     const remain = num.substring(idx + 1);
-    if((isNum(integer) || integer === '0') && isNum(remain)) {
+    if ((isNum(integer) || integer === '0') && isNum(remain)) {
         return true;
     }
 
@@ -359,15 +359,25 @@ export const isFloat = (num) => {
 }
 
 export const isAmountValid = (amount) => {
-    if(isNum(amount.trim())) {
+    if (isNum(amount.trim())) {
         return true;
     }
 
-    if(isFloat(amount.trim())) {
+    if (isFloat(amount.trim())) {
         return true;
     }
 
     return false;
+}
+
+export const isZero = (num) => {
+    for (var i = 0; i < num.length; i++) {
+        if (num.charAt(i) !== '0') {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 export const isDuplicate = (target, list) => {

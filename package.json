@@ -39,10 +39,12 @@
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "5.3.2",
     "identity-obj-proxy": "3.0.0",
+    "immer": "^9.0.6",
     "js-sha3": "^0.8.0",
     "mini-css-extract-plugin": "^2.3.0",
     "mitumc": "^0.0.5",
     "node-sass": "^6.0.1",
+    "nth-check": "^2.0.1",
     "optimize-css-assets-webpack-plugin": "6.0.1",
     "pnp-webpack-plugin": "1.7.0",
     "postcss-flexbugs-fixes": "5.0.2",
@@ -70,6 +72,7 @@
     "resolve-url-loader": "^4.0.0",
     "sass-loader": "^12.1.0",
     "semver": "7.3.5",
+    "set-value": "^4.1.0",
     "style-loader": "3.3.0",
     "terser-webpack-plugin": "5.2.4",
     "ts-pnp": "1.2.0",
@@ -160,7 +163,7 @@
     ]
   },
   "devDependencies": {
-    "browserslist": "^4.17.3",
+    "browserslist": "^4.17.6",
     "chokidar": "^3.5.2",
     "gh-pages": "^3.2.3",
     "glob-parent": "^6.0.2",
@@ -169,6 +172,10 @@
   "resolutions": {
     "glob-parent": "^6.0.2",
     "browserslist": "^4.17.3",
-    "chokidar": "^3.5.2"
+    "chokidar": "^3.5.2",
+    "axios": "^0.22.0",
+    "set-value": "^4.1.0",
+    "nth-check": "^2.0.1",
+    "immer": "^9.0.6"
   }
 }

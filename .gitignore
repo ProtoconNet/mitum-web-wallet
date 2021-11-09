@@ -100,5 +100,3 @@ dist
 .tern-port
 
 build/
-.env.development
-.env.production

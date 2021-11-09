@@ -20,6 +20,7 @@ import { Generator } from 'mitumc';
 import { OPER_CREATE_ACCOUNT } from '../../text/mode';
 import { isAmountValid, isCurrencyValid, isDuplicate, isInLimit, isPublicKeyValid, isThresholdValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
 import AlertModal from '../modals/AlertModal';
+import { parseAmount } from '../../lib/Parse';
 
 class CreateAccount extends React.Component {
     constructor(props) {
@@ -95,8 +96,10 @@ class CreateAccount extends React.Component {
 
             const amounts = generator.createAmounts(
                 this.state.amounts.map(x =>
-                    generator.formatAmount(parseInt(x.amount), x.currency))
+                    generator.formatAmount(x.amount, x.currency))
             );
+
+            console.log(amounts);
 
             const createAccountsFact = generator.createCreateAccountsFact(
                 account.address,
@@ -209,7 +212,7 @@ class CreateAccount extends React.Component {
         this.setState({
             amounts: [...this.state.amounts, {
                 currency: this.state.currency.trim(),
-                amount: this.state.amount.trim()
+                amount: parseAmount(this.state.amount.trim())
             }],
             currency: "",
             amount: ""

@@ -256,7 +256,7 @@ export const isRestoreKeyValid = (res) => {
     return true;
 }
 
-const isNum = (numb) => {
+export const isNum = (numb) => {
     if (!numb) {
         return false;
     }
@@ -339,8 +339,35 @@ export const isCurrencyValid = (currency, currencies) => {
     return isDuplicate(currency.trim(), currencies);
 }
 
+export const isFloat = (num) => {
+    if(isNum(num.trim())) {
+        return true;
+    }
+
+    const idx = num.indexOf('.');
+    if(idx < 0) {
+        return false;
+    }
+
+    const integer = num.substring(0, idx);
+    const remain = num.substring(idx + 1);
+    if((isNum(integer) || integer === '0') && isNum(remain)) {
+        return true;
+    }
+
+    return false;
+}
+
 export const isAmountValid = (amount) => {
-    return isNum(amount.trim());
+    if(isNum(amount.trim())) {
+        return true;
+    }
+
+    if(isFloat(amount.trim())) {
+        return true;
+    }
+
+    return false;
 }
 
 export const isDuplicate = (target, list) => {

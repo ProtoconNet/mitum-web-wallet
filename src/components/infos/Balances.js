@@ -1,8 +1,10 @@
 import React from 'react';
 import { balance } from './SubInfo';
 import './Balances.scss';
+import { connect } from 'react-redux';
+import { parseDecimal, toPrecision } from '../../lib/Parse';
 
-function Balances({ balances, title, labeled }) {
+function Balances({ balances, title, labeled, precision }) {
     return (
         <section className='balance-container'>
             <p id='head'>{title}</p>
@@ -13,10 +15,20 @@ function Balances({ balances, title, labeled }) {
                 </div>
             ) : false}
             <ul className={labeled ? 'wide' : 'slim'}>
-                {balances ? balances.map(x => balance(x)) : false}
+                {balances ? balances.map(x => balance({
+                    ...x,
+                    amount: toPrecision(parseDecimal(x.amount), precision)
+                })) : false}
             </ul>
         </section>
     );
 }
 
-export default Balances;
+const mapStateToProps = state => ({
+    precision: state.network.precision,
+})
+
+export default connect(
+    mapStateToProps,
+    null
+)(Balances);

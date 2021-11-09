@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react'
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router';
 import SelectButton from '../components/buttons/SelectButton';
-import getOperationFromType from '../lib/Parse';
+import { getOperationFromType } from '../lib/Parse';
 import { clearPage, setOperation, setPage } from '../store/actions';
 
 import QrReader from 'react-qr-reader';

@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { dequeueOperation, login, setAccountList } from '../store/actions';
 import './Wallet.scss';
 
-import copy from 'copy-to-clipboard';
-
 import SelectButton from '../components/buttons/SelectButton';
 import PublicKeyModal from '../components/modals/PublicKeyModal';
 import PendingModal from '../components/modals/PendingModal';
@@ -16,6 +14,12 @@ import { isAccountValid } from '../lib/Validation';
 import Sleep from '../lib/Sleep';
 import { OPER_CREATE_ACCOUNT, OPER_TRANSFER, OPER_UPDATE_KEY, PAGE_ACC_SEL, PAGE_LOGIN, PAGE_OPER } from '../text/mode';
 import AlertModal from '../components/modals/AlertModal';
+import { parseDecimal, toPrecision } from '../lib/Parse';
+
+function openTab(url) {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+}
 
 const balance = (bal) => {
     return (
@@ -28,10 +32,7 @@ const balance = (bal) => {
 
 const history = (hist) => {
     return (
-        <li key={hist.hash + hist.currency} onClick={() => {
-            copy(hist.hash);
-            alert('fact hash copied!');
-        }}>
+        <li key={hist.hash + hist.currency} onClick={() => {openTab(process.env.REACT_APP_EXPLORER + "/operation/" + hist.hash)}}>
             <p id={hist.confirmation}>{hist.confirmation}</p>
             <p id={hist.direction}>{hist.direction}</p>
             <p id='confirmed-at'>{hist.confirmedAt}</p>
@@ -73,7 +74,7 @@ class Wallet extends React.Component {
             isPubModalOpen: false,
             isPendModalOpen: false,
             isQueueUpdate: 1,
-            
+
             isAlertOpen: false,
             alertTitle: "",
             alertMsg: "",
@@ -184,42 +185,42 @@ class Wallet extends React.Component {
 
     goAccountSelector() {
         this.getPubAccounts(this.props.pub)
-        .then(
-            res => {
-                if(res.data._embedded == null ){
-                    this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.");
-                    return;
-                }
-
-                let result = res.data._embedded.map(
-                    x => {
-                        return (x._embedded.address)
+            .then(
+                res => {
+                    if (res.data._embedded == null) {
+                        this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.");
+                        return;
                     }
-                );
-                result.unshift(res.data._links.next.href); 
 
-                return result;
-            }
-        )
-        .then(
-            res => {
-                if(res == null || res.length < 2) {
-                    this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.");
-                    return;
+                    let result = res.data._embedded.map(
+                        x => {
+                            return (x._embedded.address)
+                        }
+                    );
+                    result.unshift(res.data._links.next.href);
+
+                    return result;
                 }
+            )
+            .then(
+                res => {
+                    if (res == null || res.length < 2) {
+                        this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.");
+                        return;
+                    }
 
-                const next = res.shift();
-                this.props.setAccountList(res, next);
+                    const next = res.shift();
+                    this.props.setAccountList(res, next);
 
-                this.setState({
-                    redirect: PAGE_ACC_SEL,
-                    isRedirect: true,
-                });
-            }
-        )
-        .catch(
-            e => this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.")
-        )
+                    this.setState({
+                        redirect: PAGE_ACC_SEL,
+                        isRedirect: true,
+                    });
+                }
+            )
+            .catch(
+                e => this.openAlert("오류 발생! :(", "계정 목록을 불러올 수 없습니다. 잠시후 다시 시도해 보세요.")
+            )
     }
 
     render() {
@@ -256,7 +257,15 @@ class Wallet extends React.Component {
                     <section className="wallet-amount">
                         {title('BALANCE')}
                         <ul>
-                            {this.props.account.balances ? this.props.account.balances.map(x => balance(x)) : false}
+                            {
+                                this.props.account.balances
+                                    ? this.props.account.balances.map(
+                                        x => balance({
+                                            ...x,
+                                            amount: toPrecision(parseDecimal(x.amount), this.props.precision)
+                                        }))
+                                    : false
+                            }
                         </ul>
                     </section>
                 </div>
@@ -268,7 +277,13 @@ class Wallet extends React.Component {
                 <div className="wallet-history">
                     {title('HISTORY')}
                     <ul>
-                        {this.props.history.length > 0 ? this.props.history.map(x => history(x)) : false}
+                        {this.props.history.length > 0
+                            ? this.props.history.map(
+                                x => history({
+                                    ...x,
+                                    amount: toPrecision(parseDecimal(x.amount), this.props.precision)
+                                }))
+                            : false}
                     </ul>
                     <p id='pend' onClick={() => this.openPendModal()}>
                         {this.state.isQueueUpdate ? `이 브라우저에서 전송된 ${this.props.queue.length} 개의 작업을 처리 중입니다.` : false}
@@ -290,6 +305,7 @@ const mapStateToProps = state => ({
     queue: state.queue.queue,
     networkSearchFact: state.network.networkSearchFact,
     networkPubAccounts: state.network.networkPubAccounts,
+    precision: state.network.precision,
     pub: state.login.pub,
 });
 

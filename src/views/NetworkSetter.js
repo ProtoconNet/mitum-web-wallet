@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import SmallButton from '../components/buttons/SmallButton';
 import InputBox from '../components/InputBox';
 import AlertModal from '../components/modals/AlertModal';
-import { clearNetwork, clearNetworkId, setNetwork, setNetworkId } from '../store/actions';
+import { clearNetwork, clearNetworkId, clearPrecision, setNetwork, setNetworkId, setPrecision } from '../store/actions';
 import './NetworkSetter.scss';
 
 class NetworkSetter extends React.Component {
@@ -18,6 +18,7 @@ class NetworkSetter extends React.Component {
 
             network: this.props.network,
             networkId: this.props.networkId,
+            precision: this.props.precision,
         }
     }
 
@@ -70,6 +71,22 @@ class NetworkSetter extends React.Component {
         })
     }
 
+    onPrecisionChange(e) {
+        this.setState({
+            precision: e.target.value
+        })
+    }
+
+    setPrecision() {
+        this.props.setPrecision(this.state.precision);
+        this.openAlert("Decimal point expression 변경 성공! :D", `현재 Precision: ${this.state.precision}`);
+    }
+
+    clearPrecision() {
+        this.props.clearPrecision();
+        this.openAlert("Decimal point expression 변경 성공! :D", `현재 Precision: ${process.env.REACT_APP_PRECISION}`);
+    }
+
     render() {
         return (
             <div className="network-container">
@@ -106,6 +123,22 @@ class NetworkSetter extends React.Component {
                             onClick={() => this.clearNetworkId()}>RESET</SmallButton>
                     </section>
                 </div>
+                <div className="precision-setter setter">
+                    <h2>SET DECIMAL PRECISION</h2>
+                    <section id="precision-adder">
+                        <InputBox size="medium" useCopy={false} disabled={false} placeholder="decimal precision"
+                            value={this.state.precision}
+                            onChange={(e) => this.onPrecisionChange(e)} />
+                        <SmallButton
+                            visible={true}
+                            disabled={false}
+                            onClick={() => this.setPrecision()}>SET</SmallButton>
+                        <SmallButton
+                            visible={true}
+                            disabled={false}
+                            onClick={() => this.clearPrecision()}>RESET</SmallButton>
+                    </section>
+                </div>
                 <div className="network-version-info">
                     <h2>CURRENT VERSION</h2>
                     <p>{`(FIXED) ${process.env.REACT_APP_VERSION}`}</p>
@@ -120,11 +153,14 @@ class NetworkSetter extends React.Component {
 const mapStateToProps = state => ({
     network: state.network.network,
     networkId: state.network.networkId,
+    precision: state.network.precision,
 });
 
 const mapDispatchToProps = dispatch => ({
     setNetwork: (network) => dispatch(setNetwork(network)),
     setNetworkId: (networkId) => dispatch(setNetworkId(networkId)),
+    setPrecision: (precision) => dispatch(setPrecision(precision)),
+    clearPrecision: () => dispatch(clearPrecision()),
     clearNetwork: () => dispatch(clearNetwork()),
     clearNetworkId: () => dispatch(clearNetworkId()),
 });

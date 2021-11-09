@@ -17,6 +17,7 @@ import { OPER_TRANSFER } from '../../text/mode';
 import { setOperation } from '../../store/actions';
 import AlertModal from '../modals/AlertModal';
 import { isAddressValid, isInLimit, isAmountValid, isCurrencyValid, isDuplicate } from '../../lib/Validation';
+import { parseAmount } from '../../lib/Parse';
 
 
 class Transfer extends React.Component {
@@ -85,7 +86,7 @@ class Transfer extends React.Component {
             const account = this.props.account;
             const amounts = generator.createAmounts(
                 this.state.amounts.map(x =>
-                    generator.formatAmount(parseInt(x.amount), x.currency))
+                    generator.formatAmount(x.amount, x.currency))
             );
 
             const transfersFact = generator.createTransfersFact(
@@ -152,7 +153,7 @@ class Transfer extends React.Component {
         this.setState({
             amounts: [...this.state.amounts, {
                 currency: this.state.currency.trim(),
-                amount: this.state.amount.trim()
+                amount: parseAmount(this.state.amount.trim())
             }],
             currency: "",
             amount: ""

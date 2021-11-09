@@ -21,6 +21,9 @@ export const CLEAR_NETWORK = 'CLEAR_NETWORK';
 export const SET_NETWORK_ID = 'SET_NETWORK_ID';
 export const CLEAR_NETWORK_ID = 'CLEAR_NETWORK_ID';
 
+export const SET_PRECISION = 'SET_PRECISION';
+export const CLEAR_PRECISION = 'CLEAR_PRECISION';
+
 export const SET_PAGE = 'SET_PAGE';
 export const CLEAR_PAGE = 'CLEAR_PAGE';
  
@@ -46,6 +49,19 @@ export function rejectLogin() {
     }
 }
 
+export function setPrecision(precision) {
+    return {
+        type: SET_PRECISION,
+        precision,
+    }
+}
+
+export function clearPrecision() {
+    return {
+        type: CLEAR_PRECISION,
+    }
+}
+ 
 export function setRestoreKey(priv, reskey) {
     const encrypted  = CryptoJS.AES.encrypt(priv, reskey).toString();
     const verify =  sha3_256.create().update(encrypted + reskey).hex();

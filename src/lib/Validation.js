@@ -351,7 +351,7 @@ export const isFloat = (num) => {
 
     const integer = num.substring(0, idx);
     const remain = num.substring(idx + 1);
-    if ((isNum(integer) || integer === '0') && isNum(remain)) {
+    if ((isNum(integer) || isZero(integer)) && (isNum(remain) || isZero(remain))) {
         return true;
     }
 

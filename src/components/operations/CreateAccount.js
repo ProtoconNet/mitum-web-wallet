@@ -98,9 +98,7 @@ class CreateAccount extends React.Component {
                 this.state.amounts.map(x =>
                     generator.formatAmount(x.amount, x.currency))
             );
-
-            console.log(amounts);
-
+            
             const createAccountsFact = generator.createCreateAccountsFact(
                 account.address,
                 [generator.createCreateAccountsItem(

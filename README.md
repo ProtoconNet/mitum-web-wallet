@@ -11,17 +11,7 @@ Recommended requirements for 'mitum-web-wallet' are,
 
 and
 
-* mitum-js-util
-
-You must install [mitum-js-util](https://github.com/ProtoconNet/mitum-js-util) before running 'mitum-web-wallet'.
-
-```sh
-$ git clone https://github.com/ProtoconNet/mitum-js-util.git
-
-$ cd mitum-js-util
-
-/mitum-js-util$ sudo npm install -g
-```
+* mitumc v0.0.5
 
 Then install and run 'mitum-web-wallet'.
 
@@ -31,8 +21,6 @@ $ git clone https://github.com/ProtoconNet/mitum-web-wallet.git
 $ cd mitum-web-wallet
 
 /mitum-web-wallet$ yarn install
-
-/mitum-web-wallet$ npm link mitumc
 
 /mitum-web-wallet$ yarn start
 ```

@@ -28,6 +28,8 @@ import { setMaintainInfo } from './store/actions';
 import { connect } from 'react-redux';
 import InitiateAccounts from './views/InitiateAccounts';
 import AccountSelector from './views/AccountSelector';
+import BulkTransfer from './views/BulkTransfer';
+import BulkMenu from './views/BulkMenu';
 
 const checkMaintainInfo = async () => {
   return await axios.get(process.env.REACT_APP_MAINTAIN + "?" + Math.random());
@@ -105,6 +107,8 @@ class App extends React.Component {
           <Route path="/get-pub" component={PubKeyGen} />
           <Route path="/init" component={InitiateAccounts} />
           <Route path="/account-select" component={AccountSelector} />
+          <Route path="/bulk" component={BulkTransfer} />
+          <Route path="/bulk-menu" component={BulkMenu} />
           <Footer />
         </HashRouter>
       </div>

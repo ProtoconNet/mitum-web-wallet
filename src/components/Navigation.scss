@@ -27,6 +27,8 @@
     .nav-login,
     .nav-sign,
     .nav-res,
+    .nav-single-bulk,
+    .nav-multi-bulk,
     .main {
 
         &:before {
@@ -80,7 +82,7 @@
         }
     }
 
-    .nav-sign, .nav-res {
+    .nav-sign, .nav-res, .nav-single-bulk, .nav-multi-bulk{
         &:before {
             background: gray;
         }
@@ -111,6 +113,8 @@
     .nav-title,
     .nav-sign,
     .nav-login,
+    .nav-multi-bulk,
+    .nav-single-bulk,
     .nav-res {
         position: relative;
         margin: 0.5em;
@@ -130,6 +134,8 @@
     .main,
     .nav-sign,
     .nav-login,
+    .nav-multi-bulk,
+    .nav-single-bulk,
     .nav-res {
         p {
             font-size: 1.2em;

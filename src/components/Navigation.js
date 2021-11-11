@@ -77,6 +77,19 @@ class Navigation extends React.Component {
                             <p>SIGN OPERATION</p>
                         </Link>
                     ) : false}
+                {isLogin && this.props.account.accountType === "single"
+                    ? (
+                        <Link className="nav-single-bulk" to="/bulk">
+                            <p>SEND MULTI OPERATIONS</p>
+                        </Link>
+                    ) : false}
+                {isLogin && this.props.account.accountType === "multi"
+                    ? (
+                        <Link className="nav-multi-bulk" to="/bulk-menu">
+                            <p>SIGN MULTI OPERATIONS</p>
+                        </Link>
+                    )
+                    : false}
                 {isLogin
                     ? (
                         <Link className="nav-res" to="/res-key-generate">

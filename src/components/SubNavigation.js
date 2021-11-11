@@ -46,7 +46,7 @@ class SubNavigation extends React.Component {
         return (
             <div className="sub-nav">
                 { this.state.isClosed ? <Redirect to="/logout"/> : false }
-                <input className='burger-check' id="burger-check" type="checkbox" checked={this.state.isChecked} />
+                <input className='burger-check' id="burger-check" type="checkbox" checked={this.state.isChecked} readOnly/>
                 <label className="burger-icon" htmlFor="burger-check"
                     onClick={() => this.onCheck()}>
                     <span className="burger-sticks"></span>
@@ -73,6 +73,20 @@ class SubNavigation extends React.Component {
                                 <Link className={"nav-login " + (isLogin ? "on" : "off")} to="/res-key-generate"
                                     onClick={() => this.onCheckOut()}>
                                     <p>SET RESTORE PASSWORD</p>
+                                </Link>
+                            ) : false}
+                        {isLogin && this.props.account.accountType === "single"
+                            ? (
+                                <Link className={"nav-login " + (isLogin ? "on" : "off")} to="/bulk"
+                                    onClick={() => this.onCheckOut()}>
+                                    <p>SEND MULTI OPERATIONS</p>
+                                </Link>
+                            ) : false}
+                        {isLogin && this.props.account.accountType === "multi"
+                            ? (
+                                <Link className={"nav-login " + (isLogin ? "on" : "off")} to="/bulk-menu"
+                                    onClick={() => this.onCheckOut()}>
+                                    <p>SEND MULTI OPERATIONS</p>
                                 </Link>
                             ) : false}
                         <Link className="main" to="/key-generate"

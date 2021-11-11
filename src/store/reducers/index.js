@@ -9,6 +9,7 @@ import { reducer as page } from './PageReducer';
 import { reducer as maintain } from './MaintainReducer';
 import { reducer as restore } from './RestoreReducer';
 import { reducer as allow } from './AllowanceReducer';
+import { reducer as bulk } from './BulkReducer';
 
 const persistConfig = {
     key: "root",
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     maintain,
     restore,
     allow,
+    bulk,
 });
 
 export default persistReducer(persistConfig, rootReducer);

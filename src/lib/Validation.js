@@ -298,7 +298,7 @@ export const isThresholdValid = (threshold) => {
 }
 
 export const isWeightValid = (weight) => {
-    return isNum(weight.trim());
+    return isNum(("" + weight).trim());
 }
 
 export const isWeightsValidToThres = (weights, thres) => {

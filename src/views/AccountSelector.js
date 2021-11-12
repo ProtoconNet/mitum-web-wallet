@@ -37,7 +37,7 @@ class AccountSelector extends React.Component {
 
     liAccount(account) {
         const link = this.props.networkAccount + account;
-        return <li id="account" onClick={() => this.onSelect(link, account)}>{account}</li>
+        return <li key={account} id="account" onClick={() => this.onSelect(link, account)}>{account}</li>
     }
 
     onSelect(link, addr) {

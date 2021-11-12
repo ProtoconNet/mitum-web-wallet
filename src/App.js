@@ -30,6 +30,7 @@ import InitiateAccounts from './views/InitiateAccounts';
 import AccountSelector from './views/AccountSelector';
 import BulkTransfer from './views/BulkTransfer';
 import BulkMenu from './views/BulkMenu';
+import BulkCreate from './views/BulkCreate';
 
 const checkMaintainInfo = async () => {
   return await axios.get(process.env.REACT_APP_MAINTAIN + "?" + Math.random());
@@ -44,7 +45,7 @@ class App extends React.Component {
       isNavUpdate: false
     }
 
-    this.runMaintain();
+    // this.runMaintain();
   }
 
   runMaintain() {
@@ -57,30 +58,39 @@ class App extends React.Component {
           var end = new Date(res.data.end_time).valueOf();
           var curr = new Date().valueOf();
           isOnMaintain = (curr <= end && curr >= start) ? true : false;
-          this.props.setMaintainInfo(res.data, isOnMaintain);
+
+          if (isOnMaintain) {
+            this.props.setMaintainInfo(res.data, isOnMaintain);
+          }
+          else if (isOnMaintain !== this.props.maintain.maintain) {
+            this.props.setMaintainInfo(res.data, isOnMaintain);
+          }
         }
       )
       .catch(
-        err =>
-          this.props.setMaintainInfo({
-            start_time: null,
-            end_time: null,
-            message: {
-              en: "",
-              ko: ""
-            }
-          }, false)
+        err => {
+          if (this.props.maintain.maintain) {
+            this.props.setMaintainInfo({
+              start_time: null,
+              end_time: null,
+              message: {
+                en: "",
+                ko: ""
+              }
+            }, false)
+          }
+        }
       )
-    
+
     setTimeout(() => this.runMaintain(), 5000);
   }
 
   componentDidUpdate(prevProps) {
-      if(this.props.location !== prevProps.location) {
-        this.setState({
-          isNavUpdate: Math.random()
-        })
-      }     
+    if (this.props.location !== prevProps.location) {
+      this.setState({
+        isNavUpdate: Math.random()
+      })
+    }
   }
 
   render() {
@@ -89,7 +99,7 @@ class App extends React.Component {
       <div className="app-container">
         <HashRouter >
           <Navigation history={this.props.history} />
-          <SubNavigation update={this.state.isNavUpdate}/>
+          <SubNavigation update={this.state.isNavUpdate} />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/wallet/:account" component={Wallet} />
@@ -109,6 +119,7 @@ class App extends React.Component {
           <Route path="/account-select" component={AccountSelector} />
           <Route path="/bulk" component={BulkTransfer} />
           <Route path="/bulk-menu" component={BulkMenu} />
+          <Route path="/bulk-create" component={BulkCreate} />
           <Footer />
         </HashRouter>
       </div>

@@ -37,46 +37,9 @@ export const CLEAR_RESTORE_KEY = "CLEAR_RESTORE_KEY";
 export const ALLOW_LOGIN = "ALLOW_LOGIN";
 export const REJECT_LOGIN = "REJECT_LOGIN";
 
-export const SET_PRIV = "bulk/SET_PRIV";
-export const CLEAR_PRIV = "bulk/CLEAR_PRIV";
 export const SET_BULKS = "bulk/SET_BULKS";
 export const CLEAR_BULKS = "bulk/CLEAR_BULKS";
-export const ADD_HASH = "bulk/ADD_HASH";
-export const SET_HASH_RESULT = "buld/SET_HASH_RESULT";
-export const START_LOADING = "bulk/START_LOADING";
-export const START_SEND = "bulk/START_SEND";
-export const STOP_SEND = "bulk/STOP_SEND";
-
-export function setPriv(privs) {
-    return {
-        type: SET_PRIV,
-        privs,
-    }
-}
-
-export function clearPriv() {
-    return {
-        type: CLEAR_PRIV,
-    }
-}
-
-export function startLoad() {
-    return {
-        type: START_LOADING,
-    }
-}
-
-export function startSend() {
-    return {
-        type: START_SEND,
-    }
-}
-
-export function stopSend() {
-    return {
-        type: STOP_SEND,
-    }
-}
+export const SET_RESULT = "bulk/SET_RESULT";
 
 export function setBulks(bulks) {
     return {
@@ -91,17 +54,9 @@ export function clearBulks() {
     }
 }
 
-export function addHash(hash) {
+export function setResult(result) {
     return {
-        type: ADD_HASH,
-        hash,
-    }
-}
-
-export function setHashResult(hash, result) {
-    return {
-        type: SET_HASH_RESULT,
-        hash,
+        type: SET_RESULT,
         result,
     }
 }

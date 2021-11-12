@@ -1,14 +1,14 @@
 import * as actions from '../actions';
 
-const createAccountText = "create-accounts";
-const transfersText = "transfers";
+export const createAccountText = "create-accounts";
+export const transfersText = "transfers";
 
-const createAccountsCommand = "ca";
-const transfersCommand = "tf";
+export const createAccountsCommand = "ca";
+export const transfersCommand = "tf";
 
-const invalidText = "invalid";
+export const invalidText = "a-invalid";
 
-const pendingText = "pending";
+export const pendingText = "pending";
 export const failText = "fail";
 export const successText = "success";
 
@@ -22,37 +22,10 @@ export const sendDone = "요청하신 작업이 모두 전송 완료 되었습�
 const initialState = {
     bulks: [],
     result: [],
-    state: beforeLoad,
-    privs: [],
 };
 
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actions.SET_PRIV:
-            return {
-                ...state,
-                privs: action.privs,
-            }
-        case actions.CLEAR_PRIV:
-            return {
-                ...state,
-                privs: [],
-            }
-        case actions.START_LOADING:
-            return {
-                ...state,
-                state: loadingOperation,
-            }
-        case actions.START_SEND:
-            return {
-                ...state,
-                state: sendingOperation,
-            }
-        case actions.STOP_SEND:
-            return {
-                ...state,
-                state: stopSending,
-            }
         case actions.SET_BULKS:
             return {
                 ...state,
@@ -73,33 +46,14 @@ export const reducer = (state = initialState, action) => {
                     }
                     return 0;
                 }),
-                state: afterLoad,
             };
         case actions.CLEAR_BULKS:
             return initialState;
-        case actions.ADD_HASH:
-            if (state.bulks.length - 1 <= state.result.length) {
-                return {
-                    ...state,
-                    result: [...state.result, { hash: action.hash, result: pendingText }],
-                    state: sendDone,
-                }
-            }
+        case actions.SET_RESULT:
             return {
                 ...state,
-                result: [...state.result, { hash: action.hash, result: pendingText }],
+                result: action.result,
             }
-        case actions.SET_HASH_RESULT:
-            var i = state.result.length;
-            while (--i) {
-                if (state.result[i].hash === action.hash) {
-                    return {
-                        ...state,
-                        result: state.result.splice(i, 1, { hash: action.hash, result: action.result })
-                    }
-                }
-            }
-            return state;
         default:
             return state;
     }

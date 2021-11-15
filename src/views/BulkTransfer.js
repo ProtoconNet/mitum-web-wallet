@@ -154,7 +154,7 @@ class BulkTransfer extends Component {
                 parsed.type = invalidText;
         }
 
-        this.setState({ loadingCurrent: this.state.loadingCurrent + 1, currOperation: csv });
+        this.setState({ loadingCurrent: this.state.loadingCurrent + 1, currOperation: csv.toString() ? csv.toString() : this.state.currOperation });
         return parsed;
     }
 
@@ -229,58 +229,65 @@ class BulkTransfer extends Component {
                     });
                     break;
             }
-            if (caItems.length === process.env.REACT_APP_LIMIT_ITEMS_IN_OPERATION) {
+        }
+
+        if (!running) { return; }
+        if (caItems.length > 0) {
+            var j;
+            for (j = 0; j < caItems.length / 10; j++) {
+                const items = caItems.slice(j * 10, 10 * (j + 1));
                 const createAccountsFact = generator.createCreateAccountsFact(
                     account.address,
-                    caItems.map(item => item.item),
+                    items.map(item => item.item),
                 );
 
                 const createAccounts = generator.createOperation(createAccountsFact, "");
                 createAccounts.addSign(this.props.priv);
 
-                this.sendOperation(createAccountText, caItems, createAccounts.dict());
-                caItems = [];
+                this.sendOperation(items, createAccounts.dict());
             }
-            else if (tfItems.length === process.env.REACT_APP_LIMIT_ITEMS_IN_OPERATION) {
+
+            if (caItems.length % 10) {
+                const items = caItems.slice(caItems.length - caItems.length % 10, caItems.length);
+                const createAccountsFact = generator.createCreateAccountsFact(
+                    account.address,
+                    items.map(item => item.item),
+                );
+
+                const createAccounts = generator.createOperation(createAccountsFact, "");
+                createAccounts.addSign(this.props.priv);
+
+                this.sendOperation(items, createAccounts.dict());
+            }
+        }
+
+        if (!running) { return; }
+        if (tfItems.length > 0) {
+            for (j = 0; j < tfItems.length / 10; j++) {
+                const items = tfItems.slice(10 * j, 10 * (j + 1));
                 const transfersFact = generator.createTransfersFact(
                     account.address,
-                    tfItems.map(item => item.item),
+                    items.map(item => item.item),
                 );
 
                 const transfers = generator.createOperation(transfersFact, "");
                 transfers.addSign(this.props.priv);
 
-                this.sendOperation(transfersText, tfItems, transfers.dict());
-                tfItems = [];
+                this.sendOperation(items, transfers.dict());
             }
-        }
 
-        if (!running) { return; }
-        if (caItems.length > 0) {
-            const createAccountsFact = generator.createCreateAccountsFact(
-                account.address,
-                caItems.map(item => item.item),
-            );
+            if (tfItems.length % 10) {
+                const items = tfItems.slice(tfItems.length - tfItems.length % 10, tfItems.length);
+                const transfersFact = generator.createTransfersFact(
+                    account.address,
+                    items.map(item => item.item),
+                );
 
-            const createAccounts = generator.createOperation(createAccountsFact, "");
-            createAccounts.addSign(this.props.priv);
+                const transfers = generator.createOperation(transfersFact, "");
+                transfers.addSign(this.props.priv);
 
-            this.sendOperation(caItems, createAccounts.dict());
-            caItems = [];
-        }
-
-        if (!running) { return; }
-        if (tfItems.length > 0) {
-            const transfersFact = generator.createTransfersFact(
-                account.address,
-                tfItems.map(item => item.item),
-            );
-
-            const transfers = generator.createOperation(transfersFact, "");
-            transfers.addSign(this.props.priv);
-
-            this.sendOperation(tfItems, transfers.dict());
-            tfItems = [];
+                this.sendOperation(items, transfers.dict());
+            }
         }
 
         if (this.props.bulks.length <= this.state.result.length) {
@@ -289,12 +296,13 @@ class BulkTransfer extends Component {
             });
             this.props.setResult(this.state.result);
         }
-
         running = false;
     }
 
     sendOperation(items, operation) {
-        this.broadcast(JSON.stringify(operation))
+
+        console.log(operation);
+        this.broadcast(operation)
             .then(
                 res => {
                     const newResult = [];
@@ -311,7 +319,6 @@ class BulkTransfer extends Component {
                     }
                     const result = this.state.result.concat(newResult);
                     if (this.props.bulks.length <= this.state.result.length + items.length) {
-
                         this.setState({
                             currentState: sendDone,
                             result,
@@ -321,11 +328,13 @@ class BulkTransfer extends Component {
                     else {
                         this.setState({
                             result,
-                        })
+                        });
                     }
                 }
             ).catch(
                 e => {
+                    console.log(e);
+                    console.log(JSON.stringify(operation, null, 4))
                     const newResult = [];
                     for (var i = 0; i < items.length; i++) {
                         newResult.push({ idx: items[i].idx, hash: operation.fact.hash, result: failText });
@@ -437,7 +446,7 @@ class BulkTransfer extends Component {
                     )
                     .catch(
                         e => {
-                            if(e.response.status === 404 || e.response.status === 400) {
+                            if (e.response.status === 404 || e.response.status === 400) {
                                 return;
                             }
                             else {
@@ -476,8 +485,9 @@ class BulkTransfer extends Component {
                         <li key="exp4">입력한 내용 중 유효하지 않은 요소가 있으면 그 요소는 무시됩니다. ex) PEN+001, PEN+-3, MCC+PEN, $key+MCC 등</li>
                         <li key="exp5">한 작업에 대해 입력한 내용 중 receiver, threshold가 각각 여러 개 있는 경우 가장 앞, 왼쪽에 기입한 요소만 유효합니다. </li>
                         <li key="exp6">입력한 currency를 보유하고 있지 않은 경우 해당 작업은 무시됩니다.</li>
-                        <li key="exp7">{`한 작업 당 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개를 초과하는 key가 입력되는 경우 앞서 기입한 키 10개만 허용합니다.`}</li>
-                        <li key="exp8">{`한 작업 당 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개를 초과하는 amount가 입력되는 경우 앞서 기입한 amount 10개만 허용합니다.`}</li>
+                        <li key="exp7">중복된 receiver를 입력하지 않도록 주의하세요.</li>
+                        <li key="exp8">{`한 작업 당 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개를 초과하는 key가 입력되는 경우 앞서 기입한 키 10개만 허용합니다.`}</li>
+                        <li key="exp9">{`한 작업 당 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개를 초과하는 amount가 입력되는 경우 앞서 기입한 amount 10개만 허용합니다.`}</li>
                     </ul>
                     <h3>CSV 작성 예시</h3>
                     <ul>

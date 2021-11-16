@@ -75,7 +75,7 @@ class BulkTransfer extends Component {
                 return this.parseSplitted(splitted);
             }
         );
-        this.props.setBulks(bulks);
+        this.props.setBulks(bulks, csvs);
         this.setState({
             currentState: afterLoad,
         });
@@ -234,7 +234,7 @@ class BulkTransfer extends Component {
         if (!running) { return; }
         if (caItems.length > 0) {
             var j;
-            for (j = 0; j < caItems.length / 10; j++) {
+            for (j = 0; j < parseInt(caItems.length / 10); j++) {
                 const items = caItems.slice(j * 10, 10 * (j + 1));
                 const createAccountsFact = generator.createCreateAccountsFact(
                     account.address,
@@ -263,7 +263,7 @@ class BulkTransfer extends Component {
 
         if (!running) { return; }
         if (tfItems.length > 0) {
-            for (j = 0; j < tfItems.length / 10; j++) {
+            for (j = 0; j < parseInt(tfItems.length / 10); j++) {
                 const items = tfItems.slice(10 * j, 10 * (j + 1));
                 const transfersFact = generator.createTransfersFact(
                     account.address,
@@ -301,7 +301,6 @@ class BulkTransfer extends Component {
 
     sendOperation(items, operation) {
 
-        console.log(operation);
         this.broadcast(operation)
             .then(
                 res => {
@@ -333,8 +332,6 @@ class BulkTransfer extends Component {
                 }
             ).catch(
                 e => {
-                    console.log(e);
-                    console.log(JSON.stringify(operation, null, 4))
                     const newResult = [];
                     for (var i = 0; i < items.length; i++) {
                         newResult.push({ idx: items[i].idx, hash: operation.fact.hash, result: failText });
@@ -565,7 +562,7 @@ class BulkTransfer extends Component {
                 </div>
                 <div className="bulk-main">
                     <p id="exp">{`${msg} 내역${this.state.detecting ? " (결과 조회 중...)" : ""}`}</p>
-                    <CompleteJob sent={this.state.result} />
+                    <CompleteJob sent={this.state.result} onClick={(idx) => this.setState({ currOperation: this.props.bulks[idx].origin})} />
                 </div>
             </div>
         );
@@ -576,7 +573,6 @@ class BulkTransfer extends Component {
 const mapStateToProps = state => ({
     bulks: state.bulk.bulks,
     sent: state.bulk.result,
-    currentState: state.bulk.state,
     account: state.login.account,
     priv: state.login.priv,
     currencies: state.login.account.balances.map(x => x.currency),
@@ -586,7 +582,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setBulks: (bulks) => dispatch(setBulks(bulks)),
+    setBulks: (bulks, origin) => dispatch(setBulks(bulks, origin)),
     clearBulks: () => dispatch(clearBulks()),
     setResult: (result) => dispatch(setResult(result)),
 })

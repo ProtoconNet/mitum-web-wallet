@@ -131,7 +131,7 @@ class Wallet extends React.Component {
                 });
 
             while (!isResult) {
-                await Sleep(500);
+                await Sleep(5000);
             }
         }
     }

@@ -59,7 +59,6 @@ class OperationConfirm extends React.Component {
             }
         ).catch(
             e => {
-
                 try {
                     this.props.setResult(false, false, e.response.data, e.response.data.status, undefined);
                 }

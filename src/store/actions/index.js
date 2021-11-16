@@ -40,11 +40,29 @@ export const REJECT_LOGIN = "REJECT_LOGIN";
 export const SET_BULKS = "bulk/SET_BULKS";
 export const CLEAR_BULKS = "bulk/CLEAR_BULKS";
 export const SET_RESULT = "bulk/SET_RESULT";
+export const SET_CREATED_RESULT = "bulk/SET_CREATED_RESULT";
+export const SET_UNSIGNED_OPERATION = "bulk/SET_UNSIGNED_OPERATION";
+export const SET_SIGNED_OPERATION = "bulk/SET_SIGNED_OPERATION";
 
-export function setBulks(bulks) {
+export function setSignedOperation(signed) {
+    return {
+        type: SET_SIGNED_OPERATION,
+        signed,
+    }
+}
+
+export function setUnsignedOperation(lines) {
+    return {
+        type: SET_UNSIGNED_OPERATION,
+        lines,
+    }
+}
+
+export function setBulks(bulks, origin) {
     return {
         type: SET_BULKS,
         bulks,
+        origin,
     }
 }
 
@@ -58,6 +76,13 @@ export function setResult(result) {
     return {
         type: SET_RESULT,
         result,
+    }
+}
+
+export function setCreatedResult(jsons) {
+    return {
+        type: SET_CREATED_RESULT,
+        jsons,
     }
 }
 

@@ -30,7 +30,6 @@ import InitiateAccounts from './views/InitiateAccounts';
 import AccountSelector from './views/AccountSelector';
 import BulkTransfer from './views/BulkTransfer';
 import BulkMenu from './views/BulkMenu';
-import BulkCreate from './views/BulkCreate';
 
 const checkMaintainInfo = async () => {
   return await axios.get(process.env.REACT_APP_MAINTAIN + "?" + Math.random());
@@ -119,7 +118,6 @@ class App extends React.Component {
           <Route path="/account-select" component={AccountSelector} />
           <Route path="/bulk" component={BulkTransfer} />
           <Route path="/bulk-menu" component={BulkMenu} />
-          <Route path="/bulk-create" component={BulkCreate} />
           <Footer />
         </HashRouter>
       </div>

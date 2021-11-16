@@ -22,8 +22,8 @@ class BulkMenu extends Component {
                     showMenu
                         ? (
                             <section id="menu">
-                                <p onClick={() => this.setState({ showMenu: false, showCreate: true, showSign: false })}>CREATE MUTIPLE OPERATIONS</p>
-                                <p onClick={() => this.setState({ showMenu: false, showCreate: false, showSign: true })}>SIGN MULTIPLE OPERATIONS</p>
+                                <p id="menu-p" onClick={() => this.setState({ showMenu: false, showCreate: true, showSign: false })}>CREATE MUTIPLE OPERATIONS</p>
+                                <p id="menu-p" onClick={() => this.setState({ showMenu: false, showCreate: false, showSign: true })}>SIGN MULTIPLE OPERATIONS</p>
                             </section>
                         )
                         : false

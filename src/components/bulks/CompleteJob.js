@@ -16,16 +16,11 @@ const openTab = (url) => {
 class CompleteJob extends Component {
 
     renderOperation(x, idx) {
-        // const viewOper = (i) => {
-        //     const content = JSON.stringify(this.props.bulks[i], null, 4);
-
-            
-        // };
-
+        const viewOper = () => this.props.onClick(idx);
         if (!x.hash) {
             return (
                 <li key={Math.random() + ""}>
-                    <p>{idx}</p>
+                    <p onClick={viewOper}>{idx}</p>
                     <p style={plainTextStyle}>invalid; cannot process this operation</p>
                     <p>{failText}</p>
                 </li>
@@ -34,7 +29,7 @@ class CompleteJob extends Component {
 
         return (
             <li key={x.hash + idx}>
-                <p>{idx}</p>
+                <p onClick={viewOper}>{idx}</p>
                 <p onClick={() => openTab(process.env.REACT_APP_EXPLORER + "/operation/" + x.hash)}>{x.hash}</p>
                 <p>{x.result}</p>
             </li>

@@ -1,6 +1,4 @@
 .bulk-menu-container {
-    display: flex;
-
     #menu {
         width: 450px;
         margin: 0;
@@ -12,7 +10,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
 
-        p {
+        #menu-p {
             text-align: center;
             width: 400px;
             font-size: 1.5em;

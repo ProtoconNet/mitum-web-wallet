@@ -167,7 +167,7 @@ export const isPrivateKeyValid = (pvk) => {
 
     const pk = pvk.trim();
 
-    const idx = pk.indexOf(':');
+    const idx = pk.indexOf('~');
     if (idx < 0) {
         return false;
     }
@@ -196,7 +196,7 @@ export const isPublicKeyValid = (pbk) => {
 
     const pubk = pbk.trim();
 
-    const idx = pubk.indexOf(':');
+    const idx = pubk.indexOf('~');
     if (idx < 0) {
         return false;
     }
@@ -226,7 +226,7 @@ export const isAddressValid = (adr) => {
 
     const addr = adr.trim();
 
-    const idx = addr.indexOf(':');
+    const idx = addr.indexOf('~');
     if (idx < 0) {
         return false;
     }

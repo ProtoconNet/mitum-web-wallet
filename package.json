@@ -42,7 +42,7 @@
     "immer": "^9.0.6",
     "js-sha3": "^0.8.0",
     "mini-css-extract-plugin": "^2.3.0",
-    "mitumc": "^0.0.5",
+    "mitumc": "^0.0.6",
     "node-sass": "^6.0.1",
     "nth-check": "^2.0.1",
     "optimize-css-assets-webpack-plugin": "6.0.1",

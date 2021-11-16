@@ -73,7 +73,7 @@ class RestoreKeyLoginBox extends React.Component {
 
       const idx = priv.indexOf(process.env.REACT_APP_VERSION);
       priv = priv.substring(0, idx + process.env.REACT_APP_VERSION.length);
-      priv = priv.replace('%3A', ':');
+      // priv = priv.replace('%3A', ':');
 
       this.props.onLogin(priv);
     }

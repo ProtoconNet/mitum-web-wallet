@@ -32,7 +32,7 @@ const balance = (bal) => {
 
 const history = (hist) => {
     return (
-        <li key={hist.hash + hist.currency} onClick={() => {openTab(process.env.REACT_APP_EXPLORER + "/operation/" + hist.hash)}}>
+        <li key={hist.hash + hist.currency + hist.target} onClick={() => {openTab(process.env.REACT_APP_EXPLORER + "/operation/" + hist.hash)}}>
             <p id={hist.confirmation}>{hist.confirmation}</p>
             <p id={hist.direction}>{hist.direction}</p>
             <p id='confirmed-at'>{hist.confirmedAt}</p>

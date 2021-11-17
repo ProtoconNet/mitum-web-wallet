@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { logout, clearHistory, clearQueue, rejectLogin, clearBulks } from '../store/actions';
+import { logout, clearHistory, clearQueue, rejectLogin, clearCsvs } from '../store/actions';
 
 import './Logout.scss';
 
@@ -12,7 +12,7 @@ class Logout extends React.Component {
         this.props.clearHistory();
         this.props.clearQueue();
         this.props.rejectLogin();
-        this.props.clearBulks();
+        this.props.clearCsv();
     }
     
     render() {
@@ -34,7 +34,7 @@ const mapDispatchToProps = dispatch => ({
     clearHistory: () => dispatch(clearHistory()),
     clearQueue: () => dispatch(clearQueue()),
     rejectLogin: () => dispatch(rejectLogin()),
-    clearBulks: () => dispatch(clearBulks()),
+    clearCsv: () => dispatch(clearCsvs()),
 });
 
 export default connect(

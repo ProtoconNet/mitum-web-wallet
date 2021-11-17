@@ -83,13 +83,13 @@ class Navigation extends React.Component {
                             <p>SEND MULTI OPERATIONS</p>
                         </Link>
                     ) : false}
-                {isLogin && this.props.account.accountType === "multi"
+                {/* {isLogin && this.props.account.accountType === "multi"
                     ? (
                         <Link className="nav-multi-bulk" to="/bulk-menu">
                             <p>SIGN MULTI OPERATIONS</p>
                         </Link>
                     )
-                    : false}
+                    : false} */}
                 {isLogin
                     ? (
                         <Link className="nav-res" to="/res-key-generate">

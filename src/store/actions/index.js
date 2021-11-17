@@ -37,52 +37,30 @@ export const CLEAR_RESTORE_KEY = "CLEAR_RESTORE_KEY";
 export const ALLOW_LOGIN = "ALLOW_LOGIN";
 export const REJECT_LOGIN = "REJECT_LOGIN";
 
-export const SET_BULKS = "bulk/SET_BULKS";
-export const CLEAR_BULKS = "bulk/CLEAR_BULKS";
-export const SET_RESULT = "bulk/SET_RESULT";
-export const SET_CREATED_RESULT = "bulk/SET_CREATED_RESULT";
-export const SET_UNSIGNED_OPERATION = "bulk/SET_UNSIGNED_OPERATION";
-export const SET_SIGNED_OPERATION = "bulk/SET_SIGNED_OPERATION";
+export const SET_CSVS = "bulks/set-csvs";
+export const CSV_TO_OPERATION = "bulks/csv-to-opeartion";
+export const CLEAR_CSVS = "bulks/clear-csvs";
 
-export function setSignedOperation(signed) {
+export function setCsvs(csvs) {
     return {
-        type: SET_SIGNED_OPERATION,
-        signed,
+        type: SET_CSVS,
+        csvs,
     }
 }
 
-export function setUnsignedOperation(lines) {
+export function csvToOperation(parsed, id, address, priv) {
     return {
-        type: SET_UNSIGNED_OPERATION,
-        lines,
+        type: CSV_TO_OPERATION,
+        parsed,
+        id,
+        address,
+        priv
     }
 }
 
-export function setBulks(bulks, origin) {
+export function clearCsvs() {
     return {
-        type: SET_BULKS,
-        bulks,
-        origin,
-    }
-}
-
-export function clearBulks() {
-    return {
-        type: CLEAR_BULKS,
-    }
-}
-
-export function setResult(result) {
-    return {
-        type: SET_RESULT,
-        result,
-    }
-}
-
-export function setCreatedResult(jsons) {
-    return {
-        type: SET_CREATED_RESULT,
-        jsons,
+        type: CLEAR_CSVS,
     }
 }
 

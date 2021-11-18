@@ -481,7 +481,7 @@ class BulkSingle extends Component {
                             해당 토큰을 가지고 있지 않거나 보내려는 amount의 총합이 보유한 balance보다 작은 경우, 생성하려는 주소가 이미 등록되어있는 경우 등 유효하지 않은 작업의 경우
                             대용량 작업을 생성, 전송할 수 없습니다.</p></li>
                         <li key="exp7"><p>중복된 receiver를 입력하지 않도록 주의하세요.</p></li>
-                        <li key="exp8"><p>{`한 작업 당 ${process.env.REACT_APP_LIMIT_KEYS_IN_KEYS}개를 초과하는 key가 입력되는 경우 앞서 기입한 키 10개만 허용합니다.`}</p></li>
+                        <li key="exp8"><p>create-account의 경우, single sig account 생성만 지원합니다.</p></li>
                         <li key="exp9"><p>{`한 작업 당 ${process.env.REACT_APP_LIMIT_AMOUNTS_IN_ITEM}개를 초과하는 amount가 입력되는 경우 앞서 기입한 amount 10개만 허용합니다.`}</p></li>
                     </ul>
                     <h3>CSV 작성 예시</h3>

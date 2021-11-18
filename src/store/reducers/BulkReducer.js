@@ -1,4 +1,4 @@
-import { Generator } from 'mitumc';
+import { Generator, Signer } from 'mitumc';
 import * as actions from '../actions';
 
 export const ca = "ca";
@@ -7,6 +7,8 @@ export const tf = "tf";
 const initialState = {
     csv: [],
     json: [],
+    beforeSign: [],
+    afterSign: [],
 }
 
 function createAccount(_parsed, id) {
@@ -17,7 +19,7 @@ function createAccount(_parsed, id) {
     const amounts = [];
     _parsed.amounts.forEach(
         x => {
-            amounts.push(generator.formatAmount(x.amount, x.currency));  
+            amounts.push(generator.formatAmount(x.amount, x.currency));
         }
     );
 
@@ -106,20 +108,50 @@ function toOperation(parsed, id, address, priv) {
     return json;
 }
 
+function addSigns(operations, id, priv) {
+    const signer = new Signer(id, priv);
+    
+    return operations.map(
+        x => signer.signOperation(x),
+    );
+}
+
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actions.SET_CSVS:
             return {
                 ...state,
                 csv: action.csvs,
+                json: [],
+            }
+        case actions.SET_MULTI_OPERATIONS:
+            return {
+                ...state,
+                beforeSign: action.operations,
+                afterSign: [],
             }
         case actions.CSV_TO_OPERATION:
             return {
                 ...state,
                 json: toOperation(action.parsed, action.id, action.address, action.priv),
             }
+        case actions.ADD_ALL_SIGN:
+            return {
+                ...state,
+                afterSign: addSigns(action.operations, action.id, action.priv),
+            }
         case actions.CLEAR_CSVS:
-            return initialState;
+            return {
+                ...state,
+                csv: [],
+                json: [],
+            };
+        case actions.CLEAR_MULTI_OPERATIONS:
+            return {
+                ...state,
+                beforeSign: [],
+                afterSign: [],
+            }
         default:
             return state;
     }

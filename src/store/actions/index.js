@@ -38,8 +38,33 @@ export const ALLOW_LOGIN = "ALLOW_LOGIN";
 export const REJECT_LOGIN = "REJECT_LOGIN";
 
 export const SET_CSVS = "bulks/set-csvs";
+export const SET_MULTI_OPERATIONS = "bulks/set-multi-operations";
 export const CSV_TO_OPERATION = "bulks/csv-to-opeartion";
+export const ADD_ALL_SIGN = "bulks/add-all-sign";
 export const CLEAR_CSVS = "bulks/clear-csvs";
+export const CLEAR_MULTI_OPERATIONS = "bulks/clear-all";
+
+export function setMultiOperations(opers) {
+    return {
+        type: SET_MULTI_OPERATIONS,
+        operations: opers,
+    }
+}
+
+export function addAllSign(opers, id, priv) {
+    return {
+        type: ADD_ALL_SIGN,
+        operations: opers,
+        id,
+        priv,
+    }
+}
+
+export function clearMultiOperations() {
+    return {
+        type: CLEAR_MULTI_OPERATIONS,
+    }
+}
 
 export function setCsvs(csvs) {
     return {

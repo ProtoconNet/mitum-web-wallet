@@ -10,6 +10,8 @@ import { isAddressValid, isCurrencyValid, isNum, isPublicKeyValid, isWeightsVali
 import axios from 'stellar-sdk/node_modules/axios';
 import bigInt from 'big-integer';
 import { Generator } from 'mitumc';
+import BroadcastResult from '../components/bulks/BroadcastResult';
+import Sleep from '../lib/Sleep';
 
 const invalidWeightReason = "Wrong weight";
 // const invalidThresholdReason = "Wrong threshold";
@@ -34,6 +36,7 @@ class BulkSingle extends Component {
             totalNumber: 0,
             csv: [],
             parsed: [],
+            result: [],
             showRule: false,
 
             showParsed: true,
@@ -45,7 +48,7 @@ class BulkSingle extends Component {
     }
 
     componentWillUnmount() {
-        if(this.props.csv.length > 0) {
+        if (this.props.csv.length > 0) {
             this.props.clearCsv();
         }
     }
@@ -189,6 +192,8 @@ class BulkSingle extends Component {
             totalNumber: 0,
             csv: [],
             parsed: [],
+            result: [],
+            reason: "",
             showRule: false,
             showParsed: true,
         });
@@ -215,7 +220,7 @@ class BulkSingle extends Component {
 
         var newParsed;
         const result = await this.checkAddress();
-        if(result === "duplicate") {
+        if (result === "duplicate") {
             this.setState({
                 reason: "생성, 혹은 송금하려는 주소 중 중복된 주소가 있습니다. 작업을 시작할 수 없습니다."
             });
@@ -223,19 +228,19 @@ class BulkSingle extends Component {
         }
         else {
             const resultSet = new Set(result);
-            if(resultSet.size !== 1) {
+            if (resultSet.has(false)) {
                 newParsed = this.state.parsed
                     .map(
                         (x, idx) => {
-                            if(x.valid && !result[idx]){
-                                if(x.type === ca) {
+                            if (x.valid && !result[idx]) {
+                                if (x.type === ca) {
                                     return {
                                         ...x,
                                         valid: false,
                                         reason: addressAlreadyExistReason,
                                     };
                                 }
-                                else if(x.type === tf){
+                                else if (x.type === tf) {
                                     return {
                                         ...x,
                                         valid: false,
@@ -261,7 +266,7 @@ class BulkSingle extends Component {
                 return;
             }
         }
-        
+
         newParsed = this.state.parsed;
         this.setState({
             reason: "작업을 전송 중입니다. 전송 중 다른 페이지로 이동하지 마십시오.",
@@ -270,6 +275,41 @@ class BulkSingle extends Component {
         });
 
         this.props.csvToOper(newParsed, this.props.networkId, this.props.account.address, this.props.priv);
+
+        this.sendAll();
+    }
+
+    async sendAll() {
+        const operations = this.props.created;
+
+        operations.forEach(
+            async (x, idx) => {
+                await Sleep(4000 * idx);
+                this.send(x.operation)
+                    .then(
+                        res => {
+                            const isFin = this.state.result.length >= this.props.created.length - 1;
+
+                            this.setState({
+                                running: isFin ? false : true,
+                                reason: isFin ? "전송이 완료되었습니다." : this.state.reason,
+                                result: [...this.state.result, { idxs: x.idxs, hash: x.operation.fact.hash, result: "pending" }],
+                            });
+                        }
+                    )
+                    .catch(
+                        e => {
+                            const isFin = this.state.result.length >= this.props.created.length - 1;
+
+                            this.setState({
+                                running: isFin ? false : true,
+                                reason: isFin ? "전송이 완료되었습니다." : this.state.reason,
+                                result: [...this.state.result, { idxs: x.idxs, hash: x.operation.fact.hash, result: "fail" }]
+                            });
+                        }
+                    );
+            }
+        )
     }
 
     checkAmounts() {
@@ -297,9 +337,9 @@ class BulkSingle extends Component {
 
         var valid = true;
         currencies.forEach(
-            x => { 
-                if(Object.prototype.hasOwnProperty.call(total, x.currency)) {
-                    if(bigInt(total[x.currency]).greater(x.amount)) {
+            x => {
+                if (Object.prototype.hasOwnProperty.call(total, x.currency)) {
+                    if (bigInt(total[x.currency]).greater(x.amount)) {
                         valid = false;
                     }
                 }
@@ -318,12 +358,12 @@ class BulkSingle extends Component {
         var keys;
         parsed.forEach(
             x => {
-                if(!x.valid) {
+                if (!x.valid) {
                     target.push(this.addressExist(null, null));
                     return;
                 }
 
-                switch(x.type) {
+                switch (x.type) {
                     case ca:
                         keys = generator.createKeys([generator.formatKey(x.key, parseInt(x.weight))], parseInt(x.threshold));
                         addresses.push(keys.address);
@@ -341,7 +381,7 @@ class BulkSingle extends Component {
         )
 
         const addressSet = new Set(addresses);
-        if(addressSet.size !== addresses.length) {
+        if (addressSet.size !== addresses.length) {
             return "duplicate";
         }
 
@@ -349,14 +389,14 @@ class BulkSingle extends Component {
     }
 
     addressExist(address, type) {
-        if(!address || !type) {
+        if (!address || !type) {
             return false;
         }
 
-        return axios.get(this.props.network + "/account/" +  address)
+        return axios.get(this.props.network + "/account/" + address)
             .then(
                 res => {
-                    if(type === ca) {
+                    if (type === ca) {
                         return false;
                     }
                     else {
@@ -366,7 +406,7 @@ class BulkSingle extends Component {
             )
             .catch(
                 e => {
-                    if(type === ca) {
+                    if (type === ca) {
                         return true;
                     }
                     else {
@@ -376,13 +416,57 @@ class BulkSingle extends Component {
             )
     }
 
+    async lookup() {
+        const result = this.state.result;
+        this.setState({
+            running: true,
+        });
+
+        var running = true;
+        while(running) {
+            let isAllLookedUp = true;
+            result.forEach(
+                async (x, idx) => {
+                    await axios.get(this.props.networkSearchFact + x.hash)
+                    .then(
+                        res => {
+                            const newRes = this.state.result;
+                            if(res.data._embedded.in_state) {
+                                newRes[idx] = {...newRes[idx], result: "success"}
+                            }
+                            else {
+                                newRes[idx] = {...newRes[idx], result: "fail"}
+                            }
+                            this.setState({
+                                result: newRes,
+                            });
+                        }
+                    )
+                    .catch(
+                        e => isAllLookedUp = false
+                    )
+                }
+            );
+
+            if(isAllLookedUp) {
+                break;
+            }
+        }
+
+        this.setState({
+            running: false,
+        });
+    }
+
     render() {
+        const { csv } = this.props;
+        const { showRule, running, reason, result } = this.state;
 
         return (
             <div className="bulk-container">
                 <h1>Send Multiple Operations</h1>
-                <p id="show-button" onClick={() => this.setState({ showRule: !this.state.showRule })}>CSV 작성 규칙 보기</p>
-                <section id="bulk-rule" style={this.state.showRule ? {} : { display: "none" }}>
+                <p id="show-button" onClick={() => this.setState({ showRule: !showRule })}>CSV 작성 규칙 보기</p>
+                <section id="bulk-rule" style={showRule ? {} : { display: "none" }}>
                     <h3>CSV 작성 규칙</h3>
                     <ul>
                         <li key="ca"><p>create-account 작업 명령 : ca, $publickey?threshold=$threshold&weight=$weight, token0, amount0, token1, amount1, ...</p></li>
@@ -413,39 +497,39 @@ class BulkSingle extends Component {
                     </ReactFileReader>
                 </section>
                 <section id="bulk-text">
-                    <p>{this.props.csv.length < 1 ? "불러온 대용량 작업이 없습니다." : this.state.reason ? this.state.reason : "이제 전송을 시작할 수 있습니다."}</p>
+                    <p>{csv.length < 1 ? "불러온 대용량 작업이 없습니다." : reason ? reason : "이제 전송을 시작할 수 있습니다."}</p>
                 </section>
                 <div id="bulk-button">
                     <ul>
                         <li key="start">
                             <button
-                                style={this.props.csv.length > 0 && !this.state.running
+                                style={csv.length > 0 && !running && csv.length > result.length
                                     ? { opacity: "1.0" } : { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" }}
-                                disabled={this.props.csv.length > 0 && !this.state.running ? false : true}
+                                disabled={csv.length > 0 && !running ? false : true}
                                 onClick={() => this.startSend()}>전송 시작</button>
-                            <p>{`대용량 작업 전송을 시작합니다. 전송 중 중단한 작업 목록이 있는 경우 중단된 작업부터 다시 시작합니다.`}</p>
+                            <p>{`대용량 작업 전송을 시작합니다. 전송 전 작업 유효성 확인이 진행됩니다.`}</p>
                         </li>
                         <li key="cancel">
                             <button
-                                style={this.props.csv.length > 0 && !this.state.running
+                                style={csv.length > 0 && !running
                                     ? { opacity: "1.0" } : { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" }}
-                                disabled={this.props.csv.length > 0 && !this.state.running ? false : true}
+                                disabled={csv.length > 0 && !running ? false : true}
                                 onClick={() => this.clear()}>초기화</button>
                             <p>{`로딩된 모든 작업 내용을 초기화합니다.`}</p>
                         </li>
-                        {/* <li id="lookup">
+                        <li id="lookup">
                             <button
-                                style={currentState !== sendDone
+                                style={!(csv.length > 0 && !running && csv.length > result.length)
                                     ? { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" } : { opacity: "1.0" }}
-                                disabled={currentState !== sendDone ? true : false}
+                                disabled={!(csv.length > 0 && !running && this.state.result.length > 0) ? true : false}
                                 onClick={() => this.lookup()}>결과 조회</button>
-                            <p>{`${msg} 도중에는 이 페이지에서 작업 처리 결과를 조회할 수 없습니다. 다른 페이지로 이동 시 조회가 중단됩니다.`}</p>
-                        </li> */}
+                            <p>{`전송 도중에는 이 페이지에서 작업 처리 결과를 조회할 수 없습니다. 다른 페이지로 이동 시 조회가 중단됩니다.`}</p>
+                        </li>
                     </ul>
                 </div>
                 <div className="bulk-main">
                     <p id="exp">{this.state.showParsed ? "작업 내역" : "전송 내역"}</p>
-                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> : false}
+                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> : <BroadcastResult csvs={this.state.parsed} broadcasted={this.state.result} />}
                 </div>
             </div>
         );

@@ -22,14 +22,14 @@ class CSVResult extends React.Component {
                 <div>
                     <p onClick={() => {
                         const isShow = this.state.isShow;
-                        isShow[idx - 1] = !isShow[idx - 1];
+                        isShow[idx] = !isShow[idx];
                         this.setState({ isShow })
                     }}
                         style={csv.reason ? {} : plainText}>{idx + 1}</p>
                     <p>{csv.oper}</p>
                     <p>{csv.valid ? "valid" : "invalid"}</p>
                 </div>
-                {csv.reason && this.state.isShow[idx - 1] ? <p id="reason">{csv.reason}</p> : false}
+                {csv.reason && this.state.isShow[idx] ? <p id="reason">{csv.reason}</p> : false}
             </li>
         )
     }
@@ -42,7 +42,7 @@ class CSVResult extends React.Component {
                         <div>
                             <p style={plainText}>IDX</p>
                             <p style={{ textAlign: "center" }}>COMMAND</p>
-                            <p>VALIDATION</p>
+                            <p>VALID</p>
                         </div>
                     </li>
                     {this.props.csvs.map((x, idx) => this.listComponent(x, idx))}

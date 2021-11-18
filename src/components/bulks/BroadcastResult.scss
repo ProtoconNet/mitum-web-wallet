@@ -1,4 +1,4 @@
-.csv-result-container {
+.broadcast-result-container {
     width: 100%;
 
     padding: 0;
@@ -33,12 +33,13 @@
                     width: 10%;
                     text-align: center;
 
-                    color: red;
+                    color: aquamarine;
                     text-decoration: underline;
 
                     &:hover {
-                        color: aqua;
+                        color: gray;
                     }
+
                 }
 
                 p:nth-child(2) {
@@ -53,6 +54,13 @@
 
                     &::-webkit-scrollbar {
                         display: none;
+                    }
+
+                    color: aquamarine;
+                    text-decoration: underline;
+
+                    &:hover {
+                        color: gray;
                     }
                 }
 
@@ -69,18 +77,32 @@
                 }
             }
 
-            #reason {
-                color: black;
-                font-weight: 300;
+            #idxs {
+                list-style: none;
                 width: 100%;
-                text-align: start;
-                background-color: white;
-
-                font-size: 14px;
-                padding: 2px;
                 margin: 0;
+                padding: 0;
 
-                opacity: 0.7;
+                li {
+                    width: 100%;
+                    margin: 2px;
+                    padding: 2px;
+
+                    p {
+                        color: black;
+                        font-weight: 300;
+                        width: 100%;
+                        text-align: start;
+                        font-size: 14px;
+
+                        padding: 0;
+                        margin: 0;
+
+                        opacity: 0.7;
+                    }
+
+                    background-color: white;
+                }
             }
         }
 
@@ -93,7 +115,7 @@
 }
 
 @media screen and (max-width: 1090px) and (min-width: 750px) {
-    .csv-result-container ul li {
+    .broadcast-result-container ul li {
         div {
             p {
                 font-size: 14px;
@@ -107,7 +129,7 @@
 }
 
 @media screen and (max-width: 749px) {
-    .csv-result-container ul li {
+    .broadcast-result-container ul li {
         div {
             p {
                 font-size: 14px;

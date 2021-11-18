@@ -21,7 +21,7 @@ function createAccount(_parsed, id) {
         }
     );
 
-    return generator.createCreateAccountsItem(keys, amounts);
+    return generator.createCreateAccountsItem(keys, generator.createAmounts(amounts));
 }
 
 function transfer(_parsed, id) {
@@ -34,7 +34,7 @@ function transfer(_parsed, id) {
         }
     );
 
-    return generator.createTransfersItem(_parsed.receiver, amounts);
+    return generator.createTransfersItem(_parsed.receiver, generator.createAmounts(amounts));
 }
 
 function toOperation(parsed, id, address, priv) {
@@ -62,22 +62,22 @@ function toOperation(parsed, id, address, priv) {
     const generator = new Generator(id);
     for (i = 0; i < parseInt(caItems.length / 10); i++) {
         target = caItems.slice(i * 10, (i + 1) * 10)
-        fact = generator.createCreateAccountsFact(address, target);
+        fact = generator.createCreateAccountsFact(address, target.map(x => x.item));
         oper = generator.createOperation(fact, "");
         oper.addSign(priv);
         json.push({
             idxs: target.map(x => x.idx),
-            operation: oper,
+            operation: oper.dict(),
         });
     }
     for (i = 0; i < parseInt(tfItems.length / 10); i++) {
         target = tfItems.slice(i * 10, (i + 1) * 10)
-        fact = generator.createTransfersFact(address, target);
+        fact = generator.createTransfersFact(address, target.map(x => x.item));
         oper = generator.createOperation(fact, "");
         oper.addSign(priv);
         json.push({
             idxs: target.map(x => x.idx),
-            operation: oper
+            operation: oper.dict(),
         });
     }
 
@@ -88,7 +88,7 @@ function toOperation(parsed, id, address, priv) {
         oper.addSign(priv);
         json.push({
             idxs: target.map(x => x.idx),
-            operation: oper
+            operation: oper.dict(),
         });
     }
 
@@ -99,7 +99,7 @@ function toOperation(parsed, id, address, priv) {
         oper.addSign(priv);
         json.push({
             idxs: target.map(x => x.idx),
-            operation: oper
+            operation: oper.dict(),
         });
     }
 

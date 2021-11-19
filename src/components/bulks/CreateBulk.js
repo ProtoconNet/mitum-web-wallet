@@ -61,7 +61,6 @@ class CreateBulk extends Component {
             const _csv = lines.slice(0, len - 1);
             this.setState({
                 csv: _csv,
-                totalNumber: _csv.length,
             });
             this.parseCSV();
         }
@@ -446,7 +445,7 @@ class CreateBulk extends Component {
                     </ReactFileReader>
                 </section>
                 <section id="bulk-text">
-                    <p>{csv.length < 1 ? "불러온 대용량 작업이 없습니다." : reason ? reason : "이제 전송을 시작할 수 있습니다."}</p>
+                    <p>{csv.length < 1 ? "불러온 대용량 작업이 없습니다." : reason ? reason : "이제 생성을 시작할 수 있습니다."}</p>
                 </section>
                 <div id="bulk-button">
                     <ul>
@@ -473,8 +472,9 @@ class CreateBulk extends Component {
                     disabled={result.length > 0 ? false : true}
                     href={this.state.download} rel="noreferrer">작업 파일 다운로드</a>
                 <div className="bulk-main">
-                    <p id="exp">{this.state.showParsed ? "작업 내역" : "전송 내역"}</p>
-                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> : <CreateResult csvs={this.state.parsed} created={this.state.result} />}
+                    <p id="exp">{this.state.showParsed ? "작업 내역" : "생성 내역"}</p>
+                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> 
+                    : <CreateResult showContains={true} isNew={true} csvs={this.state.parsed} created={this.state.result} />}
                 </div>
             </div>
         );

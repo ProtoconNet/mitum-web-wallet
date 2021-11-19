@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
 
-    margin: 3em;
+    padding: 3em;
 
     #switch {
         display: flex;
@@ -67,5 +67,33 @@
         width: 100%;
         margin: 0;
         padding: 0;
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .bulk-multi-container {
+        padding: 2em;
+    
+        #switch {
+            width: 90%;
+    
+            p {
+                width: 200px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 749px) {
+    .bulk-multi-container {
+        padding: 2em;
+    
+        #switch {
+            width: 90%;
+    
+            p {
+                width: 150px;
+            }
+        }
     }
 }

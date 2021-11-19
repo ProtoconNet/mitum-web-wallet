@@ -2,6 +2,9 @@
     width: 100%;
     height: 100%;
 
+    padding: 0;
+    margin: 0;
+
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -242,6 +245,127 @@
             padding: 0.2em;
         }
 
+        #show-button {
+            font-size: 0.8em;
+            width: 90%;
+            padding: 0.2em;
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .send-bulk-container {
+        padding: 0;
+        margin: 0;
+
+        h1 {
+            margin: 0.5em;
+        }
+    
+        #bulk-rule {
+            width: 90%;
+        }
+    
+        #bulk-input {
+            width: 90%;
+            margin: 1em 0 0 0;
+        }
+    
+        #bulk-text {
+            width: 90%;
+        }
+    
+        #bulk-button {
+            width: 90%;
+        }
+
+        .bulk-main {
+            width: 90%;
+        }
+    
+        #show-button {
+            font-size: 1em;
+            width: 90%;
+        }
+    }
+    
+}
+
+@media screen and (max-width: 749px) {
+    .send-bulk-container {
+        padding: 0;
+        margin: 0;
+    
+        h1 {
+            font-size: 1.5em;
+            margin: 0.5em;
+        }
+    
+        #bulk-rule {
+            width: 90%;
+            padding: 0.2em;
+    
+            h3 {
+                font-size: 1em;
+                margin: 0.3em;
+            }
+    
+            ul {
+                li {
+                    width: 100%;
+                    font-size: 0.8em;
+    
+                    margin: 0.3em;
+                    padding: 0.2em;
+                }
+            }
+        }
+    
+        #bulk-input {
+            width: 90%;
+            margin: 1em 0 0 0;
+            padding: 0.2em;
+            
+            #exp {
+                font-size: 0.8em;
+                margin: 0.3em;
+            }
+        }
+    
+        #bulk-text {
+            width: 90%;
+            margin: 0.5em 0 0 0;
+            padding: 0.2em;
+        }
+    
+        #bulk-button {
+            width: 90%;
+            margin: 0;
+            padding: 0.2em;
+    
+            ul {
+                li {
+                    margin: 0.3em 0 0 0;
+    
+                    button {
+                        width: 7em;
+                        margin: 0.2em;
+    
+                        font-size: 0.8em;
+                    }
+    
+                    p {
+                        font-size: 0.8em;
+                    }
+                }
+            }
+        }
+    
+        .bulk-main {
+            width: 90%;
+            padding: 0.2em;
+        }
+    
         #show-button {
             font-size: 0.8em;
             width: 90%;

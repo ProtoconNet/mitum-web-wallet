@@ -1,0 +1,251 @@
+.send-bulk-container {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+
+    h1 {
+        font-size: 2em;
+        font-weight: 400;
+        margin: 0.5em 0.5em 1em 0.5em;
+        letter-spacing: 2px;
+    }
+
+    #bulk-input {
+        width: 55%;
+        margin: 2em 0 0 0;
+        padding: 0.5em;
+
+        border: 2px white solid;
+        background-color: white;
+
+        border-radius: 2px;
+
+        color: black;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        #exp {
+            font-weight: 400;
+            font-size: 1em;
+            padding: 0;
+            margin: 0.5em;
+        }
+
+        .react-file-reader {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            width: fit-content !important;
+
+            .react-file-reader-button {
+                width: fit-content !important;
+            }
+        }
+    }
+
+    #bulk-text {
+        width: 55%;
+        margin: 1em 0 0 0;
+        padding: 0.5em;
+
+        border: 2px solid white;
+
+        p {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    #bulk-button {
+        width: 55%;
+        margin: 0;
+        padding: 0.5em;
+
+        ul {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+
+            list-style: none;
+
+            li {
+                width: 100%;
+                margin: 0.5em 0 0 0;
+                padding: 0;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+
+                button {
+                    width: 7em;
+                    margin: 0.2em;
+
+                    font-size: 1em;
+                    border: 1px solid white;
+                    border-radius: 2px;
+                    background-color: white;
+                    color: black;
+
+                    &:hover {
+                        background-color: transparent;
+                        color: white;
+                    }
+
+                    &:active {
+                        background-color: azure;
+                        color: gray;
+                        border: 1px solid azure;
+                    }
+                }
+
+                p {
+                    font-size: 1em;
+                    font-weight: 300;
+                    margin: 0.2em;
+                    width: 100%;
+                    text-align: start;
+                }
+            }
+        }
+    }
+
+    .bulk-main {
+        width: 55%;
+        margin: 0;
+        padding: 0.5em;
+
+        border: 2px solid white;
+
+        #exp {
+            width: 100%;
+            margin: 0;
+            text-align: center;
+
+            color: black;
+            background-color: white;
+        }
+    }
+
+    #show-button {
+        font-size: 1.2em;
+        width: 55%;
+        margin: 0;
+        padding: 0.5em;
+
+        font-weight: 400;
+
+        color: aqua;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .send-bulk-container {
+
+        h1 {
+            margin: 0.5em;
+        }
+
+        #bulk-input {
+            width: 90%;
+            margin: 1em 0 0 0;
+        }
+
+        #bulk-text {
+            width: 90%;
+        }
+
+        #bulk-button {
+            width: 90%;
+        }
+
+        .bulk-main {
+            width: 90%;
+        }
+
+        #show-button {
+            font-size: 1em;
+            width: 90%;
+        }
+    }
+
+}
+
+@media screen and (max-width: 749px) {
+    .sign-bulk-container {
+        padding: 2em;
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0.5em;
+        }
+
+        #bulk-input {
+            width: 90%;
+            margin: 1em 0 0 0;
+            padding: 0.2em;
+
+            #exp {
+                font-size: 0.8em;
+                margin: 0.3em;
+            }
+        }
+
+        #bulk-text {
+            width: 90%;
+            margin: 0.5em 0 0 0;
+            padding: 0.2em;
+        }
+
+        #bulk-button {
+            width: 90%;
+            margin: 0;
+            padding: 0.2em;
+
+            ul {
+                li {
+                    margin: 0.3em 0 0 0;
+
+                    button {
+                        width: 7em;
+                        margin: 0.2em;
+
+                        font-size: 0.8em;
+                    }
+
+                    p {
+                        font-size: 0.8em;
+                    }
+                }
+            }
+        }
+
+        .bulk-main {
+            width: 90%;
+            padding: 0.2em;
+        }
+
+        #show-button {
+            font-size: 0.8em;
+            width: 90%;
+            padding: 0.2em;
+        }
+    }
+}

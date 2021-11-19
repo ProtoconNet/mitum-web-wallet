@@ -69,7 +69,7 @@ class SignBulk extends Component {
 
         this.setState({
             operations: checked,
-            valid: !resultSet.has(false),
+            valid: !resultSet.has("invalid"),
         });
     }
 
@@ -118,6 +118,7 @@ class SignBulk extends Component {
             download: null,
             filename: "",
             showParsed: true,
+            valid: false,
         })
     }
 
@@ -127,7 +128,7 @@ class SignBulk extends Component {
 
         return (
             <div className="sign-bulk-container">
-                <h1>Create Multiple Operations</h1>
+                <h1>Sign Multiple Operations</h1>
                 <section id="bulk-input">
                     <p id="exp">이 페이지에서 생성한 대용량 작업 파일만 사용 가능합니다.</p>
                     <ReactFileReader handleFiles={this.readJson} fileTypes={'.json'}>
@@ -144,7 +145,7 @@ class SignBulk extends Component {
                                 style={beforeSign.length > 0 && !running && beforeSign.length > result.length && valid
                                     ? { opacity: "1.0" } : { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" }}
                                 disabled={beforeSign.length > 0 && !running ? false : true}
-                                onClick={() => this.startSign()}>생성 시작</button>
+                                onClick={() => this.startSign()}>서명 시작</button>
                             <p>{`대용량 작업 서명을 시작합니다.`}</p>
                         </li>
                         <li key="cancel">

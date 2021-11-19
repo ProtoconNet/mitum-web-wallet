@@ -473,7 +473,7 @@ class CreateBulk extends Component {
                     href={this.state.download} rel="noreferrer">작업 파일 다운로드</a>
                 <div className="bulk-main">
                     <p id="exp">{this.state.showParsed ? "작업 내역" : "생성 내역"}</p>
-                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> 
+                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} isOperation={false} /> 
                     : <CreateResult showContains={true} isNew={true} csvs={this.state.parsed} created={this.state.result} />}
                 </div>
             </div>

@@ -29,19 +29,21 @@ class BroadcastResult extends React.Component {
     }
 
     listComponent(oper, idx) {
+        const {isCSV} = this.props;
         return (
             <li key={idx}>
                 <div>
-                    <p onClick={() => {
+                    <p onClick={isCSV ? () => {
                         const isShow = this.state.isShow;
                         isShow[idx] = !isShow[idx];
                         this.setState({ isShow })
-                    }}>{idx + 1}</p>
+                    } : () => {}}
+                     style={isCSV ? {} : plainText}>{idx + 1}</p>
                     <p onClick={() => openTab(process.env.REACT_APP_EXPLORER + "/operation/" + oper.hash)}>{oper.hash}</p>
                     <p>{oper.result}</p>
                 </div>
                 {
-                    this.state.isShow[idx]
+                    this.state.isShow[idx] && isCSV
                         ? (
                             <ul id="idxs">
                                 {oper.idxs.map(x => this.commandComponent(x))}

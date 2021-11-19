@@ -424,32 +424,42 @@ class BulkSingle extends Component {
         });
 
         var running = true;
-        while(running) {
-            let isAllLookedUp = true;
+        var looked = result.map(x => false);
+        var lookSet;
+        while (running) {
             result.forEach(
                 async (x, idx) => {
+                    if (looked[idx]) {
+                        return;
+                    }
+
                     await axios.get(this.props.networkSearchFact + x.hash)
-                    .then(
-                        res => {
-                            const newRes = this.state.result;
-                            if(res.data._embedded.in_state) {
-                                newRes[idx] = {...newRes[idx], result: "success"}
+                        .then(
+                            res => {
+                                const newRes = this.state.result;
+                                if (res.data._embedded.in_state) {
+                                    newRes[idx] = { ...newRes[idx], result: "success" }
+                                }
+                                else {
+                                    newRes[idx] = { ...newRes[idx], result: "fail" }
+                                }
+                                this.setState({
+                                    result: newRes,
+                                });
+
+                                looked[idx] = true;
                             }
-                            else {
-                                newRes[idx] = {...newRes[idx], result: "fail"}
-                            }
-                            this.setState({
-                                result: newRes,
-                            });
-                        }
-                    )
-                    .catch(
-                        e => isAllLookedUp = false
-                    )
+                        )
+                        .catch(
+                            e => { }
+                        )
                 }
             );
 
-            if(isAllLookedUp) {
+            await Sleep(1000);
+
+            lookSet = new Set(looked);
+            if (!lookSet.has(false)) {
                 break;
             }
         }
@@ -520,9 +530,9 @@ class BulkSingle extends Component {
                         </li>
                         <li id="lookup">
                             <button
-                                style={!(csv.length > 0 && !running && csv.length > result.length)
+                                style={!(csv.length > 0 && !running && csv.length <= result.length)
                                     ? { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" } : { opacity: "1.0" }}
-                                disabled={!(csv.length > 0 && !running && this.state.result.length > 0) ? true : false}
+                                disabled={!(csv.length > 0 && !running && csv.length <= result.length) ? true : false}
                                 onClick={() => this.lookup()}>결과 조회</button>
                             <p>{`전송 도중에는 이 페이지에서 작업 처리 결과를 조회할 수 없습니다. 다른 페이지로 이동 시 조회가 중단됩니다.`}</p>
                         </li>
@@ -530,7 +540,8 @@ class BulkSingle extends Component {
                 </div>
                 <div className="bulk-main">
                     <p id="exp">{this.state.showParsed ? "작업 내역" : "전송 내역"}</p>
-                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> : <BroadcastResult csvs={this.state.parsed} broadcasted={this.state.result} />}
+                    {this.state.showParsed ? <CSVResult isOperation={false} csvs={this.state.parsed} />
+                        : <BroadcastResult csvs={this.state.parsed} broadcasted={this.state.result} isCSV={true} />}
                 </div>
             </div>
         );

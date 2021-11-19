@@ -35,13 +35,15 @@ class CSVResult extends React.Component {
     }
 
     render() {
+        const {isOperation} = this.props;
+
         return (
             <div className="csv-result-container">
                 <ul>
                     <li key="title">
                         <div>
                             <p style={plainText}>IDX</p>
-                            <p style={{ textAlign: "center" }}>COMMAND</p>
+                            <p style={{ textAlign: "center" }}>{isOperation? "FACT HASH" : "COMMAND"}</p>
                             <p>VALID</p>
                         </div>
                     </li>

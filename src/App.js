@@ -29,6 +29,7 @@ import { connect } from 'react-redux';
 import InitiateAccounts from './views/InitiateAccounts';
 import AccountSelector from './views/AccountSelector';
 import BulkSingle from './views/BulkSingle';
+import BulkMulti from './views/BulkMulti';
 
 const checkMaintainInfo = async () => {
   return await axios.get(process.env.REACT_APP_MAINTAIN + "?" + Math.random());
@@ -116,6 +117,7 @@ class App extends React.Component {
           <Route path="/init" component={InitiateAccounts} />
           <Route path="/account-select" component={AccountSelector} />
           <Route path="/bulk" component={BulkSingle} />
+          <Route path="/bulk-multi" component={BulkMulti} />
           <Footer />
         </HashRouter>
       </div>

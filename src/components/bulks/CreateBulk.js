@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import './BulkSingle.scss';
+import './CreateBulk.scss';
 
 import ReactFileReader from 'react-file-reader';
-import { clearCsvs, csvToOperation, setCsvs } from '../store/actions';
-import { ca, tf } from '../store/reducers/BulkReducer';
-import CSVResult from '../components/bulks/CSVResult';
-import { isAddressValid, isCurrencyValid, isNum, isPublicKeyValid, isWeightsValidToThres, isWeightValid } from '../lib/Validation';
-import axios from 'stellar-sdk/node_modules/axios';
+import { ca, tf } from '../../store/reducers/BulkReducer';
+import { isAddressValid, isCurrencyValid, isNum, isPublicKeyValid, isWeightsValidToThres, isWeightValid } from '../../lib/Validation';
+import CSVResult from './CSVResult';
+import CreateResult from './CreateResult';
+import axios from 'axios';
 import bigInt from 'big-integer';
 import { Generator } from 'mitumc';
-import BroadcastResult from '../components/bulks/BroadcastResult';
-import Sleep from '../lib/Sleep';
+import { connect } from 'react-redux';
+import { clearCsvs, csvToOperation, setCsvs } from '../../store/actions';
 
 const invalidWeightReason = "Wrong weight";
 // const invalidThresholdReason = "Wrong threshold";
@@ -27,21 +26,22 @@ const invalidKeyFormatReason = "Wrong key format - $key?threshold=$threshold&wei
 const invalidPublicKeyReason = "Wrong public key";
 const invalidCommandReason = "Wrong command - ca, tf";
 
-class BulkSingle extends Component {
+class CreateBulk extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            totalNumber: 0,
+            showRule: false,
+            running: false,
+            showParsed: true,
+            reason: "",
+            result: [],
             csv: [],
             parsed: [],
-            result: [],
-            showRule: false,
 
-            showParsed: true,
-            running: false,
-            reason: "",
+            download: null,
+            filename: "",
         }
 
         this.readCSV = this.readCSV.bind(this);
@@ -182,25 +182,7 @@ class BulkSingle extends Component {
         return parsed;
     }
 
-    async send(operation) {
-        return await axios.post(this.props.networkBroadcast, operation);
-    }
-
-    clear() {
-        this.props.clearCsv();
-        this.setState({
-            totalNumber: 0,
-            csv: [],
-            parsed: [],
-            result: [],
-            reason: "",
-            showRule: false,
-            showParsed: true,
-            running: false,
-        });
-    }
-
-    async startSend() {
+    async startCreate() {
         var valid = true;
         this.props.csv.forEach(
             x => valid = valid && x.valid
@@ -270,47 +252,23 @@ class BulkSingle extends Component {
 
         newParsed = this.state.parsed;
         this.setState({
-            reason: "작업을 전송 중입니다. 전송 중 다른 페이지로 이동하지 마십시오.",
+            reason: "작업을 생성 중입니다. 생성 중 다른 페이지로 이동하지 마십시오.",
             running: true,
             showParsed: false,
         });
 
-        this.props.csvToOper(newParsed, this.props.networkId, this.props.account.address, this.props.priv);
+        await this.props.csvToOper(newParsed, this.props.networkId, this.props.account.address, this.props.priv);
 
-        this.sendAll();
-    }
+        const link = this.download();
+        const filename = "bulk_" + Date.now().toFixed();
 
-    async sendAll() {
-        const operations = this.props.created;
-
-        operations.forEach(
-            async (x, idx) => {
-                await Sleep(4000 * idx);
-                this.send(x.operation)
-                    .then(
-                        res => {
-                            const isFin = this.state.result.length >= this.props.created.length - 1;
-
-                            this.setState({
-                                running: isFin ? false : true,
-                                reason: isFin ? "전송이 완료되었습니다." : this.state.reason,
-                                result: [...this.state.result, { idxs: x.idxs, hash: x.operation.fact.hash, result: "pending" }],
-                            });
-                        }
-                    )
-                    .catch(
-                        e => {
-                            const isFin = this.state.result.length >= this.props.created.length - 1;
-
-                            this.setState({
-                                running: isFin ? false : true,
-                                reason: isFin ? "전송이 완료되었습니다." : this.state.reason,
-                                result: [...this.state.result, { idxs: x.idxs, hash: x.operation.fact.hash, result: "fail" }]
-                            });
-                        }
-                    );
-            }
-        )
+        this.setState({
+            reason: "작업 생성이 완료되었습니다.",
+            running: false,
+            result: this.props.created.map(x => ({...x, result: "success"})),
+            download: link,
+            filename,
+        })
     }
 
     checkAmounts() {
@@ -417,45 +375,35 @@ class BulkSingle extends Component {
             )
     }
 
-    async lookup() {
-        const result = this.state.result;
-        this.setState({
-            running: true,
-        });
+    download() {
+        const operations = this.props.created.map(x => x.operation);
+        const all = {
+            operations,
+        };
 
-        var running = true;
-        while(running) {
-            let isAllLookedUp = true;
-            result.forEach(
-                async (x, idx) => {
-                    await axios.get(this.props.networkSearchFact + x.hash)
-                    .then(
-                        res => {
-                            const newRes = this.state.result;
-                            if(res.data._embedded.in_state) {
-                                newRes[idx] = {...newRes[idx], result: "success"}
-                            }
-                            else {
-                                newRes[idx] = {...newRes[idx], result: "fail"}
-                            }
-                            this.setState({
-                                result: newRes,
-                            });
-                        }
-                    )
-                    .catch(
-                        e => isAllLookedUp = false
-                    )
-                }
-            );
-
-            if(isAllLookedUp) {
-                break;
-            }
+        let file;
+        try {
+            file = new File([JSON.stringify(all, null, 4)], "bulk_" + all.operations[0].fact.hash, { type: 'application/json' });
+        } catch (e) {
+            alert('파일 다운로드 url을 얻을 수 없습니다.');
+            return undefined;
         }
+    
+        return URL.createObjectURL(file); 
+    }
 
+    clear() {
+        this.props.clearCsv();
         this.setState({
+            csv: [],
+            parsed: [],
+            result: [],
+            reason: "",
+            showRule: false,
+            showParsed: true,
             running: false,
+            filename: "",
+            download: null,
         });
     }
 
@@ -464,8 +412,8 @@ class BulkSingle extends Component {
         const { showRule, running, reason, result } = this.state;
 
         return (
-            <div className="bulk-container">
-                <h1>Send Multiple Operations</h1>
+            <div className="create-bulk-container">
+                <h1>Create Multiple Operations</h1>
                 <p id="show-button" onClick={() => this.setState({ showRule: !showRule })}>CSV 작성 규칙 보기</p>
                 <section id="bulk-rule" style={showRule ? {} : { display: "none" }}>
                     <h3>CSV 작성 규칙</h3>
@@ -507,8 +455,8 @@ class BulkSingle extends Component {
                                 style={csv.length > 0 && !running && csv.length > result.length
                                     ? { opacity: "1.0" } : { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" }}
                                 disabled={csv.length > 0 && !running ? false : true}
-                                onClick={() => this.startSend()}>전송 시작</button>
-                            <p>{`대용량 작업 전송을 시작합니다. 전송 전 작업 유효성 확인이 진행됩니다.`}</p>
+                                onClick={() => this.startCreate()}>생성 시작</button>
+                            <p>{`대용량 작업 생성을 시작합니다. 생성 전 작업 유효성 확인이 진행됩니다.`}</p>
                         </li>
                         <li key="cancel">
                             <button
@@ -518,24 +466,19 @@ class BulkSingle extends Component {
                                 onClick={() => this.clear()}>초기화</button>
                             <p>{`로딩된 모든 작업 내용을 초기화합니다.`}</p>
                         </li>
-                        <li id="lookup">
-                            <button
-                                style={!(csv.length > 0 && !running && csv.length > result.length)
-                                    ? { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" } : { opacity: "1.0" }}
-                                disabled={!(csv.length > 0 && !running && this.state.result.length > 0) ? true : false}
-                                onClick={() => this.lookup()}>결과 조회</button>
-                            <p>{`전송 도중에는 이 페이지에서 작업 처리 결과를 조회할 수 없습니다. 다른 페이지로 이동 시 조회가 중단됩니다.`}</p>
-                        </li>
                     </ul>
                 </div>
+                <a id="create-download" target="_blank" download={this.state.filename}
+                    style={result.length > 0 ? { opacity: "1.0" } : { opacity: "0.6" }}
+                    disabled={result.length > 0 ? false : true}
+                    href={this.state.download} rel="noreferrer">작업 파일 다운로드</a>
                 <div className="bulk-main">
                     <p id="exp">{this.state.showParsed ? "작업 내역" : "전송 내역"}</p>
-                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> : <BroadcastResult csvs={this.state.parsed} broadcasted={this.state.result} />}
+                    {this.state.showParsed ? <CSVResult csvs={this.state.parsed} /> : <CreateResult csvs={this.state.parsed} created={this.state.result} />}
                 </div>
             </div>
         );
     }
-
 }
 
 const mapStateToProps = state => ({
@@ -545,8 +488,6 @@ const mapStateToProps = state => ({
     priv: state.login.priv,
     network: state.network.network,
     networkId: state.network.networkId,
-    networkBroadcast: state.network.networkBroadcast,
-    networkSearchFact: state.network.networkSearchFact,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -558,4 +499,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(BulkSingle);
+)(CreateBulk);

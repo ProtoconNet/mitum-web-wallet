@@ -82,13 +82,13 @@ class SubNavigation extends React.Component {
                                     <p>SEND MULTI OPERATIONS</p>
                                 </Link>
                             ) : false}
-                        {/* {isLogin && this.props.account.accountType === "multi"
+                        {isLogin && this.props.account.accountType === "multi"
                             ? (
-                                <Link className={"nav-login " + (isLogin ? "on" : "off")} to="/bulk"
+                                <Link className={"nav-login " + (isLogin ? "on" : "off")} to="/bulk-multi"
                                     onClick={() => this.onCheckOut()}>
                                     <p>SEND MULTI OPERATIONS</p>
                                 </Link>
-                            ) : false} */}
+                            ) : false}
                         <Link className="main" to="/key-generate"
                             onClick={() => this.onCheckOut()}>
                             <p>GENERATE KEYPAIR</p>

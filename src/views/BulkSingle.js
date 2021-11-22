@@ -470,7 +470,7 @@ class BulkSingle extends Component {
     }
 
     render() {
-        const { csv } = this.props;
+        const { csv, created } = this.props;
         const { showRule, running, reason, result } = this.state;
 
         return (
@@ -530,9 +530,9 @@ class BulkSingle extends Component {
                         </li>
                         <li id="lookup">
                             <button
-                                style={!(csv.length > 0 && !running && csv.length <= result.length)
+                                style={!(csv.length > 0 && !running && created.length <= result.length)
                                     ? { opacity: "0.6", backgroundColor: "white", color: "black", textDecoration: "line-through" } : { opacity: "1.0" }}
-                                disabled={!(csv.length > 0 && !running && csv.length <= result.length) ? true : false}
+                                disabled={!(csv.length > 0 && !running && created.length <= result.length) ? true : false}
                                 onClick={() => this.lookup()}>결과 조회</button>
                             <p>{`전송 도중에는 이 페이지에서 작업 처리 결과를 조회할 수 없습니다. 다른 페이지로 이동 시 조회가 중단됩니다.`}</p>
                         </li>

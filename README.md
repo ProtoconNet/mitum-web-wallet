@@ -34,3 +34,13 @@ Refer to 'Install and Run'.
 ```sh
 /mitum-web-wallet$ yarn run build
 ```
+
+## Create Scripts for Massive Create-Accounts and Transfers
+
+You can generate and broadcast a number of create-accounts/transfers items.
+
+Before that, you must prepare script of create-accounts/transfers commands in csv format.
+
+See the example code [here](test/bulk_example.js).
+
+The detail of script rules is inside wallet - send/sign multiple operations.

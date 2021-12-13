@@ -144,7 +144,7 @@ export const isAccountValid = (account) => {
     return true;
 }
 
-export const isPrivateKeyValidWithNotHint = (pk) => {
+export const isPrivateKeyValidWithNotType = (pk) => {
 
     if (typeof (pk) !== typeof ("string")) {
         return false;

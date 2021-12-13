@@ -1,0 +1,76 @@
+.skey-gen-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    h2 {
+        font-size: 3em;
+        font-weight: 400;
+        margin: 1em;
+        letter-spacing: 5px;
+    }
+
+    .skey-gen-button {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .skey-boxer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        padding: 0;
+        margin: 0;
+
+        div button {
+            margin-left: 1em;
+        }
+    }
+
+    .seed-boxer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        padding: 0;
+        margin: 0 0 1rem;
+    }
+}
+
+@media screen and (max-width: 1090px) and (min-width: 750px) {
+    .skey-gen-container {
+
+        .skey-gen-button {
+            padding: 10px;
+        }
+
+        .skey-boxer {
+            div button {
+                margin-left: 1em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .skey-gen-container {
+        
+        .skey-selector {
+            padding: 7px;
+        }
+
+        .skey-boxer {
+            div button {
+                margin-left: 1em;
+            }
+        }
+    }
+}

@@ -102,7 +102,7 @@ class App extends React.Component {
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/wallet/:account" component={Wallet} />
-          <Route path="/key-generate" component={KeyGen} />
+          <Route path="/key-gen" component={KeyGen} />
           <Route path="/get-address" component={AddressGen} />
           <Route path="/res-key-generate" component={ResKeyGen} />
           <Route path="/help" component={Help} />

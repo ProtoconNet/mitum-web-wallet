@@ -89,9 +89,13 @@ class SubNavigation extends React.Component {
                                     <p>SEND MULTI OPERATIONS</p>
                                 </Link>
                             ) : false}
-                        <Link className="main" to="/key-generate"
+                        <Link className="main" to="/key-gen/new"
                             onClick={() => this.onCheckOut()}>
-                            <p>GENERATE KEYPAIR</p>
+                            <p>GET NEW KEYPAIR</p>
+                        </Link>
+                        <Link className="main" to="/key-gen/seed"
+                            onClick={() => this.onCheckOut()}>
+                            <p>GET KEYPAIR FROM SEED</p>
                         </Link>
                         <Link className="main" to="/get-address"
                             onClick={() => this.onCheckOut()}>

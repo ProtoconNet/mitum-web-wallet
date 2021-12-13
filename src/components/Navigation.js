@@ -96,8 +96,11 @@ class Navigation extends React.Component {
                             <p>SET RESTORE PASSWORD</p>
                         </Link>
                     ) : false}
-                <Link className="main" to="/key-generate">
-                    <p>GENERATE KEYPAIR</p>
+                <Link className="main" to="/key-gen/new">
+                    <p>GET NEW KEYPAIR</p>
+                </Link>
+                <Link className="main" to="/key-gen/seed">
+                    <p>GET KEYPAIR FROM SEED</p>
                 </Link>
                 <Link className="main" to="/get-address">
                     <p>GET ADDRESS</p>

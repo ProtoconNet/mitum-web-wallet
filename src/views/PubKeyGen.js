@@ -5,11 +5,7 @@ import './PubKeyGen.scss';
 
 import { getKeypairFromPrivateKey } from 'mitumc';
 import AlertModal from '../components/modals/AlertModal';
-import { isPrivateKeyValidWithNotHint } from '../lib/Validation';
-
-const KEY_BTC = "btc";
-const KEY_ETHER = "ether";
-const KEY_STELLAR = "stellar";
+import { isPrivateKeyValidWithNotType } from '../lib/Validation';
 
 class PubKeyGen extends React.Component {
 
@@ -55,10 +51,10 @@ class PubKeyGen extends React.Component {
         });
     }
 
-    getPubKey(keyType) {
+    getPubKey() {
 
         try {
-            const keypair = getKeypairFromPrivateKey(this.state.privKey.trim());
+            const keypair = getKeypairFromPrivateKey(this.state.privKey.trim() + "mpr");
             this.setState({
                 pubKey: keypair.getPublicKey(),
                 privKeyGen: keypair.getPrivateKey()
@@ -91,14 +87,8 @@ class PubKeyGen extends React.Component {
                 <div className="pubkey-gen-buttons">
                     <span id="key-selector">
                         <ConfirmButton
-                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey.trim()) ? false : true}
-                            onClick={() => this.getPubKey(KEY_BTC)}>BTC</ConfirmButton>
-                        <ConfirmButton
-                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey.trim()) ? false : true}
-                            onClick={() => this.getPubKey(KEY_ETHER)}>ETHER</ConfirmButton>
-                        <ConfirmButton
-                            disabled={isPrivateKeyValidWithNotHint(this.state.privKey.trim()) ? false : true}
-                            onClick={() => this.getPubKey(KEY_STELLAR)}>STELLAR</ConfirmButton>
+                            disabled={isPrivateKeyValidWithNotType(this.state.privKey.trim()) ? false : true}
+                            onClick={() => this.getPubKey()}>GET KEYPAIR</ConfirmButton>
                     </span>
                 </div>
                 <AlertModal isOpen={this.state.isAlertOpen} onClose={() => this.closeAlert()}

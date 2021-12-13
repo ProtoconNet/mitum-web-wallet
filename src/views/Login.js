@@ -9,7 +9,7 @@ import RestoreKeyLoginBox from '../components/RestoreKeyLoginBox';
 import { allowLogin, clearHistory, login, logout, rejectLogin, setHistory, setKeypair } from '../store/actions';
 import { connect } from 'react-redux';
 
-import { toKeypair } from 'mitumc';
+import { getKeypairFromPrivateKey } from 'mitumc';
 import { SHOW_PRIVATE, SHOW_RESTORE } from '../text/mode';
 import { isPrivateKeyValid } from '../lib/Validation';
 import AlertModal from '../components/modals/AlertModal';
@@ -74,7 +74,7 @@ class Login extends React.Component {
 
         let pubKey;
         try {
-            pubKey = toKeypair(priv, '').getPublicKey();
+            pubKey = getKeypairFromPrivateKey(priv).getPublicKey();
         } catch (e) {
             this.openAlert('지갑 열기 실패 :(', '유효하지 않은 개인키입니다.');
             this.props.rejectLogin();
@@ -147,7 +147,7 @@ class Login extends React.Component {
     async onStartLogin(priv) {
         this.props.allowLogin();
         try {
-            const pubKey = toKeypair(priv, '').getPublicKey();
+            const pubKey = getKeypairFromPrivateKey(priv).getPublicKey();
             this.props.setKeypair(priv, pubKey);
             this.setState({
                 initiate: true,

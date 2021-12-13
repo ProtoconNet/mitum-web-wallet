@@ -4,7 +4,6 @@ class Account {
             throw new Error('Wrong parameter with Account constructor');
         }
 
-
         this.address = addr;
         this.privateKey = priv;
         this.resKey = undefined;

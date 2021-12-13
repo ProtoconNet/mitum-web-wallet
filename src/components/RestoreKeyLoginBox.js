@@ -57,7 +57,7 @@ class RestoreKeyLoginBox extends React.Component {
         this.props.priv,
         this.state.restoreKey.trim()
       ).words;
-      
+
       let priv = "";
       let byteArray = [];
       let word, i, j;
@@ -71,10 +71,8 @@ class RestoreKeyLoginBox extends React.Component {
         priv += escape(String.fromCharCode(byteArray[i]));
       }
 
-      const idx = priv.indexOf(process.env.REACT_APP_VERSION);
-      priv = priv.substring(0, idx + process.env.REACT_APP_VERSION.length);
-      priv = priv.replace('%7E', '~');
-
+      const idx = priv.indexOf('%');
+      priv = priv.substring(0, idx);
       this.props.onLogin(priv);
     }
   }

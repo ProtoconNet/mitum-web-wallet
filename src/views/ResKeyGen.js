@@ -63,6 +63,8 @@ class ResKeyGen extends React.Component {
             return;
         }
 
+
+        console.log(this.props.priv);
         this.props.setRestoreKey(this.props.priv, this.state.firstRestore.trim());
         this.openAlert("비밀번호 설정 완료! :)", "이제 복구 비밀번호로 지갑을 열 수 있습니다.");
     }

@@ -2,7 +2,7 @@ import { TYPE_CREATE_ACCOUNT, TYPE_TRANSFER } from "../text/mode";
 import { address } from '../text/hint.json';
 
 const hintedAccount = (account) => {
-    return  account + '~' + address + '-' + process.env.REACT_APP_VERSION
+    return  account + address;
 };
 
 class History {

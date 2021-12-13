@@ -1,4 +1,4 @@
-import { Generator, Signer, toKeypair } from 'mitumc';
+import { Generator, Signer, getKeypairFromPrivateKey } from 'mitumc';
 import * as actions from '../actions';
 
 export const ca = "ca";
@@ -115,7 +115,7 @@ function addSigns(operations, id, priv) {
         x => {
             var isAlreadySigned = false;
             for (var i = 0; i < x.fact_signs.length; i++) {
-                if (x.fact_signs[i].signer === toKeypair(priv, "").getPublicKey()) {
+                if (x.fact_signs[i].signer === getKeypairFromPrivateKey(priv).getPublicKey()) {
                     isAlreadySigned = true;
                     break;
                 }

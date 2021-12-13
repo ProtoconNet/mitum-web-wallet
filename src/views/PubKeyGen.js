@@ -3,7 +3,7 @@ import ConfirmButton from '../components/buttons/ConfirmButton';
 import InputBox from '../components/InputBox';
 import './PubKeyGen.scss';
 
-import { toKeypair } from 'mitumc';
+import { getKeypairFromPrivateKey } from 'mitumc';
 import AlertModal from '../components/modals/AlertModal';
 import { isPrivateKeyValidWithNotHint } from '../lib/Validation';
 
@@ -58,7 +58,7 @@ class PubKeyGen extends React.Component {
     getPubKey(keyType) {
 
         try {
-            const keypair = toKeypair(this.state.privKey.trim(), keyType);
+            const keypair = getKeypairFromPrivateKey(this.state.privKey.trim());
             this.setState({
                 pubKey: keypair.getPublicKey(),
                 privKeyGen: keypair.getPrivateKey()

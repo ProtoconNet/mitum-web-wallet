@@ -1,4 +1,4 @@
-const getKeypair = require('mitumc').getKeypair;
+const getNewKeypair = require('mitumc').getNewKeypair;
 const fs = require('fs');
 
 function generatePublicKeys(numOfKey) {
@@ -7,7 +7,7 @@ function generatePublicKeys(numOfKey) {
 
     for (i = 0; i < numOfKey; i++) {
         try {
-            kp = getKeypair('btc');
+            kp = getNewKeypair();
             pub.push(kp.getPublicKey());
 
             // create ether keys

@@ -7,7 +7,7 @@ import { clearCsvs, csvToOperation, setCsvs } from '../store/actions';
 import { ca, tf } from '../store/reducers/BulkReducer';
 import CSVResult from '../components/bulks/CSVResult';
 import { isAddressValid, isCurrencyValid, isNum, isPublicKeyValid, isWeightsValidToThres, isWeightValid } from '../lib/Validation';
-import axios from 'stellar-sdk/node_modules/axios';
+import axios from 'axios';
 import bigInt from 'big-integer';
 import { Generator } from 'mitumc';
 import BroadcastResult from '../components/bulks/BroadcastResult';
@@ -497,7 +497,7 @@ class BulkSingle extends Component {
                     </ul>
                     <h3>CSV 작성 예시</h3>
                     <ul>
-                        <li key="ex1"><p>ca, 23onySFFmozrmuthYWhDgQS48we9qertP7SSsMBbdAq2X~btc-pub-v0.0.1?threshold=100&weight=100, MCC, 100000, PEN, 2000000000 </p></li>
+                        <li key="ex1"><p>ca, 23onySFFmozrmuthYWhDgQS48we9qertP7SSsMBbdAq2Xmpu?threshold=100&weight=100, MCC, 100000, PEN, 2000000000 </p></li>
                         <li key="ex4"><p>tf, EEJpas2voqX9qPve1TG7TkYPNoDxqn3PVrMYvPQ3Z3JY:mca-v0.0.1, MCC, 8000000000000, PEN, 1000</p></li>
                     </ul>
                 </section>

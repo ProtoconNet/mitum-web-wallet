@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { dequeueOperation, login, setAccountList } from '../store/actions';
+import { dequeueOperation, login, setAccountList, setHistory } from '../store/actions';
 import './Wallet.scss';
 
 import SelectButton from '../components/buttons/SelectButton';
@@ -32,7 +32,7 @@ const balance = (bal) => {
 
 const history = (hist) => {
     return (
-        <li key={hist.hash + hist.currency + hist.target} onClick={() => {openTab(process.env.REACT_APP_EXPLORER + "/operation/" + hist.hash)}}>
+        <li key={hist.hash + hist.currency + hist.target} onClick={() => { openTab(process.env.REACT_APP_EXPLORER + "/operation/" + hist.hash) }}>
             <p id={hist.confirmation}>{hist.confirmation}</p>
             <p id={hist.direction}>{hist.direction}</p>
             <p id='confirmed-at'>{hist.confirmedAt}</p>
@@ -62,6 +62,8 @@ const title = (content) => {
         </div>
     )
 }
+
+let keepRefresh = false;
 
 class Wallet extends React.Component {
 
@@ -136,6 +138,68 @@ class Wallet extends React.Component {
         }
     }
 
+    async getAccountInformation(account) {
+        return await axios.get(this.props.networkAccount + account)
+    }
+
+    async getAccountHistory(account) {
+        return await axios.get(`${this.props.networkAccount}${account}/operations?reverse=1`)
+    }
+
+    componentDidMount() {
+        this.checkInState();
+
+        keepRefresh = true;
+
+        setTimeout(() => {
+            this.keepRefresh();
+        }, 5000);
+    }
+
+    componentWillUnmount() {
+        keepRefresh = false;
+    }
+
+    keepRefresh() {
+        if (!keepRefresh) {
+            return;
+        }
+
+        this.refresh();
+
+        return setTimeout(() => {
+            this.keepRefresh();
+        }, 5000);
+    }
+
+    refresh() {
+        this.getAccountHistory(this.props.account.address)
+            .then(
+                res => {
+                    this.props.setHistory(res.data, this.props.account.address);
+                }
+            )
+            .catch(
+                e => {
+                    console.error('fail to load account history');
+                }
+            )
+
+        this.getAccountInformation(this.props.account.address)
+            .then(
+                res => {
+                    if (this.props.isLoginAllowed) {
+                        this.props.signIn(this.props.account.address, this.props.priv, this.props.pub, res.data);
+                    }
+                }
+            )
+            .catch(
+                e => {
+                    console.error('fail to load account information');
+                }
+            )
+    }
+
     onSelect(oper) {
         if (oper === OPER_CREATE_ACCOUNT
             || oper === OPER_UPDATE_KEY
@@ -146,14 +210,6 @@ class Wallet extends React.Component {
                 operation: oper
             });
         }
-    }
-
-    componentDidMount() {
-        this.checkInState();
-
-        setTimeout(() => {
-            this.refresh();
-        }, 5000);
     }
 
     closePubModal() {
@@ -170,13 +226,6 @@ class Wallet extends React.Component {
 
     openPendModal() {
         this.setState({ isPendModalOpen: true });
-    }
-
-    refresh() {
-        this.setState({
-            isRedirect: true,
-            redirect: PAGE_LOGIN
-        });
     }
 
     async getPubAccounts(pub) {
@@ -305,14 +354,18 @@ const mapStateToProps = state => ({
     queue: state.queue.queue,
     networkSearchFact: state.network.networkSearchFact,
     networkPubAccounts: state.network.networkPubAccounts,
+    networkAccount: state.network.networkAccount,
     precision: state.network.precision,
+    priv: state.login.priv,
     pub: state.login.pub,
+    isLoginAllowed: state.allow.isLoginAllowed,
 });
 
 const mapDispatchToProps = dispatch => ({
     setAccountList: (accList, next) => dispatch(setAccountList(accList, next)),
-    signIn: (address, privateKey, data) => dispatch(login(address, privateKey, data)),
-    deleteJob: () => dispatch(dequeueOperation())
+    deleteJob: () => dispatch(dequeueOperation()),
+    setHistory: (data, me) => dispatch(setHistory(data, me)),
+    signIn: (address, privateKey, publicKey, data) => dispatch(login(address, privateKey, publicKey, data)),
 });
 
 export default withRouter(connect(

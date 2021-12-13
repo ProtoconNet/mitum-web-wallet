@@ -1,5 +1,3 @@
-import { key as keyHint } from '../text/hint.json';
-import { address as addressHint } from '../text/hint.json';
 import { TYPE_CREATE_ACCOUNT, TYPE_UPDATE_KEY, TYPE_TRANSFER } from '../text/mode';
 
 export const isOperation = (json) => {
@@ -167,24 +165,22 @@ export const isPrivateKeyValid = (pvk) => {
 
     const pk = pvk.trim();
 
-    const idx = pk.indexOf('~');
-    if (idx < 0) {
+    if(pk.length < 55) {
         return false;
     }
-    const key = pk.substring(0, idx);
-    const hint = pk.substring(idx + 1);
+
+    const key = pk.substring(0, 52);
+    const type = pk.substring(52);
 
     if (!/^[a-zA-Z0-9]+(?![^a-zA-Z0-9])\b/.test(key)) {
         return false;
     }
 
-    switch (hint) {
-        case `${keyHint.btc.priv}-${process.env.REACT_APP_VERSION}`:
-        case `${keyHint.ether.priv}-${process.env.REACT_APP_VERSION}`:
-        case `${keyHint.stellar.priv}-${process.env.REACT_APP_VERSION}`:
-            return true;
-        default:
-            return false;
+    if(type === 'mpr') {
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
@@ -196,25 +192,23 @@ export const isPublicKeyValid = (pbk) => {
 
     const pubk = pbk.trim();
 
-    const idx = pubk.indexOf('~');
-    if (idx < 0) {
+    const idx = pubk.indexOf('mpu');
+    if(idx < 0) {
         return false;
     }
 
     const key = pubk.substring(0, idx);
-    const hint = pubk.substring(idx + 1);
+    const type = pubk.substring(idx);
 
     if (!/[a-zA-Z0-9]+/.test(key)) {
         return false;
     }
 
-    switch (hint) {
-        case `${keyHint.btc.pub}-${process.env.REACT_APP_VERSION}`:
-        case `${keyHint.ether.pub}-${process.env.REACT_APP_VERSION}`:
-        case `${keyHint.stellar.pub}-${process.env.REACT_APP_VERSION}`:
-            return true;
-        default:
-            return false;
+    if(type !== 'mpu') {
+        return false;
+    }
+    else {
+        return true;
     }
 }
 
@@ -226,18 +220,19 @@ export const isAddressValid = (adr) => {
 
     const addr = adr.trim();
 
-    const idx = addr.indexOf('~');
-    if (idx < 0) {
+    const idx = adr.indexOf('mca');
+    if(idx < 0) {
         return false;
     }
 
-    const hint = addr.substring(idx + 1);
-    const address = addr.substring(1, idx);
-    if (hint !== `${addressHint}-${process.env.REACT_APP_VERSION}`) {
-        return false;
-    }
+    const type = addr.substring(idx);
+    const address = addr.substring(0, idx);
 
     if (!/[a-zA-Z0-9]+/.test(address)) {
+        return false;
+    }
+
+    if (type !== 'mca') {
         return false;
     }
 

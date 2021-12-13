@@ -1,18 +1,8 @@
 {
     "version": "v0.0.1",
     "key": {
-        "btc": {
-            "priv": "btc-priv",
-            "pub": "btc-pub"
-        },
-        "ether": {
-            "priv": "ether-priv",
-            "pub": "ether-pub"
-        },
-        "stellar": {
-            "priv": "stellar-priv",
-            "pub": "stellar-pub"
-        }
+        "priv": "mpr",
+        "pub": "mpu"
     },
     "operation": {
         "create_account": "mitum-currency-create-accounts-operation",

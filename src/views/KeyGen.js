@@ -4,12 +4,7 @@ import './KeyGen.scss';
 import SelectButton from '../components/buttons/SelectButton';
 import InputBox from '../components/InputBox';
 
-import { getKeypair } from 'mitumc';
-
-
-const KEY_BTC = "btc";
-const KEY_ETHER = "ether";
-const KEY_STELLAR = "stellar";
+import { getNewKeypair } from 'mitumc';
 
 class KeyGen extends React.Component {
 
@@ -22,8 +17,8 @@ class KeyGen extends React.Component {
         }
     }
 
-    getKey(_type) {
-        const keypair = getKeypair(_type);
+    getKey() {
+        const keypair = getNewKeypair();
 
         this.setState({
             privKey: keypair.getPrivateKey(),
@@ -35,9 +30,9 @@ class KeyGen extends React.Component {
         return (
             <div className="key-gen-container">
                 <div className="key-selector">
-                    <SelectButton onClick={() => this.getKey(KEY_BTC)}>BTC</SelectButton>
-                    <SelectButton onClick={() => this.getKey(KEY_ETHER)}>ETHER</SelectButton>
-                    <SelectButton onClick={() => this.getKey(KEY_STELLAR)}>STELLAR</SelectButton>
+                    <SelectButton onClick={() => this.getKey()}>BTC</SelectButton>
+                    <SelectButton onClick={() => this.getKey()}>ETHER</SelectButton>
+                    <SelectButton onClick={() => this.getKey()}>STELLAR</SelectButton>
                 </div>
                 <div className="key-boxer">
                     <InputBox label="Private Key" disabled={true} useCopy={true} size="big" value={this.state.privKey} />

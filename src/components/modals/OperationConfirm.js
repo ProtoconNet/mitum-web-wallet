@@ -41,7 +41,7 @@ class OperationConfirm extends React.Component {
                     let data = undefined;
                     switch (this.props.operation) {
                         case OPER_CREATE_ACCOUNT:
-                            data = json.fact.items.map(x => x.keys.hash + ':' + hint.address + '-' + process.env.REACT_APP_VERSION);
+                            data = json.fact.items.map(x => x.keys.hash + hint.address);
                             break;
                         case OPER_UPDATE_KEY:
                             data = json.fact.hash;

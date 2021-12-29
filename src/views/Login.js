@@ -81,24 +81,27 @@ class Login extends React.Component {
             return;
         }
 
-        this.getAccountHistory(addr)
-            .then(
-                res => {
-                    this.props.setHistory(res.data, addr);
-                }
-            )
-            .catch(
-                e => {
-                    this.props.setHistory(null, addr);
-                }
-            )
-
         this.getAccountInformation(addr)
             .then(
                 res => {
-                    if(this.props.isLoginAllowed) {
-                        this.props.signIn(addr, priv, pubKey, res.data);
-                    }
+                    this.getAccountHistory(addr)
+                        .then(
+                            res => {
+                                this.props.setHistory(res.data, addr);
+                            }
+                        )
+                        .catch(
+                            e => {
+                                this.props.setHistory(null, addr);
+                            }
+                        )
+                        .finally(
+                            () => {
+                                if (this.props.isLoginAllowed) {
+                                    this.props.signIn(addr, priv, pubKey, res.data);
+                                }
+                            }
+                        )
                 }
             )
             .catch(
@@ -127,8 +130,8 @@ class Login extends React.Component {
                 return <PrivateKeyLoginBox
                     onLogin={(priv) => this.onStartLogin(priv)} />;
             case SHOW_RESTORE:
-                return <RestoreKeyLoginBox 
-                    onLogin={(priv) => this.onStartLogin(priv)}/>;
+                return <RestoreKeyLoginBox
+                    onLogin={(priv) => this.onStartLogin(priv)} />;
             default:
                 return <PrivateKeyLoginBox
                     onLogin={(priv) => this.onStartLogin(priv)} />;
@@ -153,7 +156,7 @@ class Login extends React.Component {
                 initiate: true,
             })
         }
-        catch(e) {
+        catch (e) {
             this.openAlert("지갑 열기 실패! :(", '유효하지 않은 개인키입니다.');
             this.props.rejectLogin();
         }

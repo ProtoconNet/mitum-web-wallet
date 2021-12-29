@@ -198,7 +198,7 @@ export function setHistory(data, me) {
 
     const histories = data._embedded.map(x => new History(x._embedded, me));
     const splitHistories = [];
-
+    console.log(histories)
     for (let i = 0; i < histories.length; i++) {
         const _i = histories[i];
         if (!_i.items) {
